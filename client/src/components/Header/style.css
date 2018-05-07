@@ -1,0 +1,29 @@
+.header {
+  background: var(--color-theme);
+  color: var(--color-white);
+  padding: .6667rem 0;
+  position: relative;
+}
+
+.header__heading {
+  margin: 0;
+  text-align: center;
+}
+
+.header__menu {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  left: 1rem;
+  position: absolute;
+  top: 0;
+}
+
+.header__profile {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  position: absolute;
+  right: 1rem;
+  top: 0;
+}
