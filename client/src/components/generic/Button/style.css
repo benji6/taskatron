@@ -1,0 +1,24 @@
+.button {
+  background: var(--color-highlight);
+  border-radius: var(--border-radius);
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: inherit;
+  outline: 0;
+  padding: 0.5rem 1rem;
+  transition: background-color var(--transition-time) var(--transition-timing-function);
+  width: 100%;
+}
+
+.button:focus {
+  background: var(--color-highlight-focus);
+}
+
+.button:hover {
+  background: var(--color-highlight-hover);
+}
+
+.button:active {
+  background: var(--color-highlight-focus);
+}

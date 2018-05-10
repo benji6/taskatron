@@ -10,15 +10,6 @@
   text-align: center;
 }
 
-.header__menu {
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  left: 1rem;
-  position: absolute;
-  top: 0;
-}
-
 .header__profile {
   align-items: center;
   bottom: 0;
@@ -26,4 +17,9 @@
   position: absolute;
   right: 1rem;
   top: 0;
+}
+
+.header__sign-in {
+  color: var(--color-white);
+  text-decoration: none;
 }

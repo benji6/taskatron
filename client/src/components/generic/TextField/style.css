@@ -1,0 +1,23 @@
+.text-field {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  font-weight: bold;
+  max-width: 25rem;
+}
+
+.text-field__input {
+  border-radius: var(--border-radius);
+  border: .1rem solid var(--color-theme);
+  font-size: inherit;
+  outline: 0;
+  padding: 0.3rem 0.2rem;
+  transition: border-color var(--transition-time) var(--transition-timing-function);
+}
+
+.text-field__input:focus {
+  border-color: var(--color-highlight-focus);
+}
+.text-field__input:hover {
+  border-color: var(--color-highlight-hover);
+}

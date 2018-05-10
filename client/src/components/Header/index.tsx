@@ -11,8 +11,9 @@ interface IProps {
 }
 
 class Header extends React.PureComponent<IProps> {
-  public render () {
+  public render (): React.ReactNode {
     const {isLoggedIn} = this.props
+
     return (
       <header className="header">
         <h1 className="header__heading">mu</h1>
@@ -20,8 +21,8 @@ class Header extends React.PureComponent<IProps> {
           { isLoggedIn ? (
             "username"
           ) : (
-            <Link to="sign-in">
-              Sign in!
+            <Link className="header__sign-in" to="sign-in">
+              Sign in
             </Link>
           ) }
         </div>
