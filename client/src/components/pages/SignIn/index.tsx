@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux'
 import {authSignInRequest} from '../../../actions'
-import {isRequestingSignInSelector} from '../../../selectors'
+import {
+  isRequestingSignInSelector,
+  signInEmailSentSelector,
+} from '../../../selectors'
 import IStore from '../../../types/IStore';
 import {
   Button,
@@ -11,6 +14,7 @@ import {
 } from '../../generic'
 
 interface IProps {
+  emailSent: boolean
   isRequesting: boolean
   signIn: typeof authSignInRequest
 }
@@ -34,18 +38,25 @@ class SignIn extends React.PureComponent<IProps, IState> {
 
   public render (): React.ReactNode {
     const {error} = this.state
-    const {isRequesting} = this.props
+    const {emailSent, isRequesting} = this.props
 
     return (
       <Main>
-        <form onSubmit={this.handleSubmit} noValidate>
-          <Heading variation="h2">Sign in</Heading>
-          <p>Send us your email address and we'll send you a secure link to sign in with.</p>
-          <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={this.handleChange} type="email">
-            Email
-          </TextField>
-          <Button disabled={isRequesting}>Send link</Button>
-        </form>
+        {emailSent ? (
+          <>
+            <Heading variation="h1">Sign in Link Sent</Heading>
+            <p>Please check your email and click the link to sign in.</p>
+          </>
+        ) : (
+          <form onSubmit={this.handleSubmit} noValidate>
+            <Heading variation="h1">Sign in</Heading>
+            <p>Send us your email address and we'll send you a secure link to sign in with.</p>
+            <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={this.handleChange} type="email">
+              Email
+            </TextField>
+            <Button disabled={isRequesting}>Send link</Button>
+          </form>
+        )}
       </Main>
     )
   }
@@ -71,7 +82,8 @@ class SignIn extends React.PureComponent<IProps, IState> {
 }
 
 const mapStateToProps = (state: IStore) => ({
-  isRequesting: isRequestingSignInSelector(state)
+  emailSent: signInEmailSentSelector(state),
+  isRequesting: isRequestingSignInSelector(state),
 })
 
 const mapDispatchToProps = {

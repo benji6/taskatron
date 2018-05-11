@@ -7,11 +7,13 @@ import {
 export interface IState {
   readonly isLoggedIn: boolean
   readonly isRequestingSignIn: boolean
+  readonly signInEmailSent: boolean
 }
 
 const initialState: IState = {
   isLoggedIn: false,
   isRequestingSignIn: false,
+  signInEmailSent: false,
 }
 
 export default (state: IState = initialState, {payload, type}: IAction<any>): IState => {
@@ -19,7 +21,11 @@ export default (state: IState = initialState, {payload, type}: IAction<any>): IS
     case AUTH_SIGN_IN_REQUEST:
       return {...state, isRequestingSignIn: true}
     case AUTH_SIGN_IN_SUCCESS:
-      return {...state, isRequestingSignIn: false}
+      return {
+        ...state,
+        isRequestingSignIn: false,
+        signInEmailSent: true,
+      }
     default:
       return state
   }

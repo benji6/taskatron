@@ -1,1 +1,1 @@
-export const authSignIn = (email: string): Promise<void> => new Promise(resolve => setTimeout(resolve, 2000))
+export const authSignIn = (email: string): Promise<void> => new Promise(resolve => setTimeout(resolve, 1500))
