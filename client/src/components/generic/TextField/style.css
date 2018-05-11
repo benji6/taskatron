@@ -6,6 +6,12 @@
   max-width: 25rem;
 }
 
+.text-field__error {
+  color: var(--color-error);
+  font-weight: initial;
+  margin: .2rem 0;
+}
+
 .text-field__input {
   border-radius: var(--border-radius);
   border: .1rem solid var(--color-theme);
@@ -20,4 +26,12 @@
 }
 .text-field__input:hover {
   border-color: var(--color-highlight-hover);
+}
+
+.text-field__input.text-field__input--error {
+  border-color: var(--color-error);
+}
+
+.text-field__label {
+  margin: .2rem 0;
 }

@@ -1,18 +1,26 @@
+import * as classnames from 'classnames';
 import * as React from 'react';
 import './style.css';
 
 interface IProps {
   readonly children: React.ReactNode
+  readonly error?: string
+  readonly onChange: (_: any) => void
 }
 
 class TextField extends React.PureComponent<IProps> {
   public render(): React.ReactNode {
-    const {children} = this.props;
+    const {children, error, ...rest} = this.props;
+
+    const inputClassName = classnames('text-field__input', {
+      ['text-field__input--error']: Boolean(error)
+    })
 
     return (
       <label className="text-field">
-        {children}
-        <input className="text-field__input" type="text" />
+        <div className="text-field__label">{children}</div>
+        {error && <div className="text-field__error">{error}</div>}
+        <input className={inputClassName} type="text" {...rest}/>
       </label>
     )
   }

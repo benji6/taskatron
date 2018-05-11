@@ -1,10 +1,11 @@
 :root {
+  --color-error: #ff005a;
   --color-highlight: #008ddc;
   --color-highlight-focus: #007cc1;
   --color-highlight-hover: #17acff;
   --color-theme: #242424;
   --color-white: #fcfcfc;
-  --border-radius: .1rem;
+  --border-radius: .15rem;
   --transition-time: .1s;
   --transition-timing-function: ease-in-out;
 }
