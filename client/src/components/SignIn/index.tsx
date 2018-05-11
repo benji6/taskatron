@@ -58,7 +58,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
 
     if (/.+@.+/.test(email)) {
       this.setState({error: false})
-      signIn()
+      signIn(email)
       return
     }
 
