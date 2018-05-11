@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {connect} from 'react-redux'
-import {authSignInRequest} from '../../actions'
-import {isRequestingSignInSelector} from '../../selectors'
-import IStore from '../../types/IStore';
+import {authSignInRequest} from '../../../actions'
+import {isRequestingSignInSelector} from '../../../selectors'
+import IStore from '../../../types/IStore';
 import {
   Button,
   Heading,
   Main,
   TextField
-} from '../generic'
+} from '../../generic'
 
 interface IProps {
   isRequesting: boolean

@@ -4,8 +4,8 @@ import {Provider} from 'react-redux'
 import {BrowserRouter, Route} from 'react-router-dom';
 import {applyMiddleware, compose, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga'
-import Home from './components/Home';
-import SignIn from './components/SignIn';
+import Home from './components/pages/Home';
+import SignIn from './components/pages/SignIn';
 import reducer from './reducers';
 import rootSaga from './sagas'
 
