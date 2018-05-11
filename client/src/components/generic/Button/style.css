@@ -22,3 +22,7 @@
 .button:active {
   background: var(--color-highlight-focus);
 }
+
+.button:disabled {
+  background: var(--color-disabled);
+}

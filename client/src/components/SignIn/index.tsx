@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux'
 import {authSignInRequest} from '../../actions'
+import {isRequestingSignInSelector} from '../../selectors'
+import IStore from '../../types/IStore';
 import {
   Button,
   Heading,
@@ -9,6 +11,7 @@ import {
 } from '../generic'
 
 interface IProps {
+  isRequesting: boolean
   signIn: typeof authSignInRequest
 }
 
@@ -31,6 +34,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
 
   public render (): React.ReactNode {
     const {error} = this.state
+    const {isRequesting} = this.props
 
     return (
       <Main>
@@ -40,7 +44,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
           <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={this.handleChange} type="email">
             Email
           </TextField>
-          <Button>Send link</Button>
+          <Button disabled={isRequesting}>Send link</Button>
         </form>
       </Main>
     )
@@ -66,8 +70,12 @@ class SignIn extends React.PureComponent<IProps, IState> {
   }
 }
 
+const mapStateToProps = (state: IStore) => ({
+  isRequesting: isRequestingSignInSelector(state)
+})
+
 const mapDispatchToProps = {
   signIn: authSignInRequest
 }
 
-export default connect(null, mapDispatchToProps)(SignIn)
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)

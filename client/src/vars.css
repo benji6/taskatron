@@ -1,4 +1,5 @@
 :root {
+  --color-disabled: gray;
   --color-error: #ff005a;
   --color-highlight: #008ddc;
   --color-highlight-focus: #007cc1;

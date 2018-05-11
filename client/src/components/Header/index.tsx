@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {isLoggedInSelector} from '../../selectors';
-import IState from '../../types/IState';
+import IStore from '../../types/IStore';
 
 import './style.css'
 
@@ -31,7 +31,7 @@ class Header extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: IState): IProps => ({
+const mapStateToProps = (state: IStore): IProps => ({
   isLoggedIn: isLoggedInSelector(state)
 })
 

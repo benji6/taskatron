@@ -3,14 +3,15 @@ import './style.css'
 
 interface IProps {
   readonly children: React.ReactNode
+  readonly disabled?: boolean
 }
 
 class Button extends React.PureComponent<IProps> {
   public render (): React.ReactNode {
-    const {children} = this.props
+    const {disabled, children} = this.props
 
     return (
-      <button className="button">{children}</button>
+      <button className="button" disabled={disabled}>{children}</button>
     )
   }
 }
