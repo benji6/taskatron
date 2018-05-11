@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {connect} from 'react-redux'
+import {authSignInRequest} from '../../actions'
 import {
   Button,
   Heading,
@@ -6,13 +8,17 @@ import {
   TextField
 } from '../generic'
 
+interface IProps {
+  signIn: typeof authSignInRequest
+}
+
 interface IState {
   email: string
   error: boolean
 }
 
-class SignIn extends React.PureComponent<React.ReactPropTypes, IState> {
-  constructor (props: React.ReactPropTypes) {
+class SignIn extends React.PureComponent<IProps, IState> {
+  constructor (props: IProps) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -28,13 +34,12 @@ class SignIn extends React.PureComponent<React.ReactPropTypes, IState> {
 
     return (
       <Main>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} noValidate>
           <Heading variation="h2">Sign in</Heading>
           <p>Send us your email address and we'll send you a secure link to sign in with.</p>
-          <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={this.handleChange}>
+          <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={this.handleChange} type="email">
             Email
           </TextField>
-          {error && "there was an error"}
           <Button>Send link</Button>
         </form>
       </Main>
@@ -49,9 +54,11 @@ class SignIn extends React.PureComponent<React.ReactPropTypes, IState> {
     e.preventDefault()
 
     const {email} = this.state
+    const {signIn} = this.props
 
     if (/.+@.+/.test(email)) {
       this.setState({error: false})
+      signIn()
       return
     }
 
@@ -59,4 +66,8 @@ class SignIn extends React.PureComponent<React.ReactPropTypes, IState> {
   }
 }
 
-export default SignIn
+const mapDispatchToProps = {
+  signIn: authSignInRequest
+}
+
+export default connect(null, mapDispatchToProps)(SignIn)

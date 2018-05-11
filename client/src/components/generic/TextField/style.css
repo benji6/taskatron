@@ -9,7 +9,7 @@
 .text-field__error {
   color: var(--color-error);
   font-weight: initial;
-  margin: .2rem 0;
+  padding-bottom: .2rem;
 }
 
 .text-field__input {
@@ -33,5 +33,5 @@
 }
 
 .text-field__label {
-  margin: .2rem 0;
+  padding-bottom: .2rem;
 }

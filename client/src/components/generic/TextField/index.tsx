@@ -6,6 +6,7 @@ interface IProps {
   readonly children: React.ReactNode
   readonly error?: string
   readonly onChange: (_: any) => void
+  readonly type?: 'email'
 }
 
 class TextField extends React.PureComponent<IProps> {
