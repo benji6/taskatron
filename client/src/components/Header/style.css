@@ -1,6 +1,6 @@
 .header {
   background: var(--color-theme);
-  color: var(--color-white);
+  color: var(--color-ground);
   padding: .6667rem 0;
   position: relative;
 }
@@ -15,11 +15,26 @@
   bottom: 0;
   display: flex;
   position: absolute;
-  right: 1rem;
+  right: .5rem;
   top: 0;
 }
 
 .header__sign-in {
-  color: var(--color-white);
+  color: var(--color-ground);
+  padding: .5rem;
+  outline: 0;
   text-decoration: none;
+  transition: color var(--transition-time) var(--transition-timing-function);
+}
+
+.header__sign-in:focus {
+  color: var(--color-ground-focus);
+}
+
+.header__sign-in:hover {
+  color: var(--color-ground-hover);
+}
+
+.header__sign-in:active {
+  color: var(--color-ground-focus);
 }

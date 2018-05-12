@@ -2,7 +2,7 @@
   background: var(--color-highlight);
   border-radius: var(--border-radius);
   border: none;
-  color: var(--color-white);
+  color: var(--color-ground);
   cursor: pointer;
   font-size: inherit;
   outline: 0;
