@@ -1,28 +1,47 @@
 .button {
-  background: var(--color-highlight);
   border-radius: var(--border-radius);
   border: none;
   color: var(--color-ground);
   cursor: pointer;
   font-size: inherit;
   outline: 0;
-  padding: 0.5rem 1rem;
+  padding: calc(2rem / 3) 1rem;
   transition: background-color var(--transition-time) var(--transition-timing-function);
   width: 100%;
 }
 
-.button:focus {
+.button--primary {
+  background: var(--color-highlight);
+}
+
+.button--primary:focus {
   background: var(--color-highlight-focus);
 }
 
-.button:hover {
+.button--primary:hover {
   background: var(--color-highlight-hover);
 }
 
-.button:active {
+.button--primary:active {
   background: var(--color-highlight-focus);
 }
 
-.button:disabled {
-  background: var(--color-disabled);
+.button--primary:disabled {
+  background: var(--color-complement);
+}
+
+.button--secondary {
+  background: var(--color-complement);
+}
+
+.button--secondary:focus {
+  background: var(--color-complement-focus);
+}
+
+.button--secondary:hover {
+  background: var(--color-complement-hover);
+}
+
+.button--secondary:active {
+  background: var(--color-complement-focus);
 }

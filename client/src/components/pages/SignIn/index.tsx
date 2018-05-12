@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux'
+import {RouteComponentProps, withRouter} from 'react-router'
 import {authSignInRequest} from '../../../actions'
 import {
   isRequestingSignInSelector,
@@ -8,13 +9,15 @@ import {
 import IStore from '../../../types/IStore';
 import {
   Button,
+  ButtonGroup,
   Heading,
   Main,
   TextField
 } from '../../generic'
 
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
   emailSent: boolean
+  history: any
   isRequesting: boolean
   signIn: typeof authSignInRequest
 }
@@ -27,6 +30,7 @@ interface IState {
 class SignIn extends React.PureComponent<IProps, IState> {
   constructor (props: IProps) {
     super(props)
+    this.goBack = this.goBack.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
@@ -37,6 +41,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
   }
 
   public render (): React.ReactNode {
+    const {goBack, handleChange, handleSubmit} = this
     const {error} = this.state
     const {emailSent, isRequesting} = this.props
 
@@ -46,19 +51,35 @@ class SignIn extends React.PureComponent<IProps, IState> {
           <>
             <Heading variation="h1">Sign in Email Sent!</Heading>
             <p>Please check your email and click the link to sign in.</p>
+            <ButtonGroup>
+              <Button onClick={goBack}>
+                Got it!
+              </Button>
+            </ButtonGroup>
           </>
         ) : (
-          <form onSubmit={this.handleSubmit} noValidate>
+          <form onSubmit={handleSubmit} noValidate>
             <Heading variation="h1">Sign in</Heading>
             <p>Send us your email address and we'll send you a secure link to sign in with.</p>
-            <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={this.handleChange} type="email">
+            <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={handleChange} type="email">
               Email
             </TextField>
-            <Button disabled={isRequesting}>Send link</Button>
+            <ButtonGroup>
+              <Button disabled={isRequesting}>
+                Send link
+              </Button>
+              <Button onClick={goBack} type="button" variation="secondary">
+                Back
+              </Button>
+            </ButtonGroup>
           </form>
         )}
       </Main>
     )
+  }
+
+  private goBack(): void {
+    this.props.history.goBack();
   }
 
   private handleChange(e: any): void {
@@ -90,4 +111,4 @@ const mapDispatchToProps = {
   signIn: authSignInRequest
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignIn))
