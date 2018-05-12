@@ -7,8 +7,9 @@
 
 .text-field__error {
   color: var(--color-error);
+  font-size: var(--font-size-small);
   font-weight: initial;
-  padding-bottom: .2rem;
+  padding-top: .2rem;
 }
 
 .text-field__input {

@@ -20,8 +20,8 @@ class TextField extends React.PureComponent<IProps> {
     return (
       <label className="text-field">
         <div className="text-field__label">{children}</div>
-        {error && <div className="text-field__error">{error}</div>}
         <input className={inputClassName} type="text" {...rest}/>
+        {error && <div className="text-field__error">{error}</div>}
       </label>
     )
   }
