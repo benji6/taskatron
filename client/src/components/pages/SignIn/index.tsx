@@ -44,7 +44,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
       <Main>
         {emailSent ? (
           <>
-            <Heading variation="h1">Sign in Link Sent</Heading>
+            <Heading variation="h1">Sign in Email Sent!</Heading>
             <p>Please check your email and click the link to sign in.</p>
           </>
         ) : (
