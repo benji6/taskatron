@@ -1,5 +1,6 @@
 body {
   background: var(--color-ground);
+  color: var(--color-figure);
   font-family: system-ui, sans-serif;
   margin: 0;
 }

@@ -3,13 +3,13 @@
   --color-complement: #707070;
   --color-complement-focus: #555555;
   --color-complement-hover: #787878;
+  --color-figure: #242424;
+  --color-ground: #fbfbfb;
+  --color-ground-focus: #dfdfdf;
+  --color-ground-hover: #ffffff;
   --color-highlight: #008ddc;
   --color-highlight-focus: #007cc1;
   --color-highlight-hover: #17acff;
-  --color-theme: #242424;
-  --color-ground: #fcfcfc;
-  --color-ground-focus: #dfdfdf;
-  --color-ground-hover: #ffffff;
   --border-radius: .15rem;
   --font-size-small: .9rem;
   --transition-time: .2s;
