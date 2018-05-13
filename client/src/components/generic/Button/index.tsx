@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Spinner from '../Spinner'
 import './style.css'
 
 interface IProps {
@@ -15,12 +16,18 @@ class Button extends React.PureComponent<IProps> {
   }
 
   public render (): React.ReactNode {
-    const {variation, ...rest} = this.props
+    const {children, disabled, variation, ...rest} = this.props
 
     const className = `button button--${variation}`
 
     return (
-      <button className={className} {...rest}/>
+      <button className={className} disabled={disabled} {...rest}>
+        {disabled ? (
+          <Spinner />
+        ) : (
+          children
+        )}
+      </button>
     )
   }
 }

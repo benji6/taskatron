@@ -5,7 +5,7 @@
   cursor: pointer;
   font-size: inherit;
   outline: 0;
-  padding: calc(2rem / 3) 1rem;
+  padding: .75rem 1rem;
   transition: background-color var(--transition-time) var(--transition-timing-function);
   width: 100%;
 }
@@ -18,7 +18,7 @@
   background: var(--color-highlight-focus);
 }
 
-.button--primary:hover {
+.button--primary:hover:not(:disabled) {
   background: var(--color-highlight-hover);
 }
 
@@ -27,7 +27,7 @@
 }
 
 .button--primary:disabled {
-  background: var(--color-complement);
+  padding: .575rem 0;
 }
 
 .button--secondary {
