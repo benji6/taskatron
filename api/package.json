@@ -1,0 +1,25 @@
+{
+  "name": "mu-api",
+  "version": "0.1.0",
+  "private": true,
+  "main": "build",
+  "scripts": {
+    "build": "rm -rf build && tsc",
+    "server:watch": "PORT=3001 nodemon .",
+    "start": "rm -rf build && run-p tsc:watch server:watch",
+    "tsc:watch": "tsc -w"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "passwordless": "^1.1.2",
+    "pino": "^4.16.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.4",
+    "@types/pino": "^4.7.1",
+    "nodemon": "^1.17.4",
+    "npm-run-all": "^4.1.3",
+    "typescript": "^2.8.3"
+  }
+}
