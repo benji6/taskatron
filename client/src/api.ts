@@ -1,1 +1,1 @@
-export const authSignIn = (email: string): Promise<void> => new Promise(resolve => setTimeout(resolve, 1500))
+export const authSignIn = (email: string): Promise<Response> => fetch('http://localhost:3001/sign-in')

@@ -7,8 +7,12 @@ import {
 import {authSignIn} from '../api'
 
 function* handleAuthSignInRequest({payload}: IAction<string>) {
-  yield call(authSignIn, payload)
-  yield put(authSignInSuccess())
+  try {
+    yield call(authSignIn, payload)
+    yield put(authSignInSuccess())
+  } catch (e) {
+    // empty
+  }
 }
 
 export default function* watchAuthSignInRequest() {
