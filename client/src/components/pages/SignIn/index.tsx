@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {connect} from 'react-redux'
-import {RouteComponentProps, withRouter} from 'react-router'
 import {authSignInRequest} from '../../../actions'
 import {
   isRequestingSignInSelector,
@@ -11,11 +10,13 @@ import {
   Button,
   ButtonGroup,
   Heading,
+  Link,
   Main,
+  Paragraph,
   TextField
 } from '../../generic'
 
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
   emailSent: boolean
   history: any
   isRequesting: boolean
@@ -23,14 +24,13 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-  email: string
-  error: boolean
+  readonly email: string
+  readonly error: boolean
 }
 
 class SignIn extends React.PureComponent<IProps, IState> {
   constructor (props: IProps) {
     super(props)
-    this.goBack = this.goBack.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
@@ -41,7 +41,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
   }
 
   public render (): React.ReactNode {
-    const {goBack, handleChange, handleSubmit} = this
+    const {handleChange, handleSubmit} = this
     const {error} = this.state
     const {emailSent, isRequesting} = this.props
 
@@ -50,17 +50,16 @@ class SignIn extends React.PureComponent<IProps, IState> {
         {emailSent ? (
           <>
             <Heading variation="h1">Sign in Email Sent!</Heading>
-            <p>Please check your email and click the link to sign in.</p>
-            <ButtonGroup>
-              <Button onClick={goBack}>
-                Got it!
-              </Button>
-            </ButtonGroup>
+            <Paragraph>
+              Please check your email and click the link to sign in.
+            </Paragraph>
           </>
         ) : (
           <form onSubmit={handleSubmit} noValidate>
             <Heading variation="h1">Sign in</Heading>
-            <p>Send us your email address and we'll send you a secure link to sign in with.</p>
+            <Paragraph>
+              Send us your email address and we'll send you a secure link to sign in with.
+            </Paragraph>
             <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={handleChange} type="email">
               Email
             </TextField>
@@ -68,18 +67,14 @@ class SignIn extends React.PureComponent<IProps, IState> {
               <Button disabled={isRequesting}>
                 Send link
               </Button>
-              <Button onClick={goBack} type="button" variation="secondary">
-                Back
-              </Button>
             </ButtonGroup>
+            <Paragraph center>
+              Don't have an account? <Link to="/sign-up">Join us</Link>!
+            </Paragraph>
           </form>
         )}
       </Main>
     )
-  }
-
-  private goBack(): void {
-    this.props.history.goBack();
   }
 
   private handleChange(e: any): void {
@@ -111,4 +106,4 @@ const mapDispatchToProps = {
   signIn: authSignInRequest
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignIn))
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)

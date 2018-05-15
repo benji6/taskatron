@@ -16,15 +16,22 @@ class Header extends React.PureComponent<IProps> {
 
     return (
       <header className="header">
-        <h1 className="header__heading">mu</h1>
+        <h1 className="header__heading">
+          <Link className="header__heading-link" to="/">mu</Link>
+        </h1>
         <div className="header__profile">
           { isLoggedIn ? (
             "username"
           ) : (
-            <Link className="header__sign-in" to="sign-in">
+            <Link className="header__link" to="sign-in">
               Sign in
             </Link>
           ) }
+        </div>
+        <div className="header__sign-up">
+          <Link className="header__link" to="sign-up">
+            Join us
+          </Link>
         </div>
       </header>
     )

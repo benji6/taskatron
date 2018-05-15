@@ -1,14 +1,12 @@
 import * as React from 'react';
-import {Main} from '../../generic';
-import Header from '../../Header'
+import {Main, Paragraph} from '../../generic';
 
 class Home extends React.PureComponent {
   public render (): React.ReactNode {
     return (
       <>
-        <Header/>
         <Main>
-          <p>This is home.</p>
+          <Paragraph>This is home.</Paragraph>
         </Main>
       </>
     )

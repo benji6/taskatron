@@ -1,3 +1,10 @@
+.button-group {
+  --child-margin-bottom: calc(2rem / 3);
+  --vertical-margin: 1.25rem;
+
+  margin: var(--vertical-margin) 0 calc(var(--vertical-margin) - var(--child-margin-bottom));
+}
+
 .button-group > * {
-  margin-bottom: calc(2rem / 3);
+  margin-bottom: var(--child-margin-bottom);
 }
