@@ -4,7 +4,7 @@ import * as express from 'express'
 import * as nodemailer from 'nodemailer';
 import * as passwordless from 'passwordless'
 const MongoStore = require('passwordless-mongostore');
-import {get as getSignIn} from './routeHandlers/signIn'
+import {get as getSignIn} from './controllers/signIn'
 import pino from './pino'
 
 const {PORT} = process.env
