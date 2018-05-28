@@ -5,6 +5,7 @@ import * as nodemailer from 'nodemailer';
 import * as passwordless from 'passwordless'
 const MongoStore = require('passwordless-mongostore');
 import pino from './pino'
+import {get as getMe} from './controllers/me'
 import {post as postSendToken} from './controllers/sendToken'
 
 const {PORT} = process.env
@@ -26,14 +27,14 @@ passwordless.addDelivery((
   recipient: string,
   callback: any
 ) => {
-  const text = `Hello!\nAccess your account here: http://${clientHost}?token=${tokenToSend}&uid=${encodeURIComponent(uidToSend)}`
+  const text = `Hello!\nAccess your account here: http://${clientHost}/login?token=${tokenToSend}&uid=${encodeURIComponent(uidToSend)}`
 
   transporter.sendMail({
     from: '"mu" <noreply@mu.com>',
     html: `<b>${text}</b>`,
     subject: `Token for ${clientHost}`,
     text,
-    to: 'benji2357@gmail.com',
+    to: uidToSend,
   })
   .then((info) => {
     pino.info('OTPW email sent: %s', info.messageId)
@@ -52,6 +53,8 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 app.use(passwordless.acceptToken());
+
+app.get('/me', passwordless.restricted(), getMe)
 
 app.post(
   '/send-token',

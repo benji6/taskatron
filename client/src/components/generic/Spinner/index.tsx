@@ -1,9 +1,22 @@
+import * as classnames from 'classnames';
 import * as React from 'react'
 import './style.css'
 
-class Spinner extends React.PureComponent {
+interface IProps {
+  ground?: boolean
+  page?: boolean
+}
+
+class Spinner extends React.PureComponent<IProps> {
   public render() {
-    return <span className="spinner" />
+    const {ground, page} = this.props;
+
+    const className = classnames('spinner', {
+      'spinner--ground': ground,
+      'spinner--page': page,
+    })
+
+    return <span className={className} />
   }
 }
 

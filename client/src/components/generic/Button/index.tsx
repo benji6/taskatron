@@ -23,7 +23,7 @@ class Button extends React.PureComponent<IProps> {
     return (
       <button className={className} disabled={disabled} {...rest}>
         {disabled ? (
-          <Spinner />
+          <Spinner ground/>
         ) : (
           children
         )}

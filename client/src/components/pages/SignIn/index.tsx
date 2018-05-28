@@ -49,14 +49,14 @@ class SignIn extends React.PureComponent<IProps, IState> {
       <Main>
         {emailSent ? (
           <>
-            <Heading variation="h1">Sign in Email Sent!</Heading>
+            <Heading>Sign in Email Sent!</Heading>
             <Paragraph>
               Please check your email and click the link to sign in.
             </Paragraph>
           </>
         ) : (
           <form onSubmit={handleSubmit} noValidate>
-            <Heading variation="h1">Sign in</Heading>
+            <Heading>Sign in</Heading>
             <Paragraph>
               Send us your email address and we'll send you a secure link to sign in with.
             </Paragraph>
