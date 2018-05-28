@@ -4,11 +4,11 @@ import {
   authSignInSuccess,
   IAction,
 } from '../actions'
-import {authSignIn} from '../api'
+import {sendToken} from '../api'
 
 function* handleAuthSignInRequest({payload}: IAction<string>) {
   try {
-    yield call(authSignIn, payload)
+    yield call(sendToken, payload)
     yield put(authSignInSuccess())
   } catch (e) {
     // empty
