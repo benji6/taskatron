@@ -5,6 +5,7 @@ import * as nodemailer from 'nodemailer';
 import * as passwordless from 'passwordless'
 const MongoStore = require('passwordless-mongostore');
 import pino from './pino'
+import {post as postSendToken} from './controllers/sendToken'
 
 const {PORT} = process.env
 const clientHost = 'localhost:3000';
@@ -52,13 +53,12 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(passwordless.acceptToken());
 
-app.post('/send-token', passwordless.requestToken(
-  (user: string, delivery: any, callback: any) => {
+app.post(
+  '/send-token',
+  passwordless.requestToken((user: string, delivery: any, callback: any) => {
     callback(null, user);
   }),
-  (req, res) => {
-    res.sendStatus(200)
-  }
+  postSendToken,
 )
 
 app.listen(PORT, (): void => pino.info(`API listening on port ${PORT}\n`))
