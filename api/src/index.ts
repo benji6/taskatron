@@ -4,7 +4,6 @@ import * as express from 'express'
 import * as nodemailer from 'nodemailer';
 import * as passwordless from 'passwordless'
 const MongoStore = require('passwordless-mongostore');
-import {get as getSignIn} from './controllers/signIn'
 import pino from './pino'
 
 const {PORT} = process.env
@@ -61,7 +60,5 @@ app.post('/send-token', passwordless.requestToken(
     res.sendStatus(200)
   }
 )
-
-app.get('/sign-in', getSignIn)
 
 app.listen(PORT, (): void => pino.info(`API listening on port ${PORT}\n`))
