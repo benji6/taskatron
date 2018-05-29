@@ -59,7 +59,7 @@ class Login extends React.PureComponent<IProps, IState> {
     if (this.state.error) {
       return (
         <Main>
-          <Heading>Error Signing In</Heading>
+          <Heading variation="h2">Error Signing In</Heading>
           <Paragraph><Link to="sign-in">Click here</Link> to get a new token and remember that old tokens may no longer work.</Paragraph>
         </Main>
       )

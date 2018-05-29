@@ -50,7 +50,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
     return (
       <Main>
         <form onSubmit={handleSubmit} noValidate>
-          <Heading>Sign Up</Heading>
+          <Heading variation="h2">Sign Up</Heading>
           <Paragraph>We just need a few details to get started.</Paragraph>
           <TextField error={usernameError ? 'Please enter a username' : undefined} onChange={handleUsernameChange}>
             Username
