@@ -18,8 +18,10 @@ interface IProps {
 interface IState {
   readonly email: string
   readonly emailError: boolean
-  readonly username: string
-  readonly usernameError: boolean
+  readonly firstName: string
+  readonly firstNameError: boolean
+  readonly lastName: string
+  readonly lastNameError: boolean
 }
 
 class SignUp extends React.PureComponent<IProps, IState> {
@@ -29,31 +31,42 @@ class SignUp extends React.PureComponent<IProps, IState> {
     this.state = {
       email: '',
       emailError: false,
-      username: '',
-      usernameError: false,
+      firstName: '',
+      firstNameError: false,
+      lastName: '',
+      lastNameError: false,
     }
 
     this.handleEmailChange = this.handleEmailChange.bind(this)
-    this.handleUsernameChange = this.handleUsernameChange.bind(this)
+    this.handleFirstNameChange = this.handleFirstNameChange.bind(this)
+    this.handleLastNameChange = this.handleLastNameChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   public render (): React.ReactNode {
     const {
       handleEmailChange,
-      handleUsernameChange,
+      handleFirstNameChange,
+      handleLastNameChange,
       handleSubmit,
     } = this
 
-    const {usernameError, emailError} = this.state
+    const {
+      firstNameError,
+      emailError,
+      lastNameError,
+    } = this.state
 
     return (
       <Main>
         <form onSubmit={handleSubmit} noValidate>
           <Heading variation="h2">Sign Up</Heading>
           <Paragraph>We just need a few details to get started.</Paragraph>
-          <TextField error={usernameError ? 'Please enter a username' : undefined} onChange={handleUsernameChange}>
-            Username
+          <TextField error={firstNameError ? 'Please enter a first name' : undefined} onChange={handleFirstNameChange}>
+            First Name
+          </TextField>
+          <TextField error={lastNameError ? 'Please enter a last name' : undefined} onChange={handleLastNameChange}>
+            Last Name
           </TextField>
           <TextField error={emailError ? 'Please enter a valid email address' : undefined} onChange={handleEmailChange} type="email">
             Email
@@ -75,26 +88,36 @@ class SignUp extends React.PureComponent<IProps, IState> {
     this.setState({email: e.target.value})
   }
 
-  private handleUsernameChange(e: any): void {
-    this.setState({username: e.target.value})
+  private handleFirstNameChange(e: any): void {
+    this.setState({firstName: e.target.value})
+  }
+
+  private handleLastNameChange(e: any): void {
+    this.setState({lastName: e.target.value})
   }
 
   private handleSubmit (e: any): void {
     e.preventDefault()
 
-    const {email, username} = this.state
+    const {email, firstName, lastName} = this.state
     const {signUp} = this.props
 
     const isEmailValid = /.+@.+/.test(email)
-    const isUsernameValid = Boolean(username.length)
+    const isFirstNameValid = Boolean(firstName.length)
+    const isLastNameValid = Boolean(lastName.length)
 
     this.setState({
       emailError: !isEmailValid,
-      usernameError: !isUsernameValid
+      firstNameError: !isFirstNameValid,
+      lastNameError: !isLastNameValid,
     })
 
-    if (isEmailValid && isUsernameValid) {
-      signUp(email)
+    if (isEmailValid && isFirstNameValid && isLastNameValid) {
+      signUp({
+        email,
+        firstName,
+        lastName,
+      })
     }
   }
 }

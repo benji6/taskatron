@@ -11,7 +11,7 @@ function* handleAuthSignInRequest({payload}: IAction<string>) {
     yield call(sendToken, payload)
     yield put(authSignInSuccess())
   } catch (e) {
-    // empty
+    // TODO
   }
 }
 
