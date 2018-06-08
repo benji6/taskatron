@@ -2,6 +2,11 @@ import * as React from 'react';
 import {connect} from 'react-redux'
 import {userSignUpRequest} from '../../../actions'
 import {
+  isValidEmail,
+  isValidFirstName,
+  isValidLastName,
+} from '../../../shared/validation'
+import {
   Button,
   ButtonGroup,
   Heading,
@@ -102,9 +107,9 @@ class SignUp extends React.PureComponent<IProps, IState> {
     const {email, firstName, lastName} = this.state
     const {signUp} = this.props
 
-    const isEmailValid = /.+@.+/.test(email)
-    const isFirstNameValid = Boolean(firstName.length)
-    const isLastNameValid = Boolean(lastName.length)
+    const isEmailValid = isValidEmail(email)
+    const isFirstNameValid = isValidFirstName(firstName.length)
+    const isLastNameValid = isValidLastName(lastName.length)
 
     this.setState({
       emailError: !isEmailValid,

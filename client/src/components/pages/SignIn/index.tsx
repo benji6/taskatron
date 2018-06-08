@@ -5,6 +5,7 @@ import {
   isRequestingSignInSelector,
   signInEmailSentSelector,
 } from '../../../selectors'
+import {isValidEmail} from '../../../shared/validation';
 import IStore from '../../../types/IStore';
 import {
   Button,
@@ -87,7 +88,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
     const {email} = this.state
     const {signIn} = this.props
 
-    if (/.+@.+/.test(email)) {
+    if (isValidEmail(email)) {
       this.setState({error: false})
       signIn(email)
       return

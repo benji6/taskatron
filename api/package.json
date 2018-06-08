@@ -13,6 +13,7 @@
   "dependencies": {
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "mongodb": "^3.1.0-beta4",
     "nodemailer": "^4.6.5",
     "passwordless": "^1.1.2",
     "passwordless-mongostore": "^0.1.4",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.4",
+    "@types/mongodb": "^3.0.19",
     "@types/nodemailer": "^4.6.0",
     "@types/pino": "^4.7.1",
     "nodemon": "^1.17.4",

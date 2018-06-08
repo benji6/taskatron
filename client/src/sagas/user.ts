@@ -4,12 +4,12 @@ import {
   USER_SIGN_UP_REQUEST,
   userSignUpSuccess,
 } from '../actions'
-import {signUp} from '../api'
-import ISignUpBody from '../types/ISignUpBody'
+import {postUser} from '../api'
+import {IUserPostBody} from '../shared/types'
 
-function* handleUserSignUpRequest({payload}: IAction<ISignUpBody>) {
+function* handleUserSignUpRequest({payload}: IAction<IUserPostBody>) {
   try {
-    yield call(signUp, payload)
+    yield call(postUser, payload)
     yield put(userSignUpSuccess())
   } catch (e) {
     // TODO

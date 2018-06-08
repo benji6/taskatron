@@ -3,9 +3,7 @@ import * as cors from 'cors'
 import * as express from 'express'
 import * as passwordless from 'passwordless'
 import pino from './pino'
-import {get as getMe} from './controllers/me'
-import {post as postSignUp} from './controllers/signUp'
-import {post as postSendToken} from './controllers/sendToken'
+import router from './router'
 import './passwordless'
 
 const {PORT} = process.env
@@ -16,15 +14,6 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(passwordless.acceptToken());
 
-app.get('/me', passwordless.restricted(), getMe)
-app.post('/sign-up', postSignUp)
-
-app.post(
-  '/send-token',
-  passwordless.requestToken((user: string, delivery: any, callback: any) => {
-    callback(null, user);
-  }),
-  postSendToken,
-)
+app.use('/', router);
 
 app.listen(PORT, (): void => pino.info(`API listening on port ${PORT}\n`))
