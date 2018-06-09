@@ -2,6 +2,7 @@ import {call, put, takeLatest} from 'redux-saga/effects'
 import {
   IAction,
   USER_SIGN_UP_REQUEST,
+  userSignUpFailure,
   userSignUpSuccess,
 } from '../actions'
 import {postUser} from '../api'
@@ -12,7 +13,7 @@ function* handleUserSignUpRequest({payload}: IAction<IUserPostBody>) {
     yield call(postUser, payload)
     yield put(userSignUpSuccess())
   } catch (e) {
-    // TODO
+    yield put(userSignUpFailure())
   }
 }
 

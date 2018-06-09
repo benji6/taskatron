@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux'
 import {userSignUpRequest} from '../../../actions'
-import {hasSignedUpSelector} from '../../../selectors'
+import {
+  hasSignedUpSelector,
+  signUpFailureSelector,
+} from '../../../selectors'
 import {
   isValidEmail,
   isValidFirstName,
@@ -22,6 +25,7 @@ import {
 interface IProps {
   readonly hasSignedUp: boolean
   readonly signUp: typeof userSignUpRequest
+  readonly signUpFailure: boolean
 }
 
 interface IState {
@@ -59,7 +63,8 @@ class SignUp extends React.PureComponent<IProps, IState> {
       handleLastNameChange,
       handleSubmit,
       props: {
-        hasSignedUp
+        hasSignedUp,
+        signUpFailure,
       },
       state: {
         firstNameError,
@@ -70,9 +75,16 @@ class SignUp extends React.PureComponent<IProps, IState> {
 
     return (
       <Main>
-        {hasSignedUp ? (
+        {signUpFailure ? (
           <>
-          <Heading variation="h2">Sign up Email Sent!</Heading>
+            <Heading variation="h2">Sign up Failed</Heading>
+            <Paragraph>
+              We're sorry, something has gone wrong, please refresh the page and try again.
+            </Paragraph>
+          </>
+        ) : hasSignedUp ? (
+          <>
+            <Heading variation="h2">Sign up Email Sent!</Heading>
             <Paragraph>
               Please check your email and click the link to sign in.
             </Paragraph>
@@ -144,6 +156,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
 
 const mapStateToProps = (state: IStore) => ({
   hasSignedUp: hasSignedUpSelector(state),
+  signUpFailure: signUpFailureSelector(state),
 })
 
 const mapDispatchToProps = {

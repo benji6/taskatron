@@ -16,6 +16,10 @@ const postConfig = (body: any) => ({
 export const getMe = ({token, uid}: ICredentials): Promise<Response> => fetch(`${origin}/me?token=${token}&uid=${encodeURIComponent(uid)}`)
 
 export const postUser = (user: IUserPostBody): Promise<Response> => fetch(`${origin}/user`, postConfig(user))
+  .then(response => {
+    if (!response.ok) throw Error(`${response.status}: ${response.statusText}`)
+    return response
+  })
 
 export const sendToken = (email: string): Promise<Response> => fetch(`${origin}/send-token`, postConfig({user: email}))
 
