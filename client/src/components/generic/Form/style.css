@@ -1,0 +1,11 @@
+.form {
+  padding: 0 1rem;
+}
+
+@media (min-width: 650px) {
+  .form {
+    border-radius: .25rem;
+    box-shadow: 0 0 .5rem var(--color-figure);
+    padding: .5rem 1.5rem 1.5rem;
+  }
+}

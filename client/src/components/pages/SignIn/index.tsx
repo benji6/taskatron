@@ -10,6 +10,7 @@ import IStore from '../../../types/IStore';
 import {
   Button,
   ButtonGroup,
+  Form,
   Heading,
   Link,
   Main,
@@ -56,7 +57,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
             </Paragraph>
           </>
         ) : (
-          <form onSubmit={handleSubmit} noValidate>
+          <Form onSubmit={handleSubmit} noValidate>
             <Heading variation="h2">Sign in</Heading>
             <Paragraph>
               Send us your email address and we'll send you a secure link to sign in with.
@@ -70,9 +71,9 @@ class SignIn extends React.PureComponent<IProps, IState> {
               </Button>
             </ButtonGroup>
             <Paragraph center>
-              Don't have an account? <Link to="/sign-up">Join us</Link>!
+              Don't have an account? <Link to="/sign-up">Sign up</Link>!
             </Paragraph>
-          </form>
+          </Form>
         )}
       </Main>
     )

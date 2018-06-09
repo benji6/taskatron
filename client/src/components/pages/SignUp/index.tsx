@@ -11,6 +11,7 @@ import IStore from '../../../types/IStore';
 import {
   Button,
   ButtonGroup,
+  Form,
   Heading,
   Link,
   Main,
@@ -77,7 +78,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
             </Paragraph>
           </>
         ) : (
-          <form onSubmit={handleSubmit} noValidate>
+          <Form onSubmit={handleSubmit} noValidate>
             <Heading variation="h2">Sign Up</Heading>
             <Paragraph>We just need a few details to get started.</Paragraph>
             <TextField error={firstNameError ? 'Please enter a first name' : undefined} onChange={handleFirstNameChange}>
@@ -97,7 +98,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
             <Paragraph center>
               Already have an account? <Link to="/sign-in">Sign in</Link>!
             </Paragraph>
-          </form>
+          </Form>
         )}
       </Main>
     )

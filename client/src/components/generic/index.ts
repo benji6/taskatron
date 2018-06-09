@@ -1,5 +1,6 @@
 export {default as Button} from './Button';
 export {default as ButtonGroup} from './ButtonGroup';
+export {default as Form} from './Form';
 export {default as Heading} from './Heading';
 export {default as Link} from './Link';
 export {default as Main} from './Main';
