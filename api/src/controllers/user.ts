@@ -7,6 +7,7 @@ import {
 } from '../shared/validation'
 import pino from '../pino'
 import {insertUser} from '../model'
+import * as passwordless from 'passwordless'
 
 export const post = (req: Request, res: Response, next: NextFunction) => {
   const body: IUserPostBody = req.body
@@ -22,9 +23,11 @@ export const post = (req: Request, res: Response, next: NextFunction) => {
 
   insertUser(body)
     .then((userRecord: IUserRecord) => {
-      pino.info('user post success', userRecord)
-      res.status(200).send(userRecord)
-      next()
+      passwordless.requestToken((user: string, delivery: any, callback: any) => {
+        pino.info('user post success', userRecord, user)
+        res.status(200).send(userRecord)
+        callback(null, user);
+      }, {userField: 'email'})(req, res, next)
     })
     .catch((e: Error) => {
       pino.error('user post fail', e)
