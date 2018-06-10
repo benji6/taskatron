@@ -24,7 +24,7 @@ export const post = (req: Request, res: Response, next: NextFunction) => {
   insertUser(body)
     .then((userRecord: IUserRecord) => {
       passwordless.requestToken((user: string, delivery: any, callback: any) => {
-        pino.info('user post success', userRecord, user)
+        pino.info(`user post success: ${userRecord._id}`)
         res.status(200).send(userRecord)
         callback(null, user);
       }, {userField: 'email'})(req, res, next)
