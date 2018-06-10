@@ -4,6 +4,8 @@ import {get as getMe} from './controllers/me'
 import {post as postSignUp} from './controllers/signUp'
 import {post as postSendToken} from './controllers/sendToken'
 import {post as postUser} from './controllers/user'
+import {getUserByEmail} from './model'
+import { IUserRecord } from './shared/types';
 
 const router = express.Router()
 
@@ -14,7 +16,11 @@ router.post('/user', postUser)
 router.post(
   '/send-token',
   passwordless.requestToken((user: string, delivery: any, callback: any) => {
-    callback(null, user);
+    getUserByEmail(user)
+      .then((user: IUserRecord) => {
+        callback(null, user._id);
+      })
+      .catch((err: Error) => callback(err))
   }),
   postSendToken,
 )

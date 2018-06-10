@@ -1,4 +1,7 @@
 import * as React from 'react';
+import {connect} from 'react-redux'
+import {userEmailSelector} from '../../../selectors';
+import IStore from '../../../types/IStore';
 import {
   Button,
   Link,
@@ -6,17 +9,31 @@ import {
   Paragraph,
 } from '../../generic';
 
-class Home extends React.PureComponent {
+interface IProps {
+  email?: string
+}
+
+class Home extends React.PureComponent<IProps> {
   public render (): React.ReactNode {
+    const {email} = this.props
+
     return (
       <>
         <Main>
           <Paragraph>This is home.</Paragraph>
-          <Link to="sign-up"><Button>Join us!</Button></Link>
+          {email ? (
+            <Paragraph>Welcome back {email}!</Paragraph>
+          ) : (
+            <Link to="sign-up"><Button>Join us!</Button></Link>
+          )}
         </Main>
       </>
     )
   }
 }
 
-export default Home
+const mapStateToProps = (state: IStore): IProps => ({
+  email: userEmailSelector(state),
+})
+
+export default connect(mapStateToProps)(Home)

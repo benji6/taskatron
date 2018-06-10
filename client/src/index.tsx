@@ -4,6 +4,7 @@ import {Provider} from 'react-redux'
 import {BrowserRouter, Route} from 'react-router-dom';
 import {applyMiddleware, compose, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga'
+import Auth from './components/Auth';
 import Header from './components/Header';
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
@@ -25,11 +26,14 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 )
 
+sagaMiddleware.run(rootSaga)
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <>
         <Header />
+        <Route path="/" component={Auth}/>
         <Route path="/" exact component={Home}/>
         <Route path="/login" component={Login}/>
         <Route path="/sign-in" component={SignIn}/>
@@ -39,5 +43,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root') as HTMLDivElement
 );
-
-sagaMiddleware.run(rootSaga)

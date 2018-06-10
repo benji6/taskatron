@@ -1,18 +1,18 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {isLoggedInSelector} from '../../selectors';
+import {userIsSignedInSelector} from '../../selectors';
 import IStore from '../../types/IStore';
 
 import './style.css'
 
 interface IProps {
-  readonly isLoggedIn: boolean
+  readonly isSignedIn: boolean
 }
 
 class Header extends React.PureComponent<IProps> {
   public render (): React.ReactNode {
-    const {isLoggedIn} = this.props
+    const {isSignedIn} = this.props
 
     return (
       <header className="header">
@@ -20,18 +20,18 @@ class Header extends React.PureComponent<IProps> {
           <Link className="header__heading-link" to="/">mu</Link>
         </h1>
         <div className="header__profile">
-          { isLoggedIn ? (
-            "username"
-          ) : (
+          { !isSignedIn && (
             <Link className="header__link" to="sign-in">
               Sign in
             </Link>
           ) }
         </div>
         <div className="header__sign-up">
-          <Link className="header__link" to="sign-up">
-            Join us
-          </Link>
+          { !isSignedIn && (
+            <Link className="header__link" to="sign-up">
+              Join us
+            </Link>
+          ) }
         </div>
       </header>
     )
@@ -39,7 +39,7 @@ class Header extends React.PureComponent<IProps> {
 }
 
 const mapStateToProps = (state: IStore): IProps => ({
-  isLoggedIn: isLoggedInSelector(state)
+  isSignedIn: userIsSignedInSelector(state)
 })
 
 export default connect(mapStateToProps)(Header)

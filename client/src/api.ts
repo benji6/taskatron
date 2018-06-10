@@ -1,4 +1,4 @@
-import {IUserPostBody} from './shared/types'
+import {IUserPostBody, IUserRecord} from './shared/types'
 import ICredentials from './types/ICredentials'
 
 const origin = 'http://localhost:3001'
@@ -13,7 +13,12 @@ const postConfig = (body: any) => ({
   method: 'post',
 })
 
-export const getMe = ({token, uid}: ICredentials): Promise<Response> => fetch(`${origin}/me?token=${token}&uid=${encodeURIComponent(uid)}`)
+export const getMe = ({token, uid}: ICredentials): Promise<IUserRecord> => fetch(`${origin}/me?token=${token}&uid=${encodeURIComponent(uid)}`)
+  .then(response => {
+    if (!response.ok) throw Error(`${response.status}: ${response.statusText}`)
+    return response
+  })
+  .then(response => response.json())
 
 export const postUser = (user: IUserPostBody): Promise<Response> => fetch(`${origin}/user`, postConfig(user))
   .then(response => {

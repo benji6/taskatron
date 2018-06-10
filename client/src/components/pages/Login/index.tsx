@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Redirect} from 'react-router-dom'
 import {getMe} from '../../../api'
 import {setCredentials} from '../../../localStorage'
+import { IUserRecord } from '../../../shared/types';
 import {
   Heading,
   Link,
@@ -37,20 +38,15 @@ class Login extends React.PureComponent<IProps, IState> {
 
     if (token && uid) {
       const credentials = {token, uid}
-      getMe({token, uid}).then(
-        response => {
-          if (response.ok) {
-            setCredentials(credentials)
-            // FIXME classic setState on unmounted component issue
-            this.setState({redirect: true})
-          } else {
-            this.setState({
-              error: true
-            })
-          }
-        },
-        () => this.setState({error: true})
-      )
+      getMe({token, uid})
+        .then((user: IUserRecord) => {
+          setCredentials(credentials)
+          // FIXME classic setState on unmounted component issue
+          this.setState({redirect: true})
+        })
+        .catch(() => {
+          this.setState({error: true})
+        })
     }
   }
 
