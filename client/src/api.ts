@@ -13,7 +13,16 @@ const postConfig = (body: any) => ({
   method: 'post',
 })
 
-export const getMe = ({token, uid}: ICredentials): Promise<IUserRecord> => fetch(`${origin}/me?token=${token}&uid=${encodeURIComponent(uid)}`)
+const credentialsQueryString = ({token, uid}: ICredentials): string => `token=${token}&uid=${encodeURIComponent(uid)}`
+
+export const getMe = (credentials: ICredentials): Promise<IUserRecord> => fetch(`${origin}/me?${credentialsQueryString(credentials)}`)
+  .then(response => {
+    if (!response.ok) throw Error(`${response.status}: ${response.statusText}`)
+    return response
+  })
+  .then(response => response.json())
+
+export const getSignOut = (credentials: ICredentials): Promise<Response> => fetch(`${origin}/sign-out?${credentialsQueryString(credentials)}`)
   .then(response => {
     if (!response.ok) throw Error(`${response.status}: ${response.statusText}`)
     return response

@@ -28,7 +28,6 @@ class Login extends React.PureComponent<IProps, IState> {
     }
   }
   public componentDidMount() {
-    console.log('Login mount') // tslint:disable-line
     const params = new URL(String(document.location)).searchParams
 
     const token = params.get('token')
