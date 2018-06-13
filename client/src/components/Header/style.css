@@ -33,14 +33,6 @@
   top: 0;
 }
 
-.header__link {
-  color: var(--color-ground);
-  padding: .5rem;
-  outline: 0;
-  text-decoration: none;
-  transition: color var(--transition-time) var(--transition-timing-function);
-}
-
 .header__sign-in:focus {
   color: var(--color-ground-focus);
 }

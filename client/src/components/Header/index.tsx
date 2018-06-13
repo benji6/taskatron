@@ -28,15 +28,19 @@ class Header extends React.PureComponent<IProps> {
           { isSignedIn ? (
             <Button onClick={onSignOut}>Sign out</Button>
           ) : (
-            <Link className="header__link" to="sign-in">
-              Sign in
+            <Link to="sign-in">
+              <Button>
+                Sign in
+              </Button>
             </Link>
           ) }
         </div>
         <div className="header__sign-up">
           { !isSignedIn && (
-            <Link className="header__link" to="sign-up">
-              Join us
+            <Link to="sign-up">
+              <Button>
+                Join us
+              </Button>
             </Link>
           ) }
         </div>
