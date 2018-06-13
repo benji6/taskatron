@@ -1,15 +1,15 @@
 :root {
-  --color-error: #ff005a;
-  --color-complement: #707070;
-  --color-complement-focus: #555555;
-  --color-complement-hover: #787878;
-  --color-figure: #242424;
-  --color-ground: #fbfbfb;
-  --color-ground-focus: #dfdfdf;
+  --color-accent: var(--oc-blue-6);
+  --color-accent-focus: var(--oc-blue-7);
+  --color-accent-hover: var(--oc-blue-5);
+  --color-complement: var(--oc-gray-6);
+  --color-complement-focus: var(--oc-gray-7);
+  --color-complement-hover: var(--oc-gray-5);
+  --color-error: var(--oc-red-6);
+  --color-figure: var(--oc-gray-9);
+  --color-ground: var(--oc-gray-0);
+  --color-ground-focus: var(--gray-3);
   --color-ground-hover: #ffffff;
-  --color-highlight: #008ddc;
-  --color-highlight-focus: #007cc1;
-  --color-highlight-hover: #17acff;
   --border-radius: .15rem;
   --font-size-small: .9rem;
   --transition-time: .2s;

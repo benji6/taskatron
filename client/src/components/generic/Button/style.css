@@ -11,19 +11,19 @@
 }
 
 .button--primary {
-  background: var(--color-highlight);
+  background: var(--color-accent);
 }
 
 .button--primary:focus {
-  background: var(--color-highlight-focus);
+  background: var(--color-accent-focus);
 }
 
 .button--primary:hover:not(:disabled) {
-  background: var(--color-highlight-hover);
+  background: var(--color-accent-hover);
 }
 
 .button--primary:active {
-  background: var(--color-highlight-focus);
+  background: var(--color-accent-focus);
 }
 
 .button--primary:disabled {

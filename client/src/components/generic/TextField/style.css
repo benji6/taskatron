@@ -22,10 +22,10 @@
 }
 
 .text-field__input:focus {
-  border-color: var(--color-highlight-focus);
+  border-color: var(--color-accent-focus);
 }
 .text-field__input:hover {
-  border-color: var(--color-highlight-hover);
+  border-color: var(--color-accent-hover);
 }
 
 .text-field__input.text-field__input--error {

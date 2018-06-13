@@ -13,6 +13,7 @@ import SignUp from './components/pages/SignUp';
 import reducer from './reducers';
 import rootSaga from './sagas'
 
+import 'open-color/open-color.css';
 import './vars.css';
 
 import './style.css';

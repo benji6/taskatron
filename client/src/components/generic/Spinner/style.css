@@ -1,7 +1,7 @@
 .spinner {
   --diameter: 1.5rem;
   animation: rotate .75s infinite linear;
-  border: calc(var(--diameter) / 6) solid var(--color-highlight);
+  border: calc(var(--diameter) / 6) solid var(--color-accent);
   border-right-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
