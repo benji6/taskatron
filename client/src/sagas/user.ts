@@ -4,6 +4,8 @@ import {
   USER_CHECK_SIGNED_IN,
   USER_SIGN_OUT,
   USER_SIGN_UP_REQUEST,
+  userGetCredentialsFailure,
+  userGetFailure,
   userGetSuccess,
   userSignUpFailure,
   userSignUpSuccess,
@@ -21,11 +23,16 @@ import {IUserPostBody} from '../shared/types'
 
 function* handleUserCheckSignedIn() {
   const credentials = getCredentials()
-  if (!credentials) return
+  if (!credentials) {
+    yield put(userGetCredentialsFailure())
+    return
+  }
+
   try {
     const user = yield call(getMe, credentials);
     yield put(userGetSuccess(user))
   } catch (e) {
+    yield put(userGetFailure())
     deleteCredentials()
   }
 }
