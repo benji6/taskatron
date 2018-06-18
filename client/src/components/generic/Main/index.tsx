@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import './style.css'
 
 interface IProps {
@@ -6,12 +6,10 @@ interface IProps {
 }
 
 class Main extends React.PureComponent<IProps> {
-  public render (): React.ReactNode {
-    const {children} = this.props
+  public render(): React.ReactNode {
+    const { children } = this.props
 
-    return (
-      <main className="main">{children}</main>
-    )
+    return <main className="main">{children}</main>
   }
 }
 

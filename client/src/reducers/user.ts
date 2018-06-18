@@ -5,7 +5,7 @@ import {
   USER_GET_SUCCESS,
   USER_SIGN_UP_FAILURE,
   USER_SIGN_UP_SUCCESS,
-} from '../actions';
+} from '../actions'
 
 export interface IState {
   readonly hasSignedUp: boolean
@@ -23,17 +23,20 @@ const initialState = {
   signUpFailure: false,
 }
 
-export default (state: IState = initialState, {payload, type}: IAction<any>): IState => {
+export default (
+  state: IState = initialState,
+  { payload, type }: IAction<any>,
+): IState => {
   switch (type) {
     case USER_GET_CREDENTIALS_FAILURE:
     case USER_GET_FAILURE:
-      return {...state, isLoading: false}
+      return { ...state, isLoading: false }
     case USER_GET_SUCCESS:
-      return {...state, ...payload, isLoading: false}
+      return { ...state, ...payload, isLoading: false }
     case USER_SIGN_UP_FAILURE:
-      return {...state, signUpFailure: true}
+      return { ...state, signUpFailure: true }
     case USER_SIGN_UP_SUCCESS:
-      return {...state, hasSignedUp: true}
+      return { ...state, hasSignedUp: true }
     default:
       return state
   }

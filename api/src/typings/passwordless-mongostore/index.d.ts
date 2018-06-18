@@ -1,6 +1,6 @@
-declare module "passwordless-mongostore" {
+declare module 'passwordless-mongostore' {
   class MongoStore {
-    constructor(_: string);
+    constructor(_: string)
   }
 
   export = MongoStore

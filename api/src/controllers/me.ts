@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import {getUser} from '../model'
-import { IUserRecord } from '../shared/types';
-import pino from '../pino';
+import { Request, Response } from 'express'
+import { getUser } from '../model'
+import { IUserRecord } from '../shared/types'
+import pino from '../pino'
 
 interface IRequest extends Request {
   user: string
@@ -14,6 +14,6 @@ export const get = (req: IRequest, res: Response): void => {
     })
     .catch((err: Error) => {
       res.status(500).end()
-      pino.error(err);
+      pino.error(err)
     })
 }

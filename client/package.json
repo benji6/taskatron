@@ -16,10 +16,12 @@
     "redux-saga": "^0.16.0"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "format": "prettier --write \"src/**/*.ts*\"",
+    "format:check": "prettier --list-different \"src/**/*.ts*\"",
+    "start": "react-scripts-ts start",
+    "test": "yarn format:check && react-scripts-ts test --env=jsdom"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",
@@ -28,6 +30,7 @@
     "@types/react": "^16.3.12",
     "@types/react-dom": "^16.0.5",
     "@types/react-redux": "^5.0.19",
+    "prettier": "^1.13.5",
     "typescript": "^2.8.3"
   }
 }

@@ -15,18 +15,14 @@ class Button extends React.PureComponent<IProps> {
     variation: 'primary',
   }
 
-  public render (): React.ReactNode {
-    const {children, disabled, variation, ...rest} = this.props
+  public render(): React.ReactNode {
+    const { children, disabled, variation, ...rest } = this.props
 
     const className = `button button--${variation}`
 
     return (
       <button className={className} disabled={disabled} {...rest}>
-        {disabled ? (
-          <Spinner ground/>
-        ) : (
-          children
-        )}
+        {disabled ? <Spinner ground /> : children}
       </button>
     )
   }

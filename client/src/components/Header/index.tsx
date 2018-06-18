@@ -1,10 +1,10 @@
-import * as React from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {userSignOut} from '../../actions'
-import {userIsSignedInSelector} from '../../selectors';
-import IStore from '../../types/IStore';
-import {Button} from '../generic'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { userSignOut } from '../../actions'
+import { userIsSignedInSelector } from '../../selectors'
+import IStore from '../../types/IStore'
+import { Button } from '../generic'
 import './style.css'
 
 interface IProps {
@@ -13,36 +13,31 @@ interface IProps {
 }
 
 class Header extends React.PureComponent<IProps> {
-  public render (): React.ReactNode {
-    const {
-      isSignedIn,
-      onSignOut,
-    } = this.props
+  public render(): React.ReactNode {
+    const { isSignedIn, onSignOut } = this.props
 
     return (
       <header className="header">
         <h1 className="header__heading">
-          <Link className="header__heading-link" to="/">mu</Link>
+          <Link className="header__heading-link" to="/">
+            mu
+          </Link>
         </h1>
         <div className="header__profile">
-          { isSignedIn ? (
+          {isSignedIn ? (
             <Button onClick={onSignOut}>Sign out</Button>
           ) : (
             <Link to="sign-in">
-              <Button>
-                Sign in
-              </Button>
+              <Button>Sign in</Button>
             </Link>
-          ) }
+          )}
         </div>
         <div className="header__sign-up">
-          { !isSignedIn && (
+          {!isSignedIn && (
             <Link to="sign-up">
-              <Button>
-                Join us
-              </Button>
+              <Button>Join us</Button>
             </Link>
-          ) }
+          )}
         </div>
       </header>
     )
@@ -50,11 +45,14 @@ class Header extends React.PureComponent<IProps> {
 }
 
 const mapStateToProps = (state: IStore) => ({
-  isSignedIn: userIsSignedInSelector(state)
+  isSignedIn: userIsSignedInSelector(state),
 })
 
 const mapDispatchToProps = {
   onSignOut: userSignOut,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header)

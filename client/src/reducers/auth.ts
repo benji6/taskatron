@@ -1,8 +1,4 @@
-import {
-  AUTH_SIGN_IN_REQUEST,
-  AUTH_SIGN_IN_SUCCESS,
-  IAction,
-} from '../actions';
+import { AUTH_SIGN_IN_REQUEST, AUTH_SIGN_IN_SUCCESS, IAction } from '../actions'
 
 export interface IState {
   readonly isLoggedIn: boolean
@@ -16,10 +12,13 @@ const initialState: IState = {
   signInEmailSent: false,
 }
 
-export default (state: IState = initialState, {payload, type}: IAction<any>): IState => {
+export default (
+  state: IState = initialState,
+  { payload, type }: IAction<any>,
+): IState => {
   switch (type) {
     case AUTH_SIGN_IN_REQUEST:
-      return {...state, isRequestingSignIn: true}
+      return { ...state, isRequestingSignIn: true }
     case AUTH_SIGN_IN_SUCCESS:
       return {
         ...state,

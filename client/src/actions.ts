@@ -3,8 +3,13 @@ export interface IAction<T> {
   type: string
 }
 
-const createAction = (type: string) => <T>(payload?: T): IAction<T> => ({payload, type})
-const createActionWithoutPayload = (type: string) => (): IAction<undefined> => ({type})
+const createAction = (type: string) => <T>(payload?: T): IAction<T> => ({
+  payload,
+  type,
+})
+const createActionWithoutPayload = (type: string) => (): IAction<
+  undefined
+> => ({ type })
 
 export const AUTH_SIGN_IN_REQUEST = 'AUTH_SIGN_IN_REQUEST'
 export const AUTH_SIGN_IN_SUCCESS = 'AUTH_SIGN_IN_SUCCESS'
@@ -20,7 +25,9 @@ export const USER_SIGN_UP_SUCCESS = 'USER_SIGN_UP_SUCCESS'
 export const authSignInRequest = createAction(AUTH_SIGN_IN_REQUEST)
 export const authSignInSuccess = createAction(AUTH_SIGN_IN_SUCCESS)
 export const userCheckSignedIn = createAction(USER_CHECK_SIGNED_IN)
-export const userGetCredentialsFailure = createAction(USER_GET_CREDENTIALS_FAILURE)
+export const userGetCredentialsFailure = createAction(
+  USER_GET_CREDENTIALS_FAILURE,
+)
 export const userGetFailure = createAction(USER_GET_FAILURE)
 export const userGetSuccess = createAction(USER_GET_SUCCESS)
 export const userSignOut = createActionWithoutPayload(USER_SIGN_OUT)

@@ -1,12 +1,12 @@
-import * as React from 'react';
-import {connect} from 'react-redux'
-import {authSignInRequest} from '../../../actions'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { authSignInRequest } from '../../../actions'
 import {
   isRequestingSignInSelector,
   signInEmailSentSelector,
 } from '../../../selectors'
-import {isValidEmail} from '../../../shared/validation';
-import IStore from '../../../types/IStore';
+import { isValidEmail } from '../../../shared/validation'
+import IStore from '../../../types/IStore'
 import {
   Button,
   ButtonGroup,
@@ -15,7 +15,7 @@ import {
   Link,
   Main,
   Paragraph,
-  TextField
+  TextField,
 } from '../../generic'
 
 interface IProps {
@@ -31,21 +31,21 @@ interface IState {
 }
 
 class SignIn extends React.PureComponent<IProps, IState> {
-  constructor (props: IProps) {
+  constructor(props: IProps) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
       email: '',
-      error: false
+      error: false,
     }
   }
 
-  public render (): React.ReactNode {
-    const {handleChange, handleSubmit} = this
-    const {error} = this.state
-    const {emailSent, isRequesting} = this.props
+  public render(): React.ReactNode {
+    const { handleChange, handleSubmit } = this
+    const { error } = this.state
+    const { emailSent, isRequesting } = this.props
 
     return (
       <Main>
@@ -60,15 +60,18 @@ class SignIn extends React.PureComponent<IProps, IState> {
           <Form onSubmit={handleSubmit} noValidate>
             <Heading variation="h2">Sign in</Heading>
             <Paragraph>
-              Send us your email address and we'll send you a secure link to sign in with.
+              Send us your email address and we'll send you a secure link to
+              sign in with.
             </Paragraph>
-            <TextField error={error ? 'Please enter a valid email address' : undefined} onChange={handleChange} type="email">
+            <TextField
+              error={error ? 'Please enter a valid email address' : undefined}
+              onChange={handleChange}
+              type="email"
+            >
               Email
             </TextField>
             <ButtonGroup>
-              <Button disabled={isRequesting}>
-                Send link
-              </Button>
+              <Button disabled={isRequesting}>Send link</Button>
             </ButtonGroup>
             <Paragraph center>
               Don't have an account? <Link to="/sign-up">Sign up</Link>!
@@ -80,22 +83,22 @@ class SignIn extends React.PureComponent<IProps, IState> {
   }
 
   private handleChange(e: any): void {
-    this.setState({email: e.target.value})
+    this.setState({ email: e.target.value })
   }
 
-  private handleSubmit (e: any): void {
+  private handleSubmit(e: any): void {
     e.preventDefault()
 
-    const {email} = this.state
-    const {signIn} = this.props
+    const { email } = this.state
+    const { signIn } = this.props
 
     if (isValidEmail(email)) {
-      this.setState({error: false})
+      this.setState({ error: false })
       signIn(email)
       return
     }
 
-    this.setState({error: true})
+    this.setState({ error: true })
   }
 }
 
@@ -105,7 +108,10 @@ const mapStateToProps = (state: IStore) => ({
 })
 
 const mapDispatchToProps = {
-  signIn: authSignInRequest
+  signIn: authSignInRequest,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignIn)

@@ -1,16 +1,13 @@
-import * as React from 'react';
-import {connect} from 'react-redux'
-import {userSignUpRequest} from '../../../actions'
-import {
-  hasSignedUpSelector,
-  signUpFailureSelector,
-} from '../../../selectors'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { userSignUpRequest } from '../../../actions'
+import { hasSignedUpSelector, signUpFailureSelector } from '../../../selectors'
 import {
   isValidEmail,
   isValidFirstName,
   isValidLastName,
 } from '../../../shared/validation'
-import IStore from '../../../types/IStore';
+import IStore from '../../../types/IStore'
 import {
   Button,
   ButtonGroup,
@@ -56,21 +53,14 @@ class SignUp extends React.PureComponent<IProps, IState> {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  public render (): React.ReactNode {
+  public render(): React.ReactNode {
     const {
       handleEmailChange,
       handleFirstNameChange,
       handleLastNameChange,
       handleSubmit,
-      props: {
-        hasSignedUp,
-        signUpFailure,
-      },
-      state: {
-        firstNameError,
-        emailError,
-        lastNameError,
-      }
+      props: { hasSignedUp, signUpFailure },
+      state: { firstNameError, emailError, lastNameError },
     } = this
 
     return (
@@ -79,7 +69,8 @@ class SignUp extends React.PureComponent<IProps, IState> {
           <>
             <Heading variation="h2">Sign up Failed</Heading>
             <Paragraph>
-              We're sorry, something has gone wrong, please refresh the page and try again.
+              We're sorry, something has gone wrong, please refresh the page and
+              try again.
             </Paragraph>
           </>
         ) : hasSignedUp ? (
@@ -93,19 +84,29 @@ class SignUp extends React.PureComponent<IProps, IState> {
           <Form onSubmit={handleSubmit} noValidate>
             <Heading variation="h2">Sign Up</Heading>
             <Paragraph>We just need a few details to get started.</Paragraph>
-            <TextField error={firstNameError ? 'Please enter a first name' : undefined} onChange={handleFirstNameChange}>
+            <TextField
+              error={firstNameError ? 'Please enter a first name' : undefined}
+              onChange={handleFirstNameChange}
+            >
               First Name
             </TextField>
-            <TextField error={lastNameError ? 'Please enter a last name' : undefined} onChange={handleLastNameChange}>
+            <TextField
+              error={lastNameError ? 'Please enter a last name' : undefined}
+              onChange={handleLastNameChange}
+            >
               Last Name
             </TextField>
-            <TextField error={emailError ? 'Please enter a valid email address' : undefined} onChange={handleEmailChange} type="email">
+            <TextField
+              error={
+                emailError ? 'Please enter a valid email address' : undefined
+              }
+              onChange={handleEmailChange}
+              type="email"
+            >
               Email
             </TextField>
             <ButtonGroup>
-              <Button>
-                Sign up
-              </Button>
+              <Button>Sign up</Button>
             </ButtonGroup>
             <Paragraph center>
               Already have an account? <Link to="/sign-in">Sign in</Link>!
@@ -117,22 +118,22 @@ class SignUp extends React.PureComponent<IProps, IState> {
   }
 
   private handleEmailChange(e: any): void {
-    this.setState({email: e.target.value})
+    this.setState({ email: e.target.value })
   }
 
   private handleFirstNameChange(e: any): void {
-    this.setState({firstName: e.target.value})
+    this.setState({ firstName: e.target.value })
   }
 
   private handleLastNameChange(e: any): void {
-    this.setState({lastName: e.target.value})
+    this.setState({ lastName: e.target.value })
   }
 
-  private handleSubmit (e: any): void {
+  private handleSubmit(e: any): void {
     e.preventDefault()
 
-    const {email, firstName, lastName} = this.state
-    const {signUp} = this.props
+    const { email, firstName, lastName } = this.state
+    const { signUp } = this.props
 
     const isEmailValid = isValidEmail(email)
     const isFirstNameValid = isValidFirstName(firstName.length)
@@ -160,7 +161,10 @@ const mapStateToProps = (state: IStore) => ({
 })
 
 const mapDispatchToProps = {
-  signUp: userSignUpRequest
+  signUp: userSignUpRequest,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUp)

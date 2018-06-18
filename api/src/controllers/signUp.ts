@@ -1,4 +1,4 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import pino from '../pino'
 
 export const post = (req: Request, res: Response) => {

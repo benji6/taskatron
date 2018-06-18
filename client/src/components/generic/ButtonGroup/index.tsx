@@ -1,17 +1,15 @@
 import * as React from 'react'
-import './style.css';
+import './style.css'
 
 interface IProps {
   children: React.ReactNode
 }
 
 class ButtonGroup extends React.PureComponent<IProps> {
-  public render () {
-    const {children} = this.props
+  public render() {
+    const { children } = this.props
 
-    return (
-      <div className="button-group">{children}</div>
-    )
+    return <div className="button-group">{children}</div>
   }
 }
 

@@ -1,12 +1,12 @@
-import {NextFunction, Request, Response} from 'express'
-import {IUserPostBody, IUserRecord} from '../shared/types'
+import { NextFunction, Request, Response } from 'express'
+import { IUserPostBody, IUserRecord } from '../shared/types'
 import {
   isValidEmail,
   isValidFirstName,
   isValidLastName,
 } from '../shared/validation'
 import pino from '../pino'
-import {insertUser} from '../model'
+import { insertUser } from '../model'
 import * as passwordless from 'passwordless'
 
 export const post = (req: Request, res: Response, next: NextFunction) => {
@@ -23,11 +23,14 @@ export const post = (req: Request, res: Response, next: NextFunction) => {
 
   insertUser(body)
     .then((userRecord: IUserRecord) => {
-      passwordless.requestToken((user: string, delivery: any, callback: any) => {
-        pino.info(`user post success: ${userRecord._id}`)
-        res.status(200).send(userRecord)
-        callback(null, user);
-      }, {userField: 'email'})(req, res, next)
+      passwordless.requestToken(
+        (user: string, delivery: any, callback: any) => {
+          pino.info(`user post success: ${userRecord._id}`)
+          res.status(200).send(userRecord)
+          callback(null, user)
+        },
+        { userField: 'email' },
+      )(req, res, next)
     })
     .catch((e: Error) => {
       pino.error('user post fail', e)
