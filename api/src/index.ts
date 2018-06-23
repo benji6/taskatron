@@ -2,9 +2,9 @@ import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
 import * as passwordless from 'passwordless'
+import './passwordless'
 import pino from './pino'
 import router from './router'
-import './passwordless'
 
 const { PORT } = process.env
 

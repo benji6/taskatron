@@ -19,8 +19,9 @@ const credentialsQueryString = ({ token, uid }: ICredentials): string =>
 export const getMe = (credentials: ICredentials): Promise<IUserRecord> =>
   fetch(`${origin}/me?${credentialsQueryString(credentials)}`)
     .then(response => {
-      if (!response.ok)
+      if (!response.ok) {
         throw Error(`${response.status}: ${response.statusText}`)
+      }
       return response
     })
     .then(response => response.json())
@@ -28,8 +29,9 @@ export const getMe = (credentials: ICredentials): Promise<IUserRecord> =>
 export const getSignOut = (credentials: ICredentials): Promise<Response> =>
   fetch(`${origin}/sign-out?${credentialsQueryString(credentials)}`)
     .then(response => {
-      if (!response.ok)
+      if (!response.ok) {
         throw Error(`${response.status}: ${response.statusText}`)
+      }
       return response
     })
     .then(response => response.json())

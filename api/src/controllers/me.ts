@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { getUser } from '../model'
-import { IUserRecord } from '../shared/types'
 import pino from '../pino'
+import { IUserRecord } from '../shared/types'
 
 interface IRequest extends Request {
   user: string

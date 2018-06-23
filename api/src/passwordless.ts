@@ -1,9 +1,9 @@
 import * as config from 'config'
 import * as Mailgun from 'mailgun-js'
 import * as passwordless from 'passwordless'
-const MongoStore = require('passwordless-mongostore')
-import pino from './pino'
+const MongoStore = require('passwordless-mongostore') // tslint:disable-line no-var-requires
 import { getUser } from './model'
+import pino from './pino'
 import { IUserRecord } from './shared/types'
 
 const clientHost = 'localhost:3000'

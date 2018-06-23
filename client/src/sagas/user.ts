@@ -7,9 +7,9 @@ import {
   userGetCredentialsFailure,
   userGetFailure,
   userGetSuccess,
+  userLogInFail,
   userSignUpFailure,
   userSignUpSuccess,
-  userLogInFail,
 } from '../actions'
 import { getMe, getSignOut, postUser } from '../api'
 import {
@@ -32,11 +32,11 @@ function* handleUserCheckSignedIn() {
     } catch (e) {
       if (location.pathname === '/login') {
         if (token && uid) {
-          const credentials = { token, uid }
+          const paramsCredentials = { token, uid }
           try {
-            const user = yield call(getMe, credentials)
+            const user = yield call(getMe, paramsCredentials)
             yield put(userGetSuccess(user))
-            setCredentials(credentials)
+            setCredentials(paramsCredentials)
           } catch (e) {
             yield put(userLogInFail())
           }
@@ -51,11 +51,11 @@ function* handleUserCheckSignedIn() {
 
   if (location.pathname === '/login') {
     if (token && uid) {
-      const credentials = { token, uid }
+      const paramsCredentials = { token, uid }
       try {
-        const user = yield call(getMe, credentials)
+        const user = yield call(getMe, paramsCredentials)
         yield put(userGetSuccess(user))
-        setCredentials(credentials)
+        setCredentials(paramsCredentials)
       } catch (e) {
         yield put(userLogInFail())
       }

@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
+import * as passwordless from 'passwordless'
+import { insertUser } from '../model'
+import pino from '../pino'
 import { IUserPostBody, IUserRecord } from '../shared/types'
 import {
   isValidEmail,
   isValidFirstName,
   isValidLastName,
 } from '../shared/validation'
-import pino from '../pino'
-import { insertUser } from '../model'
-import * as passwordless from 'passwordless'
 
 export const post = (req: Request, res: Response, next: NextFunction) => {
   const body: IUserPostBody = req.body
