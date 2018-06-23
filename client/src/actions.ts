@@ -3,7 +3,7 @@ export interface IAction<T> {
   type: string
 }
 
-const createAction = (type: string) => <T>(payload?: T): IAction<T> => ({
+const createAction = (type: string) => <T>(payload: T): IAction<T> => ({
   payload,
   type,
 })
@@ -23,14 +23,22 @@ export const USER_SIGN_UP_REQUEST = 'USER_SIGN_UP_REQUEST'
 export const USER_SIGN_UP_SUCCESS = 'USER_SIGN_UP_SUCCESS'
 
 export const authSignInRequest = createAction(AUTH_SIGN_IN_REQUEST)
-export const authSignInSuccess = createAction(AUTH_SIGN_IN_SUCCESS)
-export const userCheckSignedIn = createAction(USER_CHECK_SIGNED_IN)
-export const userGetCredentialsFailure = createAction(
+export const authSignInSuccess = createActionWithoutPayload(
+  AUTH_SIGN_IN_SUCCESS,
+)
+export const userCheckSignedIn = createActionWithoutPayload(
+  USER_CHECK_SIGNED_IN,
+)
+export const userGetCredentialsFailure = createActionWithoutPayload(
   USER_GET_CREDENTIALS_FAILURE,
 )
-export const userGetFailure = createAction(USER_GET_FAILURE)
+export const userGetFailure = createActionWithoutPayload(USER_GET_FAILURE)
 export const userGetSuccess = createAction(USER_GET_SUCCESS)
 export const userSignOut = createActionWithoutPayload(USER_SIGN_OUT)
-export const userSignUpFailure = createAction(USER_SIGN_UP_FAILURE)
+export const userSignUpFailure = createActionWithoutPayload(
+  USER_SIGN_UP_FAILURE,
+)
 export const userSignUpRequest = createAction(USER_SIGN_UP_REQUEST)
-export const userSignUpSuccess = createAction(USER_SIGN_UP_SUCCESS)
+export const userSignUpSuccess = createActionWithoutPayload(
+  USER_SIGN_UP_SUCCESS,
+)
