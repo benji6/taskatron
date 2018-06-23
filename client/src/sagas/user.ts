@@ -1,7 +1,7 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
   IAction,
-  USER_CHECK_SIGNED_IN,
+  USER_AUTH,
   USER_SIGN_OUT,
   USER_SIGN_UP_REQUEST,
   userGetCredentialsFailure,
@@ -9,25 +9,61 @@ import {
   userGetSuccess,
   userSignUpFailure,
   userSignUpSuccess,
+  userLogInFail,
 } from '../actions'
 import { getMe, getSignOut, postUser } from '../api'
-import { deleteCredentials, getCredentials } from '../localStorage'
+import {
+  deleteCredentials,
+  getCredentials,
+  setCredentials,
+} from '../localStorage'
 import { IUserPostBody } from '../shared/types'
 
 function* handleUserCheckSignedIn() {
   const credentials = getCredentials()
-  if (!credentials) {
-    yield put(userGetCredentialsFailure())
+  const params = new URL(String(document.location)).searchParams
+  const token = params.get('token')
+  const uid = params.get('uid')
+
+  if (credentials) {
+    try {
+      const user = yield call(getMe, credentials)
+      yield put(userGetSuccess(user))
+    } catch (e) {
+      if (location.pathname === '/login') {
+        if (token && uid) {
+          const credentials = { token, uid }
+          try {
+            const user = yield call(getMe, credentials)
+            yield put(userGetSuccess(user))
+            setCredentials(credentials)
+          } catch (e) {
+            yield put(userLogInFail())
+          }
+        }
+        return
+      }
+      yield put(userGetFailure())
+      deleteCredentials()
+    }
     return
   }
 
-  try {
-    const user = yield call(getMe, credentials)
-    yield put(userGetSuccess(user))
-  } catch (e) {
-    yield put(userGetFailure())
-    deleteCredentials()
+  if (location.pathname === '/login') {
+    if (token && uid) {
+      const credentials = { token, uid }
+      try {
+        const user = yield call(getMe, credentials)
+        yield put(userGetSuccess(user))
+        setCredentials(credentials)
+      } catch (e) {
+        yield put(userLogInFail())
+      }
+    }
+    return
   }
+
+  yield put(userGetCredentialsFailure())
 }
 
 function* handleUserSignOut() {
@@ -51,7 +87,7 @@ function* handleUserSignUpRequest({ payload }: IAction<IUserPostBody>) {
 
 export default function* watchSignUpRequest() {
   yield all([
-    takeLatest(USER_CHECK_SIGNED_IN, handleUserCheckSignedIn),
+    takeLatest(USER_AUTH, handleUserCheckSignedIn),
     takeLatest(USER_SIGN_OUT, handleUserSignOut),
     takeLatest(USER_SIGN_UP_REQUEST, handleUserSignUpRequest),
   ])

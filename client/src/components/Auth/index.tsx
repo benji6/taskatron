@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { userCheckSignedIn } from '../../actions'
+import { userAuth } from '../../actions'
 
 interface IProps {
-  handleMount: typeof userCheckSignedIn
+  handleMount: typeof userAuth
 }
 
 class Auth extends React.PureComponent<IProps> {
@@ -17,7 +17,7 @@ class Auth extends React.PureComponent<IProps> {
 }
 
 const mapDispatchToProps = {
-  handleMount: userCheckSignedIn,
+  handleMount: userAuth,
 }
 
 export default connect(
