@@ -20,7 +20,7 @@ class Header extends React.PureComponent<IProps> {
       <header className="header">
         <h1 className="header__heading">
           <Link className="header__heading-link" to="/">
-            mu
+            Taskatron
           </Link>
         </h1>
         <div className="header__profile">

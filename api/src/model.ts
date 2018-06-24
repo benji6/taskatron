@@ -2,7 +2,7 @@ import { MongoClient, ObjectId } from 'mongodb'
 import { IUserPostBody, IUserRecord } from './shared/types'
 
 const url = 'mongodb://localhost:27017'
-const dbName = 'mu'
+const dbName = 'taskatron'
 
 export const insertUser = (user: IUserPostBody): Promise<IUserRecord> =>
   MongoClient.connect(url).then((client: any) =>
