@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { Heading, Link, Main, Paragraph, Spinner } from '../../generic'
 import {
   userIsSignedInSelector,
   userLogInFailSelector,
 } from '../../../selectors'
 import IStore from '../../../types/IStore'
+import { Heading, Link, Main, Paragraph, Spinner } from '../../generic'
 
-type IProps = {
+interface IProps {
   isSignedIn: boolean
   logInFail: boolean
 }

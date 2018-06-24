@@ -24,15 +24,6 @@
   top: 0;
 }
 
-.header__sign-up {
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  position: absolute;
-  left: .5rem;
-  top: 0;
-}
-
 .header__sign-in:focus {
   color: var(--color-ground-focus);
 }

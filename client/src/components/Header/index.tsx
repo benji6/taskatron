@@ -24,20 +24,7 @@ class Header extends React.PureComponent<IProps> {
           </Link>
         </h1>
         <div className="header__profile">
-          {isSignedIn ? (
-            <Button onClick={onSignOut}>Sign out</Button>
-          ) : (
-            <Link to="sign-in">
-              <Button>Sign in</Button>
-            </Link>
-          )}
-        </div>
-        <div className="header__sign-up">
-          {!isSignedIn && (
-            <Link to="sign-up">
-              <Button>Join us</Button>
-            </Link>
-          )}
+          {isSignedIn && <Button onClick={onSignOut}>Sign out</Button>}
         </div>
       </header>
     )

@@ -73,7 +73,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
             <ButtonGroup>
               <Button disabled={isRequesting}>Send link</Button>
             </ButtonGroup>
-            <Paragraph center>
+            <Paragraph textCenter>
               Don't have an account? <Link to="/sign-up">Sign up</Link>!
             </Paragraph>
           </Form>

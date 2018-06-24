@@ -7,6 +7,8 @@
   ],
   "rules": {
     "curly": [true, "ignore-same-line"],
-    "no-submodule-imports": false
+    "jsx-boolean-value": [true, "never"],
+    "no-submodule-imports": false,
+    "no-this-assignment": false
   }
 }

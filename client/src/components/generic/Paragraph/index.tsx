@@ -4,14 +4,14 @@ import './style.css'
 
 interface IProps {
   readonly children: React.ReactNode
-  readonly center?: boolean
+  readonly textCenter?: boolean
 }
 
 class Paragraph extends React.PureComponent<IProps> {
   public render(): React.ReactNode {
-    const { center, ...rest } = this.props
+    const { textCenter, ...rest } = this.props
     const className = classnames('paragraph', {
-      'paragraph--center': center,
+      'paragraph--center': textCenter,
     })
 
     return <p {...rest} className={className} />

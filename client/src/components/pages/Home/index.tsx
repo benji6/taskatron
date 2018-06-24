@@ -19,9 +19,17 @@ class Home extends React.PureComponent<IProps> {
           {email ? (
             <Paragraph>Welcome back {email}!</Paragraph>
           ) : (
-            <Link to="sign-up">
-              <Button>Join us!</Button>
-            </Link>
+            <>
+              <Link to="sign-up">
+                <Button>Join us!</Button>
+              </Link>
+              <br />
+              <br />
+              <br />
+              <Link to="sign-in">
+                <Button>Sign in</Button>
+              </Link>
+            </>
           )}
         </Main>
       </>

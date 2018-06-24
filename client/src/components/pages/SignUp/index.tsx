@@ -108,7 +108,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
             <ButtonGroup>
               <Button>Sign up</Button>
             </ButtonGroup>
-            <Paragraph center>
+            <Paragraph textCenter>
               Already have an account? <Link to="/sign-in">Sign in</Link>!
             </Paragraph>
           </Form>
