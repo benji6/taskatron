@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { authSignInRequest } from '../../../actions'
+import { authSignInRequest, userSignInUnmount } from '../../../actions'
 import {
   isRequestingSignInSelector,
+  signInEmailNotRecognisedSelector,
   signInEmailSentSelector,
+  signInUnknownErrorSelector,
 } from '../../../selectors'
 import { isValidEmail } from '../../../shared/validation'
 import IStore from '../../../types/IStore'
@@ -19,10 +21,13 @@ import {
 } from '../../generic'
 
 interface IProps {
+  emailNotRecognised: boolean
   emailSent: boolean
+  handleUnmount: typeof userSignInUnmount
   history: any
   isRequesting: boolean
   signIn: typeof authSignInRequest
+  signInUnknownError: boolean
 }
 
 interface IState {
@@ -42,10 +47,30 @@ class SignIn extends React.PureComponent<IProps, IState> {
     }
   }
 
+  public componentWillUnmount() {
+    this.props.handleUnmount()
+  }
+
   public render(): React.ReactNode {
-    const { handleChange, handleSubmit } = this
-    const { error } = this.state
-    const { emailSent, isRequesting } = this.props
+    const {
+      handleChange,
+      handleSubmit,
+      props: {
+        emailNotRecognised,
+        emailSent,
+        isRequesting,
+        signInUnknownError,
+      },
+      state: { error },
+    } = this
+
+    const errorMessage = error
+      ? 'Please enter a valid email address'
+      : emailNotRecognised
+        ? "We don't recognise that email address, please check your spelling or sign up for an account"
+        : signInUnknownError
+          ? 'An unknown error has occurred, please check back shortly'
+          : undefined
 
     return (
       <Main>
@@ -64,7 +89,7 @@ class SignIn extends React.PureComponent<IProps, IState> {
               sign in with.
             </Paragraph>
             <TextField
-              error={error ? 'Please enter a valid email address' : undefined}
+              error={errorMessage}
               onChange={handleChange}
               type="email"
             >
@@ -103,11 +128,14 @@ class SignIn extends React.PureComponent<IProps, IState> {
 }
 
 const mapStateToProps = (state: IStore) => ({
+  emailNotRecognised: signInEmailNotRecognisedSelector(state),
   emailSent: signInEmailSentSelector(state),
   isRequesting: isRequestingSignInSelector(state),
+  signInUnknownError: signInUnknownErrorSelector(state),
 })
 
 const mapDispatchToProps = {
+  handleUnmount: userSignInUnmount,
   signIn: authSignInRequest,
 }
 

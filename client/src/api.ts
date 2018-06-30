@@ -20,7 +20,7 @@ export const getMe = (credentials: ICredentials): Promise<IUserRecord> =>
   fetch(`${origin}/me?${credentialsQueryString(credentials)}`)
     .then(response => {
       if (!response.ok) {
-        throw Error(`${response.status}: ${response.statusText}`)
+        throw Error(String(response.status))
       }
       return response
     })
@@ -30,7 +30,7 @@ export const getSignOut = (credentials: ICredentials): Promise<Response> =>
   fetch(`${origin}/sign-out?${credentialsQueryString(credentials)}`)
     .then(response => {
       if (!response.ok) {
-        throw Error(`${response.status}: ${response.statusText}`)
+        throw Error(String(response.status))
       }
       return response
     })
@@ -38,12 +38,17 @@ export const getSignOut = (credentials: ICredentials): Promise<Response> =>
 
 export const postUser = (user: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/user`, postConfig(user)).then(response => {
-    if (!response.ok) throw Error(`${response.status}: ${response.statusText}`)
+    if (!response.ok) throw Error(String(response.status))
     return response
   })
 
 export const sendToken = (email: string): Promise<Response> =>
-  fetch(`${origin}/send-token`, postConfig({ user: email }))
+  fetch(`${origin}/send-token`, postConfig({ user: email })).then(response => {
+    if (!response.ok) {
+      throw Error(String(response.status))
+    }
+    return response
+  })
 
 export const signUp = (data: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/sign-up`, postConfig(data))

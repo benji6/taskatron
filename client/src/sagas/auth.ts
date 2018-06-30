@@ -1,5 +1,10 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { AUTH_SIGN_IN_REQUEST, authSignInSuccess, IAction } from '../actions'
+import {
+  AUTH_SIGN_IN_REQUEST,
+  authSignInFail,
+  authSignInSuccess,
+  IAction,
+} from '../actions'
 import { sendToken } from '../api'
 
 function* handleAuthSignInRequest({ payload }: IAction<string>) {
@@ -7,7 +12,7 @@ function* handleAuthSignInRequest({ payload }: IAction<string>) {
     yield call(sendToken, payload)
     yield put(authSignInSuccess())
   } catch (e) {
-    // TODO
+    yield put(authSignInFail(Number(e.message)))
   }
 }
 
