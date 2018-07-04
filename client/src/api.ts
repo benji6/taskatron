@@ -16,8 +16,13 @@ const postConfig = (body: any) => ({
 const credentialsQueryString = ({ token, uid }: ICredentials): string =>
   `token=${token}&uid=${encodeURIComponent(uid)}`
 
-export const getMe = (credentials: ICredentials): Promise<IUserRecord> =>
-  fetch(`${origin}/me?${credentialsQueryString(credentials)}`)
+export const getMe = (
+  credentialsPromise: Promise<ICredentials>,
+): Promise<IUserRecord> =>
+  credentialsPromise
+    .then(credentials =>
+      fetch(`${origin}/me?${credentialsQueryString(credentials)}`),
+    )
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))
@@ -26,8 +31,13 @@ export const getMe = (credentials: ICredentials): Promise<IUserRecord> =>
     })
     .then(response => response.json())
 
-export const getSignOut = (credentials: ICredentials): Promise<Response> =>
-  fetch(`${origin}/sign-out?${credentialsQueryString(credentials)}`)
+export const getSignOut = (
+  credentialsPromise: Promise<ICredentials>,
+): Promise<Response> =>
+  credentialsPromise
+    .then(credentials =>
+      fetch(`${origin}/sign-out?${credentialsQueryString(credentials)}`),
+    )
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))

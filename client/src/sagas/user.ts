@@ -34,7 +34,7 @@ function* handleUserCheckSignedIn() {
         if (token && uid) {
           const paramsCredentials = { token, uid }
           try {
-            const user = yield call(getMe, paramsCredentials)
+            const user = yield call(getMe, Promise.resolve(paramsCredentials))
             yield put(userGetSuccess(user))
             setCredentials(paramsCredentials)
           } catch (e) {
@@ -53,7 +53,7 @@ function* handleUserCheckSignedIn() {
     if (token && uid) {
       const paramsCredentials = { token, uid }
       try {
-        const user = yield call(getMe, paramsCredentials)
+        const user = yield call(getMe, Promise.resolve(paramsCredentials))
         yield put(userGetSuccess(user))
         setCredentials(paramsCredentials)
       } catch (e) {

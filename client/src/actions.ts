@@ -1,5 +1,9 @@
 export interface IAction<T> {
-  payload?: T
+  payload: T
+  type: string
+}
+
+export interface IActionWithoutPayload {
   type: string
 }
 
@@ -7,9 +11,9 @@ const createAction = (type: string) => <T>(payload: T): IAction<T> => ({
   payload,
   type,
 })
-const createActionWithoutPayload = (type: string) => (): IAction<
-  undefined
-> => ({ type })
+const createActionWithoutPayload = (
+  type: string,
+) => (): IActionWithoutPayload => ({ type })
 
 export const AUTH_SIGN_IN_FAIL = 'AUTH_SIGN_IN_FAIL'
 export const AUTH_SIGN_IN_REQUEST = 'AUTH_SIGN_IN_REQUEST'
