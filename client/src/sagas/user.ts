@@ -1,14 +1,13 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
-  IAction,
-  USER_AUTH,
-  USER_SIGN_OUT,
-  USER_SIGN_UP_REQUEST,
+  userAuth,
   userGetCredentialsFailure,
   userGetFailure,
   userGetSuccess,
   userLogInFail,
+  userSignOut,
   userSignUpFailure,
+  userSignUpRequest,
   userSignUpSuccess,
 } from '../actions'
 import { getMe, getSignOut, postUser } from '../api'
@@ -18,6 +17,7 @@ import {
   setCredentials,
 } from '../localStorage'
 import { IUserPostBody } from '../shared/types'
+import IAction from '../types/IAction'
 
 function* handleUserCheckSignedIn() {
   const credentials = getCredentials()
@@ -87,8 +87,8 @@ function* handleUserSignUpRequest({ payload }: IAction<IUserPostBody>) {
 
 export default function* watchSignUpRequest() {
   yield all([
-    takeLatest(USER_AUTH, handleUserCheckSignedIn),
-    takeLatest(USER_SIGN_OUT, handleUserSignOut),
-    takeLatest(USER_SIGN_UP_REQUEST, handleUserSignUpRequest),
+    takeLatest(userAuth, handleUserCheckSignedIn),
+    takeLatest(userSignOut, handleUserSignOut),
+    takeLatest(userSignUpRequest, handleUserSignUpRequest),
   ])
 }

@@ -1,13 +1,13 @@
 import {
-  IAction,
-  USER_GET_CREDENTIALS_FAILURE,
-  USER_GET_FAILURE,
-  USER_GET_SUCCESS,
-  USER_LOG_IN_FAIL,
-  USER_SIGN_OUT,
-  USER_SIGN_UP_FAILURE,
-  USER_SIGN_UP_SUCCESS,
+  userGetCredentialsFailure,
+  userGetFailure,
+  userGetSuccess,
+  userLogInFail,
+  userSignOut,
+  userSignUpFailure,
+  userSignUpRequest,
 } from '../actions'
+import IAction from '../types/IAction'
 
 export interface IState {
   readonly _id?: string
@@ -32,18 +32,18 @@ export default (
   { payload, type }: IAction<any>,
 ): IState => {
   switch (type) {
-    case USER_GET_CREDENTIALS_FAILURE:
-    case USER_GET_FAILURE:
+    case String(userGetCredentialsFailure):
+    case String(userGetFailure):
       return { ...state, isLoading: false }
-    case USER_GET_SUCCESS:
+    case String(userGetSuccess):
       return { ...state, ...payload, isLoading: false }
-    case USER_LOG_IN_FAIL:
+    case String(userLogInFail):
       return { ...state, isLoading: false, logInFail: true }
-    case USER_SIGN_OUT:
+    case String(userSignOut):
       return { ...initialState, isLoading: false }
-    case USER_SIGN_UP_FAILURE:
+    case String(userSignUpFailure):
       return { ...state, signUpFailure: true }
-    case USER_SIGN_UP_SUCCESS:
+    case String(userSignUpRequest):
       return { ...state, hasSignedUp: true }
     default:
       return state

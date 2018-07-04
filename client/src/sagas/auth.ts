@@ -1,11 +1,11 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import {
-  AUTH_SIGN_IN_REQUEST,
   authSignInFail,
+  authSignInRequest,
   authSignInSuccess,
-  IAction,
 } from '../actions'
 import { sendToken } from '../api'
+import IAction from '../types/IAction'
 
 function* handleAuthSignInRequest({ payload }: IAction<string>) {
   try {
@@ -17,5 +17,5 @@ function* handleAuthSignInRequest({ payload }: IAction<string>) {
 }
 
 export default function* watchAuthSignInRequest() {
-  yield takeLatest(AUTH_SIGN_IN_REQUEST, handleAuthSignInRequest)
+  yield takeLatest(authSignInRequest, handleAuthSignInRequest)
 }

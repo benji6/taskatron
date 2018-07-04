@@ -1,10 +1,10 @@
 import {
-  AUTH_SIGN_IN_FAIL,
-  AUTH_SIGN_IN_REQUEST,
-  AUTH_SIGN_IN_SUCCESS,
-  IAction,
-  USER_SIGN_IN_UNMOUNT,
+  authSignInFail,
+  authSignInRequest,
+  authSignInSuccess,
+  userSignInUnmount,
 } from '../actions'
+import IAction from '../types/IAction'
 
 export interface IState {
   readonly failCode?: number
@@ -24,22 +24,22 @@ export default (
   { payload, type }: IAction<any>,
 ): IState => {
   switch (type) {
-    case AUTH_SIGN_IN_REQUEST:
+    case String(authSignInRequest):
       return { ...state, failCode: undefined, isRequestingSignIn: true }
-    case AUTH_SIGN_IN_FAIL:
+    case String(authSignInFail):
       return {
         ...state,
         failCode: payload,
         isRequestingSignIn: false,
       }
-    case AUTH_SIGN_IN_SUCCESS:
+    case String(authSignInSuccess):
       return {
         ...state,
         failCode: undefined,
         isRequestingSignIn: false,
         signInEmailSent: true,
       }
-    case USER_SIGN_IN_UNMOUNT:
+    case String(userSignInUnmount):
       return {
         ...state,
         failCode: undefined,
