@@ -7,8 +7,8 @@ interface IRequest extends Request {
   user: string
 }
 
-export const get = (req: IRequest, res: Response): void => {
-  getUser(req.user)
+export const get = (req: Request, res: Response): void => {
+  getUser((req as IRequest).user)
     .then((user: IUserRecord) => {
       res.status(200).send(user)
     })
