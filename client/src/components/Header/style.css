@@ -15,15 +15,6 @@
   text-decoration: none;
 }
 
-.header__profile {
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  position: absolute;
-  right: .5rem;
-  top: 0;
-}
-
 .header__sign-in:focus {
   color: var(--color-ground-focus);
 }
