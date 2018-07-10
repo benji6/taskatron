@@ -6,7 +6,6 @@ import {
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
 import { get as getSignOut } from './controllers/signOut'
-import { post as postSignUp } from './controllers/signUp'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model'
 import { IUserRecord } from './shared/types'
@@ -32,7 +31,6 @@ router.post(
   postSendTokenErrorMiddleware,
   postSendToken,
 )
-router.post('/sign-up', postSignUp)
 router.post('/user', postUser)
 
 export default router

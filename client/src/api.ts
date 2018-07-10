@@ -59,6 +59,3 @@ export const sendToken = (email: string): Promise<Response> =>
     }
     return response
   })
-
-export const signUp = (data: IUserPostBody): Promise<Response> =>
-  fetch(`${origin}/sign-up`, postConfig(data))
