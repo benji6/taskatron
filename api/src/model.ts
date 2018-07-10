@@ -9,7 +9,7 @@ export const insertUser = (user: IUserPostBody): Promise<IUserRecord> =>
     client
       .db(dbName)
       .collection('users')
-      .insertOne(user)
+      .insertOne({ ...user, email: user.email.toLowerCase() })
       .then((result: any) => {
         client.close()
         return user
@@ -38,7 +38,7 @@ export const getUserByEmail = (email: string): Promise<IUserRecord> =>
     client
       .db(dbName)
       .collection('users')
-      .find({ email })
+      .find({ email: email.toLowerCase() })
       .toArray()
       .then(
         ([result]: [IUserRecord]): IUserRecord => {
