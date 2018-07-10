@@ -38,21 +38,15 @@ interface IState {
 }
 
 class SignUp extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-
-    this.state = {
-      email: '',
-      emailError: false,
-      firstName: '',
-      firstNameError: false,
-      lastName: '',
-      lastNameError: false,
-      postcode: '',
-      postcodeError: false,
-    }
-
-    this.handleSubmit = this.handleSubmit.bind(this)
+  public state = {
+    email: '',
+    emailError: false,
+    firstName: '',
+    firstNameError: false,
+    lastName: '',
+    lastNameError: false,
+    postcode: '',
+    postcodeError: false,
   }
 
   public render(): React.ReactNode {
@@ -144,7 +138,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
     this.setState({ postcode: e.target.value })
   }
 
-  private handleSubmit(e: any): void {
+  private handleSubmit = (e: any): void => {
     e.preventDefault()
 
     const { email, firstName, lastName, postcode } = this.state

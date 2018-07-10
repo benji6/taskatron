@@ -36,15 +36,9 @@ interface IState {
 }
 
 class SignIn extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-
-    this.state = {
-      email: '',
-      error: false,
-    }
+  public state = {
+    email: '',
+    error: false,
   }
 
   public componentWillUnmount() {
@@ -107,11 +101,11 @@ class SignIn extends React.PureComponent<IProps, IState> {
     )
   }
 
-  private handleChange(e: any): void {
+  private handleChange = (e: any): void => {
     this.setState({ email: e.target.value })
   }
 
-  private handleSubmit(e: any): void {
+  private handleSubmit = (e: any): void => {
     e.preventDefault()
 
     const { email } = this.state
