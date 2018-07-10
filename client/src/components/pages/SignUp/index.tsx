@@ -6,6 +6,7 @@ import {
   isValidEmail,
   isValidFirstName,
   isValidLastName,
+  isValidPostcode,
 } from '../../../shared/validation'
 import IStore from '../../../types/IStore'
 import {
@@ -20,18 +21,20 @@ import {
 } from '../../generic'
 
 interface IProps {
-  readonly hasSignedUp: boolean
-  readonly signUp: typeof userSignUpRequest
-  readonly signUpFailure: boolean
+  hasSignedUp: boolean
+  signUp: typeof userSignUpRequest
+  signUpFailure: boolean
 }
 
 interface IState {
-  readonly email: string
-  readonly emailError: boolean
-  readonly firstName: string
-  readonly firstNameError: boolean
-  readonly lastName: string
-  readonly lastNameError: boolean
+  email: string
+  emailError: boolean
+  firstName: string
+  firstNameError: boolean
+  lastName: string
+  lastNameError: boolean
+  postcode: string
+  postcodeError: boolean
 }
 
 class SignUp extends React.PureComponent<IProps, IState> {
@@ -45,11 +48,10 @@ class SignUp extends React.PureComponent<IProps, IState> {
       firstNameError: false,
       lastName: '',
       lastNameError: false,
+      postcode: '',
+      postcodeError: false,
     }
 
-    this.handleEmailChange = this.handleEmailChange.bind(this)
-    this.handleFirstNameChange = this.handleFirstNameChange.bind(this)
-    this.handleLastNameChange = this.handleLastNameChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -58,9 +60,10 @@ class SignUp extends React.PureComponent<IProps, IState> {
       handleEmailChange,
       handleFirstNameChange,
       handleLastNameChange,
+      handlePostcodeChange,
       handleSubmit,
       props: { hasSignedUp, signUpFailure },
-      state: { firstNameError, emailError, lastNameError },
+      state: { firstNameError, emailError, lastNameError, postcodeError },
     } = this
 
     return (
@@ -85,18 +88,6 @@ class SignUp extends React.PureComponent<IProps, IState> {
             <Heading variation="h2">Sign Up</Heading>
             <Paragraph>We just need a few details to get started.</Paragraph>
             <TextField
-              error={firstNameError ? 'Please enter a first name' : undefined}
-              onChange={handleFirstNameChange}
-            >
-              First Name
-            </TextField>
-            <TextField
-              error={lastNameError ? 'Please enter a last name' : undefined}
-              onChange={handleLastNameChange}
-            >
-              Last Name
-            </TextField>
-            <TextField
               error={
                 emailError ? 'Please enter a valid email address' : undefined
               }
@@ -104,6 +95,26 @@ class SignUp extends React.PureComponent<IProps, IState> {
               type="email"
             >
               Email
+            </TextField>
+            <TextField
+              error={firstNameError ? 'Please enter a first name' : undefined}
+              onChange={handleFirstNameChange}
+            >
+              First name
+            </TextField>
+            <TextField
+              error={lastNameError ? 'Please enter a last name' : undefined}
+              onChange={handleLastNameChange}
+            >
+              Last name
+            </TextField>
+            <TextField
+              error={
+                postcodeError ? 'Please enter a valid postcode' : undefined
+              }
+              onChange={handlePostcodeChange}
+            >
+              Postcode
             </TextField>
             <ButtonGroup>
               <Button>Sign up</Button>
@@ -117,39 +128,51 @@ class SignUp extends React.PureComponent<IProps, IState> {
     )
   }
 
-  private handleEmailChange(e: any): void {
+  private handleEmailChange = (e: any): void => {
     this.setState({ email: e.target.value })
   }
 
-  private handleFirstNameChange(e: any): void {
+  private handleFirstNameChange = (e: any): void => {
     this.setState({ firstName: e.target.value })
   }
 
-  private handleLastNameChange(e: any): void {
+  private handleLastNameChange = (e: any): void => {
     this.setState({ lastName: e.target.value })
+  }
+
+  private handlePostcodeChange = (e: any): void => {
+    this.setState({ postcode: e.target.value })
   }
 
   private handleSubmit(e: any): void {
     e.preventDefault()
 
-    const { email, firstName, lastName } = this.state
+    const { email, firstName, lastName, postcode } = this.state
     const { signUp } = this.props
 
     const isEmailValid = isValidEmail(email)
-    const isFirstNameValid = isValidFirstName(firstName.length)
-    const isLastNameValid = isValidLastName(lastName.length)
+    const isFirstNameValid = isValidFirstName(firstName)
+    const isLastNameValid = isValidLastName(lastName)
+    const isPostcodeValid = isValidPostcode(postcode)
 
     this.setState({
       emailError: !isEmailValid,
       firstNameError: !isFirstNameValid,
       lastNameError: !isLastNameValid,
+      postcodeError: !isPostcodeValid,
     })
 
-    if (isEmailValid && isFirstNameValid && isLastNameValid) {
+    if (
+      isEmailValid &&
+      isFirstNameValid &&
+      isLastNameValid &&
+      isPostcodeValid
+    ) {
       signUp({
         email,
         firstName,
         lastName,
+        postcode,
       })
     }
   }

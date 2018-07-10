@@ -7,6 +7,7 @@ import {
   isValidEmail,
   isValidFirstName,
   isValidLastName,
+  isValidPostcode,
 } from '../shared/validation'
 
 export const post = (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +16,8 @@ export const post = (req: Request, res: Response, next: NextFunction) => {
   if (
     !isValidEmail(body.email) ||
     !isValidFirstName(body.firstName) ||
-    !isValidLastName(body.lastName)
+    !isValidLastName(body.lastName) ||
+    !isValidPostcode(body.postcode)
   ) {
     res.status(400).send('invalid request body')
     return next()

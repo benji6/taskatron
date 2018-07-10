@@ -9,7 +9,11 @@ export const insertUser = (user: IUserPostBody): Promise<IUserRecord> =>
     client
       .db(dbName)
       .collection('users')
-      .insertOne({ ...user, email: user.email.toLowerCase() })
+      .insertOne({
+        ...user,
+        email: user.email.toLowerCase(),
+        signUpDate: new Date(),
+      })
       .then((result: any) => {
         client.close()
         return user
