@@ -8,7 +8,6 @@ process.on('unhandledRejection', err => {
 require('../config/env');
 
 const fs = require('fs');
-const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const clearConsole = require('react-dev-utils/clearConsole');
@@ -38,16 +37,12 @@ const HOST = process.env.HOST || '0.0.0.0';
 
 if (process.env.HOST) {
   console.log(
-    chalk.cyan(
-      `Attempting to bind to HOST environment variable: ${chalk.yellow(
-        chalk.bold(process.env.HOST)
-      )}`
-    )
+    `Attempting to bind to HOST environment variable: ${process.env.HOST}`
   );
   console.log(
     `If this was unintentional, check that you haven't mistakenly set it in your shell.`
   );
-  console.log(`Learn more here: ${chalk.yellow('http://bit.ly/2mwWSwH')}`);
+  console.log(`Learn more here: ${'http://bit.ly/2mwWSwH'}`);
   console.log();
 }
 
@@ -81,7 +76,7 @@ choosePort(HOST, DEFAULT_PORT)
       if (isInteractive) {
         clearConsole();
       }
-      console.log(chalk.cyan('Starting the development server...\n'));
+      console.log('Starting the development server...\n');
       openBrowser(urls.localUrlForBrowser);
     });
 

@@ -15,7 +15,6 @@ process.on('unhandledRejection', err => {
 require('../config/env');
 
 const path = require('path');
-const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const config = require('../config/webpack.config.prod');
@@ -54,20 +53,16 @@ measureFileSizesBeforeBuild(paths.appBuild)
   .then(
     ({ stats, previousFileSizes, warnings }) => {
       if (warnings.length) {
-        console.log(chalk.yellow('Compiled with warnings.\n'));
+        console.log('Compiled with warnings.\n');
         console.log(warnings.join('\n\n'));
         console.log(
-          '\nSearch for the ' +
-            chalk.underline(chalk.yellow('keywords')) +
-            ' to learn more about each warning.'
+          '\nSearch for the keywords to learn more about each warning.'
         );
         console.log(
-          'To ignore, add ' +
-            chalk.cyan('// eslint-disable-next-line') +
-            ' to the line before.\n'
+          'To ignore, add "// eslint-disable-next-line" to the line before.\n'
         );
       } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+        console.log('Compiled successfully.\n');
       }
 
       console.log('File sizes after gzip:\n');
@@ -93,7 +88,7 @@ measureFileSizesBeforeBuild(paths.appBuild)
       );
     },
     err => {
-      console.log(chalk.red('Failed to compile.\n'));
+      console.log('Failed to compile.\n');
       printBuildError(err);
       process.exit(1);
     }
@@ -125,10 +120,8 @@ function build(previousFileSizes) {
         messages.warnings.length
       ) {
         console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n' +
-              'Most CI servers set it automatically.\n'
-          )
+          '\nTreating warnings as errors because process.env.CI = true.\n' +
+            'Most CI servers set it automatically.\n'
         );
         return reject(new Error(messages.warnings.join('\n\n')));
       }
