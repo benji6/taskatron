@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import * as passwordless from 'passwordless'
-import { insertUser } from '../model'
+import { getUserByEmail, insertUser } from '../model'
 import pino from '../pino'
-import { IUserPostBody, IUserRecord } from '../shared/types'
+import { IUserPostBody } from '../shared/types'
 import {
   isValidEmail,
   isValidFirstName,
@@ -10,7 +10,7 @@ import {
   isValidPostcode,
 } from '../shared/validation'
 
-export const post = (req: Request, res: Response, next: NextFunction) => {
+export const post = async (req: Request, res: Response, next: NextFunction) => {
   const body: IUserPostBody = req.body
 
   if (
@@ -23,19 +23,20 @@ export const post = (req: Request, res: Response, next: NextFunction) => {
     return next()
   }
 
-  insertUser(body)
-    .then((userRecord: IUserRecord) => {
-      passwordless.requestToken(
-        (user: string, delivery: any, callback: any) => {
-          pino.info(`user post success: ${userRecord._id}`)
-          res.status(200).send(userRecord)
-          callback(null, user)
-        },
-        { userField: 'email' },
-      )(req, res, next)
-    })
-    .catch((e: Error) => {
-      pino.error('user post fail', e)
-      res.status(500).end()
-    })
+  try {
+    if (await getUserByEmail(body.email)) return res.status(400).end()
+
+    const userRecord = await insertUser(body)
+    passwordless.requestToken(
+      (user: string, delivery: any, callback: any) => {
+        pino.info(`user post success: ${userRecord._id}`)
+        res.status(200).send(userRecord)
+        callback(null, user)
+      },
+      { userField: 'email' },
+    )(req, res, next)
+  } catch (e) {
+    pino.error('user post fail', e)
+    res.status(500).end()
+  }
 }

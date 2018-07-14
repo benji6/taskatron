@@ -6,25 +6,26 @@ import {
   userSignOut,
   userSignUpFailure,
   userSignUpRequest,
+  userSignUpUnmount,
 } from '../actions'
 import IAction from '../types/IAction'
 
 export interface IState {
-  readonly _id?: string
-  readonly email?: string
-  readonly firstName?: string
-  readonly hasSignedUp: boolean
-  readonly isLoading: boolean
-  readonly lastName?: string
-  readonly logInFail: boolean
-  readonly signUpFailure: boolean
+  _id?: string
+  email?: string
+  firstName?: string
+  hasSignedUp: boolean
+  isLoading: boolean
+  lastName?: string
+  logInFail: boolean
+  signUpFailureCode?: 400 | 500
 }
 
 const initialState = {
   hasSignedUp: false,
   isLoading: true,
   logInFail: false,
-  signUpFailure: false,
+  signUpFailureCode: undefined,
 }
 
 export default (
@@ -42,9 +43,16 @@ export default (
     case String(userSignOut):
       return { ...initialState, isLoading: false }
     case String(userSignUpFailure):
-      return { ...state, signUpFailure: true }
+      return { ...state, signUpFailureCode: payload }
     case String(userSignUpRequest):
       return { ...state, hasSignedUp: true }
+    case String(userSignUpUnmount):
+      return {
+        ...state,
+        hasSignedUp: false,
+        logInFail: false,
+        signUpFailureCode: undefined,
+      }
     default:
       return state
   }

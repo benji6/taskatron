@@ -81,7 +81,7 @@ function* handleUserSignUpRequest({ payload }: IAction<IUserPostBody>) {
     yield call(postUser, payload)
     yield put(userSignUpSuccess())
   } catch (e) {
-    yield put(userSignUpFailure())
+    yield put(userSignUpFailure(Number(e.message)))
   }
 }
 

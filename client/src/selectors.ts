@@ -10,8 +10,9 @@ export const isRequestingSignInSelector = (state: IStore): boolean =>
   state.auth.isRequestingSignIn
 export const signInEmailSentSelector = (state: IStore): boolean =>
   state.auth.signInEmailSent
-export const signUpFailureSelector = (state: IStore): boolean =>
-  state.user.signUpFailure
+export const signUpFailureCodeSelector = (
+  state: IStore,
+): 400 | 500 | undefined => state.user.signUpFailureCode
 export const userEmailSelector = (state: IStore): string | undefined =>
   state.user.email
 export const userIsLoadingSelector = (state: IStore): boolean =>

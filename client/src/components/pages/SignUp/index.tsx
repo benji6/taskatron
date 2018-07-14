@@ -1,7 +1,10 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { userSignUpRequest } from '../../../actions'
-import { hasSignedUpSelector, signUpFailureSelector } from '../../../selectors'
+import { userSignUpRequest, userSignUpUnmount } from '../../../actions'
+import {
+  hasSignedUpSelector,
+  signUpFailureCodeSelector,
+} from '../../../selectors'
 import {
   isValidEmail,
   isValidFirstName,
@@ -22,8 +25,9 @@ import {
 
 interface IProps {
   hasSignedUp: boolean
+  onUnmount: typeof userSignUpUnmount
   signUp: typeof userSignUpRequest
-  signUpFailure: boolean
+  signUpFailureCode: 400 | 500 | undefined
 }
 
 interface IState {
@@ -49,6 +53,10 @@ class SignUp extends React.PureComponent<IProps, IState> {
     postcodeError: false,
   }
 
+  public componentWillUnmount() {
+    this.props.onUnmount()
+  }
+
   public render(): React.ReactNode {
     const {
       handleEmailChange,
@@ -56,13 +64,29 @@ class SignUp extends React.PureComponent<IProps, IState> {
       handleLastNameChange,
       handlePostcodeChange,
       handleSubmit,
-      props: { hasSignedUp, signUpFailure },
-      state: { firstNameError, emailError, lastNameError, postcodeError },
+      props: { hasSignedUp, signUpFailureCode },
+      state: {
+        email,
+        firstNameError,
+        emailError,
+        lastNameError,
+        postcodeError,
+      },
     } = this
 
     return (
       <Main>
-        {signUpFailure ? (
+        {signUpFailureCode === 400 ? (
+          <>
+            <Heading variation="h2">Sign up Failed</Heading>
+            <Paragraph>
+              Looks like we already have an account for {email}.
+            </Paragraph>
+            <Paragraph>
+              Try <Link to="/sign-in">signing in</Link>.
+            </Paragraph>
+          </>
+        ) : signUpFailureCode === 500 ? (
           <>
             <Heading variation="h2">Sign up Failed</Heading>
             <Paragraph>
@@ -174,10 +198,11 @@ class SignUp extends React.PureComponent<IProps, IState> {
 
 const mapStateToProps = (state: IStore) => ({
   hasSignedUp: hasSignedUpSelector(state),
-  signUpFailure: signUpFailureSelector(state),
+  signUpFailureCode: signUpFailureCodeSelector(state),
 })
 
 const mapDispatchToProps = {
+  onUnmount: userSignUpUnmount,
   signUp: userSignUpRequest,
 }
 

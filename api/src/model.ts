@@ -37,7 +37,9 @@ export const getUser = (id: string): Promise<IUserRecord> =>
       .catch(() => client.close()),
   )
 
-export const getUserByEmail = (email: string): Promise<IUserRecord> =>
+export const getUserByEmail = (
+  email: string,
+): Promise<IUserRecord | undefined> =>
   MongoClient.connect(url).then((client: any) =>
     client
       .db(dbName)
@@ -45,7 +47,7 @@ export const getUserByEmail = (email: string): Promise<IUserRecord> =>
       .find({ email: email.toLowerCase() })
       .toArray()
       .then(
-        ([result]: [IUserRecord]): IUserRecord => {
+        ([result]: [IUserRecord | undefined]): IUserRecord | undefined => {
           client.close()
           return result
         },
