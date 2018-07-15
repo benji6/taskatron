@@ -1,18 +1,5 @@
 import IStore from './types/IStore'
 
-export const signInEmailNotRecognisedSelector = (state: IStore): boolean =>
-  state.auth.failCode === 400
-export const signInUnknownErrorSelector = (state: IStore): boolean =>
-  !signInEmailNotRecognisedSelector(state) && Boolean(state.auth.failCode)
-export const hasSignedUpSelector = (state: IStore): boolean =>
-  state.user.hasSignedUp
-export const isRequestingSignInSelector = (state: IStore): boolean =>
-  state.auth.isRequestingSignIn
-export const signInEmailSentSelector = (state: IStore): boolean =>
-  state.auth.signInEmailSent
-export const signUpFailureCodeSelector = (
-  state: IStore,
-): 400 | 500 | undefined => state.user.signUpFailureCode
 export const userEmailSelector = (state: IStore): string | undefined =>
   state.user.email
 export const userIsLoadingSelector = (state: IStore): boolean =>

@@ -1,15 +1,11 @@
 import * as React from 'react'
 import './style.css'
 
-interface IProps {
-  children: React.ReactNode
-}
-
-class ButtonGroup extends React.PureComponent<IProps> {
+class ButtonGroup extends React.PureComponent<
+  React.HTMLAttributes<HTMLDivElement>
+> {
   public render() {
-    const { children } = this.props
-
-    return <div className="button-group">{children}</div>
+    return <div {...this.props} className="button-group" />
   }
 }
 

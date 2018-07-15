@@ -1,3 +1,4 @@
+import { Form as FormikForm } from 'formik'
 import * as React from 'react'
 import './style.css'
 
@@ -5,13 +6,7 @@ class Form extends React.PureComponent<
   React.FormHTMLAttributes<HTMLFormElement>
 > {
   public render() {
-    const { children, ...rest } = this.props
-
-    return (
-      <form {...rest} className="form">
-        {this.props.children}
-      </form>
-    )
+    return <FormikForm {...this.props} className="form" noValidate />
   }
 }
 

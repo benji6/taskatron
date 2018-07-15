@@ -2,8 +2,7 @@ import * as classnames from 'classnames'
 import * as React from 'react'
 import './style.css'
 
-interface IProps {
-  readonly children: React.ReactNode
+interface IProps extends React.HTMLAttributes<HTMLParagraphElement> {
   readonly textCenter?: boolean
 }
 

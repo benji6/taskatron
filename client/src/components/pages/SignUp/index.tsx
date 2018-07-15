@@ -1,17 +1,13 @@
+import { Field, FieldProps, Formik, FormikProps } from 'formik'
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { userSignUpRequest, userSignUpUnmount } from '../../../actions'
-import {
-  hasSignedUpSelector,
-  signUpFailureCodeSelector,
-} from '../../../selectors'
+import { postUser } from '../../../api'
 import {
   isValidEmail,
   isValidFirstName,
   isValidLastName,
   isValidPostcode,
 } from '../../../shared/validation'
-import IStore from '../../../types/IStore'
+import getFieldError from '../../../utils/getFieldError'
 import {
   Button,
   ButtonGroup,
@@ -23,60 +19,38 @@ import {
   TextField,
 } from '../../generic'
 
-interface IProps {
-  hasSignedUp: boolean
-  onUnmount: typeof userSignUpUnmount
-  signUp: typeof userSignUpRequest
-  signUpFailureCode: 400 | 500 | undefined
+interface IFormValues {
+  email: string
+  firstName: string
+  lastName: string
+  postcode: string
 }
 
 interface IState {
   email: string
-  emailError: boolean
-  firstName: string
-  firstNameError: boolean
-  lastName: string
-  lastNameError: boolean
-  postcode: string
-  postcodeError: boolean
+  errorCode?: number
+  submittedSuccessfully: boolean
 }
 
-class SignUp extends React.PureComponent<IProps, IState> {
+class SignUp extends React.PureComponent<{}, IState> {
   public state = {
     email: '',
-    emailError: false,
-    firstName: '',
-    firstNameError: false,
-    lastName: '',
-    lastNameError: false,
-    postcode: '',
-    postcodeError: false,
+    errorCode: undefined,
+    submittedSuccessfully: false,
   }
 
+  public hasUnmounted = false
+
   public componentWillUnmount() {
-    this.props.onUnmount()
+    this.hasUnmounted = true
   }
 
   public render(): React.ReactNode {
-    const {
-      handleEmailChange,
-      handleFirstNameChange,
-      handleLastNameChange,
-      handlePostcodeChange,
-      handleSubmit,
-      props: { hasSignedUp, signUpFailureCode },
-      state: {
-        email,
-        firstNameError,
-        emailError,
-        lastNameError,
-        postcodeError,
-      },
-    } = this
+    const { email, errorCode, submittedSuccessfully } = this.state
 
     return (
       <Main>
-        {signUpFailureCode === 400 ? (
+        {errorCode === 400 ? (
           <>
             <Heading variation="h2">Sign up Failed</Heading>
             <Paragraph>
@@ -86,7 +60,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
               Try <Link to="/sign-in">signing in</Link>.
             </Paragraph>
           </>
-        ) : signUpFailureCode === 500 ? (
+        ) : errorCode === 500 ? (
           <>
             <Heading variation="h2">Sign up Failed</Heading>
             <Paragraph>
@@ -94,7 +68,7 @@ class SignUp extends React.PureComponent<IProps, IState> {
               try again.
             </Paragraph>
           </>
-        ) : hasSignedUp ? (
+        ) : submittedSuccessfully ? (
           <>
             <Heading variation="h2">Sign up Email Sent!</Heading>
             <Paragraph>
@@ -102,111 +76,112 @@ class SignUp extends React.PureComponent<IProps, IState> {
             </Paragraph>
           </>
         ) : (
-          <Form onSubmit={handleSubmit} noValidate>
-            <Heading variation="h2">Sign Up</Heading>
-            <Paragraph>We just need a few details to get started.</Paragraph>
-            <TextField
-              error={
-                emailError ? 'Please enter a valid email address' : undefined
-              }
-              onChange={handleEmailChange}
-              type="email"
-            >
-              Email
-            </TextField>
-            <TextField
-              error={firstNameError ? 'Please enter a first name' : undefined}
-              onChange={handleFirstNameChange}
-            >
-              First name
-            </TextField>
-            <TextField
-              error={lastNameError ? 'Please enter a last name' : undefined}
-              onChange={handleLastNameChange}
-            >
-              Last name
-            </TextField>
-            <TextField
-              error={
-                postcodeError ? 'Please enter a valid postcode' : undefined
-              }
-              onChange={handlePostcodeChange}
-            >
-              Postcode
-            </TextField>
-            <ButtonGroup>
-              <Button>Sign up</Button>
-            </ButtonGroup>
-            <Paragraph textCenter>
-              Already have an account? <Link to="/sign-in">Sign in</Link>!
-            </Paragraph>
-          </Form>
+          <Formik
+            initialValues={{
+              email: '',
+              firstName: '',
+              lastName: '',
+              postcode: '',
+            }}
+            onSubmit={this.handleSubmit}
+            validate={this.validate}
+            render={({ isSubmitting }: FormikProps<IFormValues>) => (
+              <Form className="form" noValidate>
+                <Heading variation="h2">Sign up</Heading>
+                <Paragraph>
+                  We just need a few details to get started.
+                </Paragraph>
+                <Field
+                  name="email"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <TextField
+                      {...field}
+                      error={getFieldError(form, 'email')}
+                      type="email"
+                    >
+                      Email
+                    </TextField>
+                  )}
+                />
+                <Field
+                  name="firstName"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <TextField
+                      {...field}
+                      error={getFieldError(form, 'firstName')}
+                    >
+                      First name
+                    </TextField>
+                  )}
+                />
+                <Field
+                  name="lastName"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <TextField
+                      {...field}
+                      error={getFieldError(form, 'lastName')}
+                    >
+                      Last name
+                    </TextField>
+                  )}
+                />
+                <Field
+                  name="postcode"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <TextField
+                      {...field}
+                      error={getFieldError(form, 'postcode')}
+                    >
+                      Postcode
+                    </TextField>
+                  )}
+                />
+                <ButtonGroup>
+                  <Button disabled={isSubmitting}>Send link</Button>
+                </ButtonGroup>
+                <Paragraph textCenter>
+                  Already have an account? <Link to="/sign-in">Sign in</Link>!
+                </Paragraph>
+              </Form>
+            )}
+          />
         )}
       </Main>
     )
   }
 
-  private handleEmailChange = (e: any): void => {
-    this.setState({ email: e.target.value })
+  private validate = ({
+    email,
+    firstName,
+    lastName,
+    postcode,
+  }: IFormValues) => {
+    const errors: any = {}
+    if (!isValidEmail(email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+    if (!isValidFirstName(firstName)) {
+      errors.firstName = 'Please enter a first name'
+    }
+    if (!isValidLastName(lastName)) errors.lastName = 'Please enter a last name'
+    if (!isValidPostcode(postcode)) {
+      errors.postcode = 'Please enter a valid postcode'
+    }
+    return errors
   }
 
-  private handleFirstNameChange = (e: any): void => {
-    this.setState({ firstName: e.target.value })
-  }
+  private handleSubmit = async (values: IFormValues) => {
+    this.setState({ email: values.email })
 
-  private handleLastNameChange = (e: any): void => {
-    this.setState({ lastName: e.target.value })
-  }
-
-  private handlePostcodeChange = (e: any): void => {
-    this.setState({ postcode: e.target.value })
-  }
-
-  private handleSubmit = (e: any): void => {
-    e.preventDefault()
-
-    const { email, firstName, lastName, postcode } = this.state
-    const { signUp } = this.props
-
-    const isEmailValid = isValidEmail(email)
-    const isFirstNameValid = isValidFirstName(firstName)
-    const isLastNameValid = isValidLastName(lastName)
-    const isPostcodeValid = isValidPostcode(postcode)
-
-    this.setState({
-      emailError: !isEmailValid,
-      firstNameError: !isFirstNameValid,
-      lastNameError: !isLastNameValid,
-      postcodeError: !isPostcodeValid,
-    })
-
-    if (
-      isEmailValid &&
-      isFirstNameValid &&
-      isLastNameValid &&
-      isPostcodeValid
-    ) {
-      signUp({
-        email,
-        firstName,
-        lastName,
-        postcode,
-      })
+    try {
+      await postUser(values)
+      if (this.hasUnmounted) return
+      this.setState({ submittedSuccessfully: true })
+    } catch (e) {
+      if (this.hasUnmounted) return
+      this.setState({ errorCode: e.message === '400' ? 400 : 500 })
     }
   }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  hasSignedUp: hasSignedUpSelector(state),
-  signUpFailureCode: signUpFailureCodeSelector(state),
-})
-
-const mapDispatchToProps = {
-  onUnmount: userSignUpUnmount,
-  signUp: userSignUpRequest,
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignUp)
+export default SignUp

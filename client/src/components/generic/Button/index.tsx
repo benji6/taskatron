@@ -2,11 +2,7 @@ import * as React from 'react'
 import Spinner from '../Spinner'
 import './style.css'
 
-interface IProps {
-  readonly children: React.ReactNode
-  readonly disabled?: boolean
-  readonly onClick?: (e: any) => void
-  readonly type?: 'button'
+interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   readonly variation?: 'primary' | 'secondary'
 }
 
@@ -16,12 +12,18 @@ class Button extends React.PureComponent<IProps> {
   }
 
   public render(): React.ReactNode {
-    const { children, disabled, variation, ...rest } = this.props
+    const {
+      children,
+      disabled,
+      type = 'submit',
+      variation,
+      ...rest
+    } = this.props
 
     const className = `button button--${variation}`
 
     return (
-      <button className={className} disabled={disabled} {...rest}>
+      <button {...rest} className={className} disabled={disabled} type={type}>
         {disabled ? <Spinner ground /> : children}
       </button>
     )

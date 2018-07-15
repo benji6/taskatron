@@ -1,14 +1,8 @@
+import { Field, FieldProps, Formik, FormikActions, FormikProps } from 'formik'
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { authSignInRequest, userSignInUnmount } from '../../../actions'
-import {
-  isRequestingSignInSelector,
-  signInEmailNotRecognisedSelector,
-  signInEmailSentSelector,
-  signInUnknownErrorSelector,
-} from '../../../selectors'
+import { sendToken } from '../../../api'
 import { isValidEmail } from '../../../shared/validation'
-import IStore from '../../../types/IStore'
+import getFieldError from '../../../utils/getFieldError'
 import {
   Button,
   ButtonGroup,
@@ -20,55 +14,31 @@ import {
   TextField,
 } from '../../generic'
 
-interface IProps {
-  emailNotRecognised: boolean
-  emailSent: boolean
-  handleUnmount: typeof userSignInUnmount
-  history: any
-  isRequesting: boolean
-  signIn: typeof authSignInRequest
-  signInUnknownError: boolean
+interface IFormValues {
+  email: string
 }
 
 interface IState {
-  readonly email: string
-  readonly error: boolean
+  submittedSuccessfully: boolean
 }
 
-class SignIn extends React.PureComponent<IProps, IState> {
+class SignIn extends React.PureComponent<{}, IState> {
   public state = {
-    email: '',
-    error: false,
+    submittedSuccessfully: false,
   }
 
+  public hasUnmounted = false
+
   public componentWillUnmount() {
-    this.props.handleUnmount()
+    this.hasUnmounted = true
   }
 
   public render(): React.ReactNode {
-    const {
-      handleChange,
-      handleSubmit,
-      props: {
-        emailNotRecognised,
-        emailSent,
-        isRequesting,
-        signInUnknownError,
-      },
-      state: { error },
-    } = this
-
-    const errorMessage = error
-      ? 'Please enter a valid email address'
-      : emailNotRecognised
-        ? "We don't recognise that email address, please check your spelling or sign up for an account"
-        : signInUnknownError
-          ? 'An unknown error has occurred, please check back shortly'
-          : undefined
+    const { submittedSuccessfully } = this.state
 
     return (
       <Main>
-        {emailSent ? (
+        {submittedSuccessfully ? (
           <>
             <Heading variation="h2">Sign in Email Sent!</Heading>
             <Paragraph>
@@ -76,64 +46,72 @@ class SignIn extends React.PureComponent<IProps, IState> {
             </Paragraph>
           </>
         ) : (
-          <Form onSubmit={handleSubmit} noValidate>
-            <Heading variation="h2">Sign in</Heading>
-            <Paragraph>
-              Send us your email address and we'll send you a secure link to
-              sign in with.
-            </Paragraph>
-            <TextField
-              error={errorMessage}
-              onChange={handleChange}
-              type="email"
-            >
-              Email
-            </TextField>
-            <ButtonGroup>
-              <Button disabled={isRequesting}>Send link</Button>
-            </ButtonGroup>
-            <Paragraph textCenter>
-              Don't have an account? <Link to="/sign-up">Sign up</Link>!
-            </Paragraph>
-          </Form>
+          <Formik
+            initialValues={{ email: '' }}
+            onSubmit={this.handleSubmit}
+            validate={this.validate}
+            render={({ isSubmitting }: FormikProps<IFormValues>) => (
+              <Form className="form" noValidate>
+                <Heading variation="h2">Sign in</Heading>
+                <Paragraph>
+                  Send us your email address and we'll send you a secure link to
+                  sign in with.
+                </Paragraph>
+                <Field
+                  name="email"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <TextField
+                      {...field}
+                      error={getFieldError(form, 'email')}
+                      type="email"
+                    >
+                      Email
+                    </TextField>
+                  )}
+                />
+                <ButtonGroup>
+                  <Button disabled={isSubmitting}>Send link</Button>
+                </ButtonGroup>
+                <Paragraph textCenter>
+                  Don't have an account? <Link to="/sign-up">Sign up</Link>!
+                </Paragraph>
+              </Form>
+            )}
+          />
         )}
       </Main>
     )
   }
 
-  private handleChange = (e: any): void => {
-    this.setState({ email: e.target.value })
-  }
-
-  private handleSubmit = (e: any): void => {
-    e.preventDefault()
-
-    const { email } = this.state
-    const { signIn } = this.props
-
-    if (isValidEmail(email)) {
-      this.setState({ error: false })
-      signIn(email)
-      return
+  private handleSubmit = async (
+    { email }: IFormValues,
+    { setErrors, setSubmitting }: FormikActions<IFormValues>,
+  ) => {
+    try {
+      await sendToken(email)
+      if (!this.hasUnmounted) {
+        this.setState({ submittedSuccessfully: true })
+      }
+    } catch (e) {
+      if (e.message === '400') {
+        setErrors({
+          email:
+            "We don't recognise that email address, please check your spelling or sign up for an account",
+        })
+        setSubmitting(false)
+        return
+      }
+      setErrors({
+        email: 'An unknown error has occurred, please check back shortly',
+      })
+      setSubmitting(false)
     }
-
-    this.setState({ error: true })
   }
+
+  private validate = ({ email }: IFormValues) =>
+    isValidEmail(email)
+      ? undefined
+      : { email: 'Please enter a valid email address' }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  emailNotRecognised: signInEmailNotRecognisedSelector(state),
-  emailSent: signInEmailSentSelector(state),
-  isRequesting: isRequestingSignInSelector(state),
-  signInUnknownError: signInUnknownErrorSelector(state),
-})
-
-const mapDispatchToProps = {
-  handleUnmount: userSignInUnmount,
-  signIn: authSignInRequest,
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignIn)
+export default SignIn

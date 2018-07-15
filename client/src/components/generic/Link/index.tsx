@@ -1,12 +1,8 @@
 import * as React from 'react'
-import { Link as RRLink } from 'react-router-dom'
+import { Link as RRLink, LinkProps } from 'react-router-dom'
 import './style.css'
 
-interface IProps {
-  to: string
-}
-
-class Link extends React.PureComponent<IProps> {
+class Link extends React.PureComponent<LinkProps> {
   public render() {
     return <RRLink {...this.props} className="link" />
   }

@@ -2,11 +2,8 @@ import * as classnames from 'classnames'
 import * as React from 'react'
 import './style.css'
 
-interface IProps {
-  readonly children: React.ReactNode
+interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   readonly error?: string
-  readonly onChange: (_: any) => void
-  readonly type?: 'email'
 }
 
 class TextField extends React.PureComponent<IProps> {
@@ -20,7 +17,7 @@ class TextField extends React.PureComponent<IProps> {
     return (
       <label className="text-field">
         <div className="text-field__label">{children}</div>
-        <input className={inputClassName} type="text" {...rest} />
+        <input type="text" {...rest} className={inputClassName} />
         {error && <div className="text-field__error">{error}</div>}
       </label>
     )

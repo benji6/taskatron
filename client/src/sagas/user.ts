@@ -6,18 +6,13 @@ import {
   userGetSuccess,
   userLogInFail,
   userSignOut,
-  userSignUpFailure,
-  userSignUpRequest,
-  userSignUpSuccess,
 } from '../actions'
-import { getMe, getSignOut, postUser } from '../api'
+import { getMe, getSignOut } from '../api'
 import {
   deleteCredentials,
   getCredentials,
   setCredentials,
 } from '../localStorage'
-import { IUserPostBody } from '../shared/types'
-import IAction from '../types/IAction'
 
 function* handleUserCheckSignedIn() {
   const credentials = getCredentials()
@@ -76,19 +71,9 @@ function* handleUserSignOut() {
   }
 }
 
-function* handleUserSignUpRequest({ payload }: IAction<IUserPostBody>) {
-  try {
-    yield call(postUser, payload)
-    yield put(userSignUpSuccess())
-  } catch (e) {
-    yield put(userSignUpFailure(Number(e.message)))
-  }
-}
-
 export default function* watchSignUpRequest() {
   yield all([
     takeLatest(userAuth, handleUserCheckSignedIn),
     takeLatest(userSignOut, handleUserSignOut),
-    takeLatest(userSignUpRequest, handleUserSignUpRequest),
   ])
 }
