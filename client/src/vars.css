@@ -12,6 +12,7 @@
   --color-ground-hover: #ffffff;
   --border-radius: .15rem;
   --font-size-small: .9rem;
+  --space-2: .5rem;
   --transition-time: .2s;
   --transition-timing-function: ease-in-out;
 }
