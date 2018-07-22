@@ -97,10 +97,9 @@ class SignUp extends React.PureComponent<{}, IState> {
                     <TextField
                       {...field}
                       error={getFieldError(form, 'email')}
+                      label="Email"
                       type="email"
-                    >
-                      Email
-                    </TextField>
+                    />
                   )}
                 />
                 <Field
@@ -109,9 +108,8 @@ class SignUp extends React.PureComponent<{}, IState> {
                     <TextField
                       {...field}
                       error={getFieldError(form, 'firstName')}
-                    >
-                      First name
-                    </TextField>
+                      label="First name"
+                    />
                   )}
                 />
                 <Field
@@ -120,9 +118,8 @@ class SignUp extends React.PureComponent<{}, IState> {
                     <TextField
                       {...field}
                       error={getFieldError(form, 'lastName')}
-                    >
-                      Last name
-                    </TextField>
+                      label="Last name"
+                    />
                   )}
                 />
                 <Field
@@ -131,9 +128,8 @@ class SignUp extends React.PureComponent<{}, IState> {
                     <TextField
                       {...field}
                       error={getFieldError(form, 'postcode')}
-                    >
-                      Postcode
-                    </TextField>
+                      label="Postcode"
+                    />
                   )}
                 />
                 <ButtonGroup>

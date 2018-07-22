@@ -63,10 +63,9 @@ class SignIn extends React.PureComponent<{}, IState> {
                     <TextField
                       {...field}
                       error={getFieldError(form, 'email')}
+                      label="Email"
                       type="email"
-                    >
-                      Email
-                    </TextField>
+                    />
                   )}
                 />
                 <ButtonGroup>
