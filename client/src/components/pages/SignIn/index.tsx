@@ -1,18 +1,17 @@
-import { Field, FieldProps, Formik, FormikActions, FormikProps } from 'formik'
+import { Button, TextField } from 'eri'
+import {
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikActions,
+  FormikProps,
+} from 'formik'
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { sendToken } from '../../../api'
 import { isValidEmail } from '../../../shared/validation'
 import getFieldError from '../../../utils/getFieldError'
-import {
-  Button,
-  ButtonGroup,
-  Form,
-  Heading,
-  Link,
-  Main,
-  Paragraph,
-  TextField,
-} from '../../generic'
 
 interface IFormValues {
   email: string
@@ -37,13 +36,11 @@ class SignIn extends React.PureComponent<{}, IState> {
     const { submittedSuccessfully } = this.state
 
     return (
-      <Main>
+      <main>
         {submittedSuccessfully ? (
           <>
-            <Heading variation="h2">Sign in Email Sent!</Heading>
-            <Paragraph>
-              Please check your email and click the link to sign in.
-            </Paragraph>
+            <h2>Sign in Email Sent!</h2>
+            <p>Please check your email and click the link to sign in.</p>
           </>
         ) : (
           <Formik
@@ -51,12 +48,12 @@ class SignIn extends React.PureComponent<{}, IState> {
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form className="form" noValidate>
-                <Heading variation="h2">Sign in</Heading>
-                <Paragraph>
+              <Form>
+                <h2>Sign in</h2>
+                <p>
                   Send us your email address and we'll send you a secure link to
                   sign in with.
-                </Paragraph>
+                </p>
                 <Field
                   name="email"
                   render={({ field, form }: FieldProps<IFormValues>) => (
@@ -68,17 +65,15 @@ class SignIn extends React.PureComponent<{}, IState> {
                     />
                   )}
                 />
-                <ButtonGroup>
-                  <Button disabled={isSubmitting}>Send link</Button>
-                </ButtonGroup>
-                <Paragraph textCenter>
+                <Button disabled={isSubmitting}>Send link</Button>
+                <p e-util="center">
                   Don't have an account? <Link to="/sign-up">Sign up</Link>!
-                </Paragraph>
+                </p>
               </Form>
             )}
           />
         )}
-      </Main>
+      </main>
     )
   }
 

@@ -1,5 +1,7 @@
-import { Field, FieldProps, Formik, FormikProps } from 'formik'
+import { Button, TextField } from 'eri'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { postUser } from '../../../api'
 import {
   isValidEmail,
@@ -8,16 +10,6 @@ import {
   isValidPostcode,
 } from '../../../shared/validation'
 import getFieldError from '../../../utils/getFieldError'
-import {
-  Button,
-  ButtonGroup,
-  Form,
-  Heading,
-  Link,
-  Main,
-  Paragraph,
-  TextField,
-} from '../../generic'
 
 interface IFormValues {
   email: string
@@ -49,31 +41,27 @@ class SignUp extends React.PureComponent<{}, IState> {
     const { email, errorCode, submittedSuccessfully } = this.state
 
     return (
-      <Main>
+      <main>
         {errorCode === 400 ? (
           <>
-            <Heading variation="h2">Sign up Failed</Heading>
-            <Paragraph>
-              Looks like we already have an account for {email}.
-            </Paragraph>
-            <Paragraph>
+            <h2>Sign up Failed</h2>
+            <p>Looks like we already have an account for {email}.</p>
+            <p>
               Try <Link to="/sign-in">signing in</Link>.
-            </Paragraph>
+            </p>
           </>
         ) : errorCode === 500 ? (
           <>
-            <Heading variation="h2">Sign up Failed</Heading>
-            <Paragraph>
+            <h2>Sign up Failed</h2>
+            <p>
               We're sorry, something has gone wrong, please refresh the page and
               try again.
-            </Paragraph>
+            </p>
           </>
         ) : submittedSuccessfully ? (
           <>
-            <Heading variation="h2">Sign up Email Sent!</Heading>
-            <Paragraph>
-              Please check your email and click the link to sign in.
-            </Paragraph>
+            <h2>Sign up Email Sent!</h2>
+            <p>Please check your email and click the link to sign in.</p>
           </>
         ) : (
           <Formik
@@ -86,11 +74,9 @@ class SignUp extends React.PureComponent<{}, IState> {
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form className="form" noValidate>
-                <Heading variation="h2">Sign up</Heading>
-                <Paragraph>
-                  We just need a few details to get started.
-                </Paragraph>
+              <Form>
+                <h2>Sign up</h2>
+                <p>We just need a few details to get started.</p>
                 <Field
                   name="email"
                   render={({ field, form }: FieldProps<IFormValues>) => (
@@ -132,17 +118,15 @@ class SignUp extends React.PureComponent<{}, IState> {
                     />
                   )}
                 />
-                <ButtonGroup>
-                  <Button disabled={isSubmitting}>Send link</Button>
-                </ButtonGroup>
-                <Paragraph textCenter>
+                <Button disabled={isSubmitting}>Send link</Button>
+                <p e-util="center">
                   Already have an account? <Link to="/sign-in">Sign in</Link>!
-                </Paragraph>
+                </p>
               </Form>
             )}
           />
         )}
-      </Main>
+      </main>
     )
   }
 

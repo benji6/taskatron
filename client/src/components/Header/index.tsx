@@ -5,8 +5,8 @@ import './style.css'
 class Header extends React.PureComponent {
   public render(): React.ReactNode {
     return (
-      <header className="header">
-        <h1 className="header__heading">
+      <header>
+        <h1>
           <Link className="header__heading-link" to="/">
             Taskatron
           </Link>

@@ -1,9 +1,10 @@
+import { Button } from 'eri'
 import * as React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { userSignOut } from '../../../actions'
 import { userEmailSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
-import { Button, Link, Main, Paragraph } from '../../generic'
 
 interface IProps {
   readonly email: string | undefined
@@ -16,11 +17,11 @@ class Home extends React.PureComponent<IProps> {
 
     return (
       <>
-        <Main>
-          <Paragraph>This is home.</Paragraph>
+        <main>
+          <p>This is home.</p>
           {email ? (
             <>
-              <Paragraph>Welcome back {email}!</Paragraph>
+              <p>Welcome back {email}!</p>
               <Button onClick={onSignOut}>Sign out</Button>
             </>
           ) : (
@@ -28,15 +29,12 @@ class Home extends React.PureComponent<IProps> {
               <Link to="sign-up">
                 <Button>Join us!</Button>
               </Link>
-              <br />
-              <br />
-              <br />
               <Link to="sign-in">
                 <Button>Sign in</Button>
               </Link>
             </>
           )}
-        </Main>
+        </main>
       </>
     )
   }

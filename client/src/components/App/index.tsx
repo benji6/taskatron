@@ -1,10 +1,10 @@
+import { Spinner } from 'eri'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { userIsLoadingSelector } from '../../selectors'
 import IStore from '../../types/IStore'
 import Auth from '../Auth'
-import { Spinner } from '../generic'
 import Header from '../Header'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
@@ -24,7 +24,7 @@ class App extends React.PureComponent<IProps> {
         <Auth />
         <BrowserRouter>
           {isLoading ? (
-            <Spinner page />
+            <Spinner variation="page" />
           ) : (
             <>
               <Header />

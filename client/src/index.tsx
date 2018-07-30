@@ -1,4 +1,4 @@
-import 'open-color/open-color.css'
+import 'eri/dist/index.css'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -7,9 +7,6 @@ import createSagaMiddleware from 'redux-saga'
 import App from './components/App'
 import reducer from './reducers'
 import rootSaga from './sagas'
-import './vars.css'
-
-import './style.css'
 
 const sagaMiddleware = createSagaMiddleware()
 

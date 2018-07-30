@@ -1,28 +1,4 @@
-.header {
-  background: var(--color-figure);
-  color: var(--color-ground);
-  padding: .6667rem 0;
-  position: relative;
-}
-
-.header__heading {
-  margin: 0;
-  text-align: center;
-}
-
 .header__heading-link {
-  color: var(--color-ground);
+  color: inherit;
   text-decoration: none;
-}
-
-.header__sign-in:focus {
-  color: var(--color-ground-focus);
-}
-
-.header__sign-in:hover {
-  color: var(--color-ground-hover);
-}
-
-.header__sign-in:active {
-  color: var(--color-ground-focus);
 }
