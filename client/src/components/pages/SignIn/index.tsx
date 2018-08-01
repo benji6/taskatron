@@ -1,4 +1,4 @@
-import { Button, TextField } from 'eri'
+import { Button, ButtonGroup, TextField } from 'eri'
 import {
   Field,
   FieldProps,
@@ -65,7 +65,9 @@ class SignIn extends React.PureComponent<{}, IState> {
                     />
                   )}
                 />
-                <Button disabled={isSubmitting}>Send link</Button>
+                <ButtonGroup>
+                  <Button disabled={isSubmitting}>Send link</Button>
+                </ButtonGroup>
                 <p e-util="center">
                   Don't have an account? <Link to="/sign-up">Sign up</Link>!
                 </p>

@@ -1,4 +1,4 @@
-import { Button } from 'eri'
+import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -25,14 +25,14 @@ class Home extends React.PureComponent<IProps> {
               <Button onClick={onSignOut}>Sign out</Button>
             </>
           ) : (
-            <>
+            <ButtonGroup>
               <Link to="sign-up">
                 <Button>Join us!</Button>
               </Link>
               <Link to="sign-in">
                 <Button>Sign in</Button>
               </Link>
-            </>
+            </ButtonGroup>
           )}
         </main>
       </>

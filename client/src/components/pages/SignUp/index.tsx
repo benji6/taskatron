@@ -1,4 +1,4 @@
-import { Button, TextField } from 'eri'
+import { Button, ButtonGroup, TextField } from 'eri'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
@@ -118,7 +118,9 @@ class SignUp extends React.PureComponent<{}, IState> {
                     />
                   )}
                 />
-                <Button disabled={isSubmitting}>Send link</Button>
+                <ButtonGroup>
+                  <Button disabled={isSubmitting}>Send link</Button>
+                </ButtonGroup>
                 <p e-util="center">
                   Already have an account? <Link to="/sign-in">Sign in</Link>!
                 </p>
