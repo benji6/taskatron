@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import * as passwordless from 'passwordless'
-import { getUserByEmail, insertUser } from '../model'
+import { getUserByEmail, setUser } from '../model'
 import pino from '../pino'
 import { IUserPostBody } from '../shared/types'
 import {
@@ -26,7 +26,7 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (await getUserByEmail(body.email)) return res.status(400).end()
 
-    const userRecord = await insertUser(body)
+    const userRecord = await setUser(body)
     passwordless.requestToken(
       (user: string, delivery: any, callback: any) => {
         pino.info(`user post success: ${userRecord._id}`)
