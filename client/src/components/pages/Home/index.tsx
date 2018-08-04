@@ -16,26 +16,31 @@ class Home extends React.PureComponent<IProps> {
     const { email, onSignOut } = this.props
 
     return (
-      <>
-        <main>
-          <p>This is home.</p>
-          {email ? (
-            <>
-              <p>Welcome back {email}!</p>
-              <Button onClick={onSignOut}>Sign out</Button>
-            </>
-          ) : (
+      <main>
+        {email ? (
+          <>
+            <p>Welcome back {email}!</p>
+            <p>
+              Tell us what service you have to offer -{' '}
+              <Link to="/service/cleaning">cleaning</Link>,{' '}
+              <Link to="/service/gardening">gardening</Link>, or{' '}
+              <Link to="/service/ironing">ironing</Link>.
+            </p>
             <ButtonGroup>
-              <Link to="sign-up">
-                <Button>Join us!</Button>
-              </Link>
-              <Link to="sign-in">
-                <Button>Sign in</Button>
-              </Link>
+              <Button onClick={onSignOut}>Sign out</Button>
             </ButtonGroup>
-          )}
-        </main>
-      </>
+          </>
+        ) : (
+          <ButtonGroup>
+            <Link to="sign-up">
+              <Button>Join us!</Button>
+            </Link>
+            <Link to="sign-in">
+              <Button>Sign in</Button>
+            </Link>
+          </ButtonGroup>
+        )}
+      </main>
     )
   }
 }
