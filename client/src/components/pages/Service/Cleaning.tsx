@@ -123,7 +123,7 @@ class Service extends React.PureComponent {
   private validate = ({ hourlyRate }: IFormValues) =>
     isValidNumber(hourlyRate)
       ? undefined
-      : { hourlyRate: 'Please enter a valid email address' }
+      : { hourlyRate: 'Please enter a valid hourly rate' }
 }
 
 export default Service

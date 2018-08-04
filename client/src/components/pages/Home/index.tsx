@@ -7,8 +7,8 @@ import { userEmailSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 
 interface IProps {
-  readonly email: string | undefined
-  readonly onSignOut: typeof userSignOut
+  email: string | undefined
+  onSignOut: typeof userSignOut
 }
 
 class Home extends React.PureComponent<IProps> {
