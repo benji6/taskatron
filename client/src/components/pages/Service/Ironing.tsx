@@ -16,7 +16,7 @@ interface IFormValues {
   trousers: boolean
 }
 
-class Service extends React.PureComponent {
+class IroningService extends React.PureComponent {
   public render() {
     return (
       <main>
@@ -138,4 +138,4 @@ class Service extends React.PureComponent {
       : { hourlyRate: 'Please enter a valid hourly rate' }
 }
 
-export default Service
+export default IroningService

@@ -1,10 +1,24 @@
+export interface IServiceCleaningPostBody {
+  carpetClean: boolean
+  deepClean: boolean
+  general: boolean
+  hasOwnEquipment: boolean
+  hasOwnProducts: boolean
+  hourlyRate: string
+  ovenClean: boolean
+}
+
+export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
+  userId: string
+}
+
 export interface IUserPostBody {
-  readonly email: string
-  readonly firstName: string
-  readonly lastName: string
-  readonly postcode: string
+  email: string
+  firstName: string
+  lastName: string
+  postcode: string
 }
 
 export interface IUserRecord extends IUserPostBody {
-  readonly _id: string
+  _id: string
 }

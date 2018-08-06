@@ -1,4 +1,9 @@
-import { IUserPostBody, IUserRecord } from './shared/types'
+import { getCredentials } from './localStorage'
+import {
+  IServiceCleaningPostBody,
+  IUserPostBody,
+  IUserRecord,
+} from './shared/types'
 import ICredentials from './types/ICredentials'
 
 const origin = 'http://localhost:3001'
@@ -45,6 +50,19 @@ export const getSignOut = (
       return response
     })
     .then(response => response.json())
+
+export const postServiceCleaning = async (
+  service: IServiceCleaningPostBody,
+): Promise<Response> => {
+  const credentials = await getCredentials()
+  const response = await fetch(
+    `${origin}/service/cleaning?${credentialsQueryString(credentials)}`,
+    postConfig(service),
+  )
+
+  if (!response.ok) throw Error(String(response.status))
+  return response
+}
 
 export const postUser = (user: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/user`, postConfig(user)).then(response => {

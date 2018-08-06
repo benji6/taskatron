@@ -13,7 +13,7 @@ interface IFormValues {
   specialist: boolean
 }
 
-class Service extends React.PureComponent {
+class GardeningService extends React.PureComponent {
   public render() {
     return (
       <main>
@@ -102,4 +102,4 @@ class Service extends React.PureComponent {
       : { hourlyRate: 'Please enter a valid hourly rate' }
 }
 
-export default Service
+export default GardeningService
