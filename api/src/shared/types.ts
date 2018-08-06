@@ -8,6 +8,19 @@ export interface IServiceCleaningPostBody {
   ovenClean: boolean
 }
 
+export interface IServiceGardeningPostBody {
+  general: boolean
+  hasOwnEquipment: boolean
+  hasOwnProducts: boolean
+  hourlyRate: number
+  specialist: boolean
+}
+
+export interface IServiceGardeningRecord extends IServiceGardeningPostBody {
+  service: 'gardening'
+  userId: string
+}
+
 export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
   service: 'cleaning'
   userId: string

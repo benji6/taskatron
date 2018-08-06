@@ -6,6 +6,7 @@ import {
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
 import { post as postCleaning } from './controllers/service/cleaning'
+import { post as postGardening } from './controllers/service/gardening'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model'
@@ -33,6 +34,7 @@ router.post(
   postSendToken,
 )
 router.post('/service/cleaning', passwordless.restricted(), postCleaning)
+router.post('/service/gardening', passwordless.restricted(), postGardening)
 router.post('/user', postUser)
 
 export default router
