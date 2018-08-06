@@ -4,7 +4,7 @@ export interface IServiceCleaningPostBody {
   general: boolean
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
-  hourlyRate: string
+  hourlyRate: number
   ovenClean: boolean
 }
 

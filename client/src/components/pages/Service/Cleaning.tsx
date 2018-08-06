@@ -156,7 +156,10 @@ class CleaningService extends React.PureComponent {
     actions: FormikActions<IFormValues>,
   ) => {
     try {
-      await postServiceCleaning(values)
+      await postServiceCleaning({
+        ...values,
+        hourlyRate: Number(values.hourlyRate),
+      })
       if (this.hasUnmounted) return
       actions.setSubmitting(false)
       this.setState({ submittedSuccessfully: true })

@@ -8,23 +8,24 @@ import {
 const url = 'mongodb://localhost:27017'
 const dbName = 'taskatron'
 
-export const setCleaningService = (
+export const setCleaningService = async (
   service: IServiceCleaningRecord,
-): Promise<IServiceCleaningRecord> =>
-  MongoClient.connect(url).then((client: any) =>
-    client
+): Promise<IServiceCleaningRecord> => {
+  const client: any = await MongoClient.connect(url)
+
+  try {
+    await client
       .db(dbName)
       .collection('services')
-      .insertOne({
-        ...service,
-        creationDate: new Date(),
-      })
-      .then((result: any) => {
-        client.close()
-        return service
-      })
-      .catch(() => client.close()),
-  )
+      .insertOne({ ...service, creationDate: new Date() })
+
+    client.close()
+    return service
+  } catch (e) {
+    client.close()
+    throw Error('failed to set cleaning service')
+  }
+}
 
 export const setUser = (user: IUserPostBody): Promise<IUserRecord> =>
   MongoClient.connect(url).then((client: any) =>

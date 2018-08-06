@@ -4,11 +4,12 @@ export interface IServiceCleaningPostBody {
   general: boolean
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
-  hourlyRate: string
+  hourlyRate: number
   ovenClean: boolean
 }
 
 export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
+  service: 'cleaning'
   userId: string
 }
 
