@@ -58,7 +58,7 @@ export const postServiceCleaning = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/service/cleaning?${credentialsQueryString(credentials)}`,
+    `${origin}/services/cleaning?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -71,7 +71,7 @@ export const postServiceGardening = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/service/gardening?${credentialsQueryString(credentials)}`,
+    `${origin}/services/gardening?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -84,7 +84,7 @@ export const postServiceIroning = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/service/ironing?${credentialsQueryString(credentials)}`,
+    `${origin}/services/ironing?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 

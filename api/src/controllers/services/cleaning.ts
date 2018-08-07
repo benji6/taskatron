@@ -33,7 +33,7 @@ export const post = async (req: Request, res: Response) => {
     })
     res.status(200).send(serviceRecord)
   } catch (e) {
-    pino.error('service/cleaning post fail', e)
+    pino.error('services/cleaning post fail', e)
     res.status(500).end()
   }
 }

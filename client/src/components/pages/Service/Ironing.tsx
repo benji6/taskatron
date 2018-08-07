@@ -45,8 +45,8 @@ class IroningService extends React.PureComponent {
             <h2>Gardening service added!</h2>
             <p>
               Have a different service to offer? Click{' '}
-              <Link to="/service/cleaning">here for cleaning</Link> or{' '}
-              <Link to="/service/gardening">here for gardening</Link>!
+              <Link to="/services/cleaning">here for cleaning</Link> or{' '}
+              <Link to="/services/gardening">here for gardening</Link>!
             </p>
           </>
         ) : (
@@ -152,8 +152,8 @@ class IroningService extends React.PureComponent {
                 </ButtonGroup>
                 <p e-util="center">
                   Have a different service to offer? Click{' '}
-                  <Link to="/service/cleaning">here for cleaning</Link> or{' '}
-                  <Link to="/service/gardening">here for gardening</Link>!
+                  <Link to="/services/cleaning">here for cleaning</Link> or{' '}
+                  <Link to="/services/gardening">here for gardening</Link>!
                 </p>
               </Form>
             )}

@@ -38,17 +38,17 @@ class App extends React.PureComponent<IProps> {
               <Route path="/sign-in" component={SignIn} />
               <Route path="/sign-up" component={SignUp} />
               <PrivateRoute
-                path="/service/cleaning"
+                path="/services/cleaning"
                 component={Cleaning}
                 isSignedIn={isSignedIn}
               />
               <PrivateRoute
-                path="/service/gardening"
+                path="/services/gardening"
                 component={Gardening}
                 isSignedIn={isSignedIn}
               />
               <PrivateRoute
-                path="/service/ironing"
+                path="/services/ironing"
                 component={Ironing}
                 isSignedIn={isSignedIn}
               />

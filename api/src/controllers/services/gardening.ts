@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import { IRONING } from '../../constants/services'
-import { setIroningService } from '../../model'
+import { GARDENING } from '../../constants/services'
+import { setGardeningService } from '../../model'
 import pino from '../../pino'
-import { IServiceIroningPostBody } from '../../shared/types'
+import { IServiceGardeningPostBody } from '../../shared/types'
 import { isBoolean, isDecimal } from '../../shared/validation'
 
 interface IRequest extends Request {
@@ -10,15 +10,12 @@ interface IRequest extends Request {
 }
 
 export const post = async (req: Request, res: Response) => {
-  const body: IServiceIroningPostBody = req.body
+  const body: IServiceGardeningPostBody = req.body
   if (
-    !isBoolean(body.bedLinen) ||
-    !isBoolean(body.collectAndReturn) ||
+    !isBoolean(body.general) ||
     !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.other) ||
-    !isBoolean(body.shirts) ||
+    !isBoolean(body.hasOwnProducts) ||
     !isBoolean(body.specialist) ||
-    !isBoolean(body.trousers) ||
     !isDecimal(body.hourlyRate)
   ) {
     res.status(400).send('invalid request body')
@@ -26,14 +23,14 @@ export const post = async (req: Request, res: Response) => {
   }
 
   try {
-    const serviceRecord = await setIroningService({
+    const serviceRecord = await setGardeningService({
       ...body,
-      service: IRONING,
+      service: GARDENING,
       userId: (req as IRequest).user,
     })
     res.status(200).send(serviceRecord)
   } catch (e) {
-    pino.error('service/ironing post fail', e)
+    pino.error('services/gardening post fail', e)
     res.status(500).end()
   }
 }
