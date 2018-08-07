@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb'
+import { Db, MongoClient, ObjectId } from 'mongodb'
 import {
   IServiceCleaningRecord,
   IServiceGardeningRecord,
@@ -10,110 +10,83 @@ import {
 const url = 'mongodb://localhost:27017'
 const dbName = 'taskatron'
 
-export const setCleaningService = async (
-  service: IServiceCleaningRecord,
-): Promise<IServiceCleaningRecord> => {
+const withDb = async <A>(f: (a: Db) => A) => {
   const client = await MongoClient.connect(url)
 
   try {
-    await client
-      .db(dbName)
-      .collection('services')
-      .insertOne({ ...service, creationDate: new Date() })
-
-    client.close()
-    return service
+    return f(client.db(dbName))
   } catch (e) {
+    throw e
+  } finally {
     client.close()
-    throw Error('failed to set cleaning service')
   }
 }
+
+export const setCleaningService = async (
+  service: IServiceCleaningRecord,
+): Promise<IServiceCleaningRecord> =>
+  withDb(async db => {
+    await db.collection('services').insertOne({
+      ...service,
+      creationDate: new Date(),
+    })
+
+    return service
+  })
 
 export const setGardeningService = async (
   service: IServiceGardeningRecord,
-): Promise<IServiceGardeningRecord> => {
-  const client = await MongoClient.connect(url)
+): Promise<IServiceGardeningRecord> =>
+  withDb(async db => {
+    await db.collection('services').insertOne({
+      ...service,
+      creationDate: new Date(),
+    })
 
-  try {
-    await client
-      .db(dbName)
-      .collection('services')
-      .insertOne({ ...service, creationDate: new Date() })
-
-    client.close()
     return service
-  } catch (e) {
-    client.close()
-    throw Error('failed to set cleaning service')
-  }
-}
+  })
 
 export const setIroningService = async (
   service: IServiceIroningRecord,
-): Promise<IServiceIroningRecord> => {
-  const client = await MongoClient.connect(url)
+): Promise<IServiceIroningRecord> =>
+  withDb(async db => {
+    await db.collection('services').insertOne({
+      ...service,
+      creationDate: new Date(),
+    })
 
-  try {
-    await client
-      .db(dbName)
-      .collection('services')
-      .insertOne({ ...service, creationDate: new Date() })
-
-    client.close()
     return service
-  } catch (e) {
-    client.close()
-    throw Error('failed to set cleaning service')
-  }
-}
+  })
 
-export const setUser = (user: IUserPostBody): Promise<IUserRecord> =>
-  MongoClient.connect(url).then((client: any) =>
-    client
-      .db(dbName)
-      .collection('users')
-      .insertOne({
-        ...user,
-        email: user.email.toLowerCase(),
-        signUpDate: new Date(),
-      })
-      .then((result: any) => {
-        client.close()
-        return user
-      })
-      .catch(() => client.close()),
-  )
+export const setUser = async (user: IUserPostBody): Promise<any> =>
+  withDb(async db => {
+    await db.collection('users').insertOne({
+      ...user,
+      email: user.email.toLowerCase(),
+      signUpDate: new Date(),
+    })
 
-export const getUser = (id: string): Promise<IUserRecord> =>
-  MongoClient.connect(url).then((client: any) =>
-    client
-      .db(dbName)
+    return user
+  })
+
+export const getUser = async (id: string): Promise<IUserRecord> =>
+  withDb(async db => {
+    const results = await db
       .collection('users')
       .find(new ObjectId(id))
       .toArray()
-      .then(
-        ([result]: [IUserRecord]): IUserRecord => {
-          client.close()
-          return result
-        },
-      )
-      .catch(() => client.close()),
-  )
 
-export const getUserByEmail = (
+    return results[0]
+  })
+
+export const getUserByEmail = async (
   email: string,
 ): Promise<IUserRecord | undefined> =>
-  MongoClient.connect(url).then((client: any) =>
-    client
-      .db(dbName)
+  withDb(async db => {
+    const results = await db
       .collection('users')
       .find({ email: email.toLowerCase() })
       .toArray()
-      .then(
-        ([result]: [IUserRecord | undefined]): IUserRecord | undefined => {
-          client.close()
-          return result
-        },
-      )
-      .catch(() => client.close()),
-  )
+
+    return results[0]
+  })
