@@ -28,16 +28,24 @@ export interface IServiceIroningPostBody {
 }
 
 export interface IServiceGardeningRecord extends IServiceGardeningPostBody {
+  _id: string
   service: 'gardening'
   userId: string
 }
 
+export type IServiceRecord =
+  | IServiceCleaningRecord
+  | IServiceGardeningRecord
+  | IServiceIroningRecord
+
 export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
+  _id: string
   service: 'cleaning'
   userId: string
 }
 
 export interface IServiceIroningRecord extends IServiceIroningPostBody {
+  _id: string
   service: 'ironing'
   userId: string
 }

@@ -3,6 +3,7 @@ import {
   IServiceCleaningRecord,
   IServiceGardeningRecord,
   IServiceIroningRecord,
+  IServiceRecord,
   IUserPostBody,
   IUserRecord,
 } from './shared/types'
@@ -68,6 +69,14 @@ export const setUser = async (user: IUserPostBody): Promise<any> =>
 
     return user
   })
+
+export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
+  withDb(async db =>
+    db
+      .collection('services')
+      .find({ userId })
+      .toArray(),
+  )
 
 export const getUser = async (id: string): Promise<IUserRecord> =>
   withDb(async db => {

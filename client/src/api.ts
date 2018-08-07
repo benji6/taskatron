@@ -38,6 +38,16 @@ export const getMe = (
     })
     .then(response => response.json())
 
+export const getServices = async (): Promise<Response> => {
+  const credentials = await getCredentials()
+  const response = await fetch(
+    `${origin}/services?${credentialsQueryString(credentials)}`,
+  )
+
+  if (!response.ok) throw Error(String(response.status))
+  return response
+}
+
 export const getSignOut = (
   credentialsPromise: Promise<ICredentials>,
 ): Promise<Response> =>

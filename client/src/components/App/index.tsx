@@ -8,6 +8,7 @@ import Auth from '../Auth'
 import Header from '../Header'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
+import Services from '../pages/Services'
 import Cleaning from '../pages/Services/Cleaning'
 import Gardening from '../pages/Services/Gardening'
 import Ironing from '../pages/Services/Ironing'
@@ -37,6 +38,12 @@ class App extends React.PureComponent<IProps> {
               <Route path="/login" component={Login} />
               <Route path="/sign-in" component={SignIn} />
               <Route path="/sign-up" component={SignUp} />
+              <PrivateRoute
+                exact
+                path="/services"
+                component={Services}
+                isSignedIn={isSignedIn}
+              />
               <PrivateRoute
                 path="/services/cleaning"
                 component={Cleaning}
