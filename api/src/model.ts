@@ -13,7 +13,7 @@ const dbName = 'taskatron'
 export const setCleaningService = async (
   service: IServiceCleaningRecord,
 ): Promise<IServiceCleaningRecord> => {
-  const client: any = await MongoClient.connect(url)
+  const client = await MongoClient.connect(url)
 
   try {
     await client
@@ -32,7 +32,7 @@ export const setCleaningService = async (
 export const setGardeningService = async (
   service: IServiceGardeningRecord,
 ): Promise<IServiceGardeningRecord> => {
-  const client: any = await MongoClient.connect(url)
+  const client = await MongoClient.connect(url)
 
   try {
     await client
@@ -51,7 +51,7 @@ export const setGardeningService = async (
 export const setIroningService = async (
   service: IServiceIroningRecord,
 ): Promise<IServiceIroningRecord> => {
-  const client: any = await MongoClient.connect(url)
+  const client = await MongoClient.connect(url)
 
   try {
     await client
