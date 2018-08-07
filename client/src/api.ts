@@ -2,6 +2,7 @@ import { getCredentials } from './localStorage'
 import {
   IServiceCleaningPostBody,
   IServiceGardeningPostBody,
+  IServiceIroningPostBody,
   IUserPostBody,
   IUserRecord,
 } from './shared/types'
@@ -71,6 +72,19 @@ export const postServiceGardening = async (
   const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/service/gardening?${credentialsQueryString(credentials)}`,
+    postConfig(service),
+  )
+
+  if (!response.ok) throw Error(String(response.status))
+  return response
+}
+
+export const postServiceIroning = async (
+  service: IServiceIroningPostBody,
+): Promise<Response> => {
+  const credentials = await getCredentials()
+  const response = await fetch(
+    `${origin}/service/ironing?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 

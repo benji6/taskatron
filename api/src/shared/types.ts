@@ -16,6 +16,17 @@ export interface IServiceGardeningPostBody {
   specialist: boolean
 }
 
+export interface IServiceIroningPostBody {
+  bedLinen: boolean
+  collectAndReturn: boolean
+  hasOwnEquipment: boolean
+  hourlyRate: number
+  other: boolean
+  shirts: boolean
+  specialist: boolean
+  trousers: boolean
+}
+
 export interface IServiceGardeningRecord extends IServiceGardeningPostBody {
   service: 'gardening'
   userId: string
@@ -23,6 +34,11 @@ export interface IServiceGardeningRecord extends IServiceGardeningPostBody {
 
 export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
   service: 'cleaning'
+  userId: string
+}
+
+export interface IServiceIroningRecord extends IServiceIroningPostBody {
+  service: 'ironing'
   userId: string
 }
 

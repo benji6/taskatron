@@ -2,6 +2,7 @@ import { MongoClient, ObjectId } from 'mongodb'
 import {
   IServiceCleaningRecord,
   IServiceGardeningRecord,
+  IServiceIroningRecord,
   IUserPostBody,
   IUserRecord,
 } from './shared/types'
@@ -31,6 +32,25 @@ export const setCleaningService = async (
 export const setGardeningService = async (
   service: IServiceGardeningRecord,
 ): Promise<IServiceGardeningRecord> => {
+  const client: any = await MongoClient.connect(url)
+
+  try {
+    await client
+      .db(dbName)
+      .collection('services')
+      .insertOne({ ...service, creationDate: new Date() })
+
+    client.close()
+    return service
+  } catch (e) {
+    client.close()
+    throw Error('failed to set cleaning service')
+  }
+}
+
+export const setIroningService = async (
+  service: IServiceIroningRecord,
+): Promise<IServiceIroningRecord> => {
   const client: any = await MongoClient.connect(url)
 
   try {
