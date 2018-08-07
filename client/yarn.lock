@@ -1329,9 +1329,9 @@ entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-eri@^3.13.2:
-  version "3.13.2"
-  resolved "https://registry.yarnpkg.com/eri/-/eri-3.13.2.tgz#b29e76b12380427a56d5b57d9213c687bce39ec8"
+eri@^3.14.2:
+  version "3.14.2"
+  resolved "https://registry.yarnpkg.com/eri/-/eri-3.14.2.tgz#39559d406a3b5e2e286714fea0bb9d32afe23b40"
   dependencies:
     classnames "^2.2.6"
 

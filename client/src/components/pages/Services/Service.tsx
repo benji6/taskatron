@@ -1,3 +1,4 @@
+import { Card } from 'eri'
 import * as React from 'react'
 import {
   IServiceCleaningRecord,
@@ -15,7 +16,7 @@ class Service extends React.PureComponent<IProps> {
     const { children } = this.props
 
     return (
-      <div>
+      <Card>
         <h3>{capitalizeFirst(children.service)}</h3>
         <ul>
           <li>Hourly rate: £{JSON.stringify(children.hourlyRate)}</li>
@@ -92,7 +93,7 @@ class Service extends React.PureComponent<IProps> {
             Have own equipment: {JSON.stringify(children.hasOwnEquipment)}
           </li>
         </ul>
-      </div>
+      </Card>
     )
   }
 }
