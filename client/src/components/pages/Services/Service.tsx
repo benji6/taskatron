@@ -11,6 +11,8 @@ interface IProps {
   children: IServiceRecord
 }
 
+const renderTrueFalse = (a: boolean) => a ? '✓' : '×'
+
 class Service extends React.PureComponent<IProps> {
   public render() {
     const { children } = this.props
@@ -19,23 +21,23 @@ class Service extends React.PureComponent<IProps> {
       <Card>
         <h3>{capitalizeFirst(children.service)}</h3>
         <ul>
-          <li>Hourly rate: £{JSON.stringify(children.hourlyRate)}</li>
+          <li>Hourly rate: £{String(children.hourlyRate)}</li>
           {(children as IServiceIroningRecord).bedLinen && (
             <li>
               Bed linen:{' '}
-              {JSON.stringify((children as IServiceIroningRecord).bedLinen)}
+              {renderTrueFalse((children as IServiceIroningRecord).bedLinen)}
             </li>
           )}
           {(children as IServiceCleaningRecord).carpetClean && (
             <li>
               Carpet clean:{' '}
-              {JSON.stringify((children as IServiceCleaningRecord).carpetClean)}
+              {renderTrueFalse((children as IServiceCleaningRecord).carpetClean)}
             </li>
           )}
           {(children as IServiceIroningRecord).collectAndReturn && (
             <li>
               Collect and return:{' '}
-              {JSON.stringify(
+              {renderTrueFalse(
                 (children as IServiceIroningRecord).collectAndReturn,
               )}
             </li>
@@ -43,54 +45,54 @@ class Service extends React.PureComponent<IProps> {
           {(children as IServiceCleaningRecord).deepClean && (
             <li>
               Deep clean:{' '}
-              {JSON.stringify((children as IServiceCleaningRecord).deepClean)}
+              {renderTrueFalse((children as IServiceCleaningRecord).deepClean)}
             </li>
           )}
           {children.service === 'cleaning' && (
-            <li>General clean: {JSON.stringify(children.general)}</li>
+            <li>General clean: {renderTrueFalse(children.general)}</li>
           )}
           {children.service === 'gardening' && (
-            <li>General gardening: {JSON.stringify(children.general)}</li>
+            <li>General gardening: {renderTrueFalse(children.general)}</li>
           )}
           {(children as IServiceIroningRecord).other && (
             <li>
-              Other: {JSON.stringify((children as IServiceIroningRecord).other)}
+              Other: {renderTrueFalse((children as IServiceIroningRecord).other)}
             </li>
           )}
           {(children as IServiceCleaningRecord).ovenClean && (
             <li>
               Oven clean:{' '}
-              {JSON.stringify((children as IServiceCleaningRecord).ovenClean)}
+              {renderTrueFalse((children as IServiceCleaningRecord).ovenClean)}
             </li>
           )}
           {(children as IServiceIroningRecord).shirts && (
             <li>
               Shirts:{' '}
-              {JSON.stringify((children as IServiceIroningRecord).shirts)}
+              {renderTrueFalse((children as IServiceIroningRecord).shirts)}
             </li>
           )}
           {children.service === 'ironing' && (
-            <li>Specialist ironing: {JSON.stringify(children.specialist)}</li>
+            <li>Specialist ironing: {renderTrueFalse(children.specialist)}</li>
           )}
           {children.service === 'gardening' && (
-            <li>Specialist gardening: {JSON.stringify(children.specialist)}</li>
+            <li>Specialist gardening: {renderTrueFalse(children.specialist)}</li>
           )}
           {(children as IServiceIroningRecord).trousers && (
             <li>
               Trousers:{' '}
-              {JSON.stringify((children as IServiceIroningRecord).trousers)}
+              {renderTrueFalse((children as IServiceIroningRecord).trousers)}
             </li>
           )}
           {(children as IServiceCleaningRecord).hasOwnProducts && (
             <li>
               Have own products:{' '}
-              {JSON.stringify(
+              {renderTrueFalse(
                 (children as IServiceCleaningRecord).hasOwnProducts,
               )}
             </li>
           )}
           <li>
-            Have own equipment: {JSON.stringify(children.hasOwnEquipment)}
+            Have own equipment: {renderTrueFalse(children.hasOwnEquipment)}
           </li>
         </ul>
       </Card>
