@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import {
   IServiceCleaningRecord,
   IServiceGardeningRecord,
@@ -6,13 +7,21 @@ import {
 } from '../shared/types'
 import withDb from './withDb'
 
+export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
+  withDb(async db =>
+    db
+      .collection('services')
+      .find({ userId })
+      .toArray(),
+  )
+
 export const setCleaningService = async (
   service: IServiceCleaningRecord,
 ): Promise<IServiceCleaningRecord> =>
   withDb(async db => {
     await db.collection('services').insertOne({
       ...service,
-      creationDate: new Date(),
+      userId: new ObjectId(service.userId),
     })
 
     return service
@@ -24,7 +33,7 @@ export const setGardeningService = async (
   withDb(async db => {
     await db.collection('services').insertOne({
       ...service,
-      creationDate: new Date(),
+      userId: new ObjectId(service.userId),
     })
 
     return service
@@ -36,16 +45,8 @@ export const setIroningService = async (
   withDb(async db => {
     await db.collection('services').insertOne({
       ...service,
-      creationDate: new Date(),
+      userId: new ObjectId(service.userId),
     })
 
     return service
   })
-
-export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
-  withDb(async db =>
-    db
-      .collection('services')
-      .find({ userId })
-      .toArray(),
-  )

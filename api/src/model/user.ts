@@ -7,7 +7,6 @@ export const setUser = async (user: IUserPostBody): Promise<any> =>
     await db.collection('users').insertOne({
       ...user,
       email: user.email.toLowerCase(),
-      signUpDate: new Date(),
     })
 
     return user
