@@ -11,7 +11,7 @@ import { post as postGardening } from './controllers/services/gardening'
 import { post as postIroning } from './controllers/services/ironing'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
-import { getUserByEmail } from './model'
+import { getUserByEmail } from './model/user'
 import { IUserRecord } from './shared/types'
 
 const router = express.Router()

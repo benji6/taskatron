@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getUser } from '../model'
+import { getUser } from '../model/user'
 import pino from '../pino'
 import { IUserRecord } from '../shared/types'
 

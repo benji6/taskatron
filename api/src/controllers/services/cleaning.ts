@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { CLEANING } from '../../constants/services'
-import { setCleaningService } from '../../model'
+import { setCleaningService } from '../../model/services'
 import pino from '../../pino'
 import { IServiceCleaningPostBody } from '../../shared/types'
 import { isBoolean, isDecimal } from '../../shared/validation'

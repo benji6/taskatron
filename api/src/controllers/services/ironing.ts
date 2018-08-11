@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { IRONING } from '../../constants/services'
-import { setIroningService } from '../../model'
+import { setIroningService } from '../../model/services'
 import pino from '../../pino'
 import { IServiceIroningPostBody } from '../../shared/types'
 import { isBoolean, isDecimal } from '../../shared/validation'

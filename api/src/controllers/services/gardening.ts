@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { GARDENING } from '../../constants/services'
-import { setGardeningService } from '../../model'
+import { setGardeningService } from '../../model/services'
 import pino from '../../pino'
 import { IServiceGardeningPostBody } from '../../shared/types'
 import { isBoolean, isDecimal } from '../../shared/validation'

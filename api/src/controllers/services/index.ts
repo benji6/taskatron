@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getServices } from '../../model'
+import { getServices } from '../../model/services'
 import pino from '../../pino'
 
 interface IRequest extends Request {
