@@ -11,7 +11,7 @@ interface IProps {
   children: IServiceRecord
 }
 
-const renderTrueFalse = (a: boolean) => a ? '✓' : '×'
+const renderTrueFalse = (a: boolean) => (a ? '✓' : '×')
 
 class Service extends React.PureComponent<IProps> {
   public render() {
@@ -31,7 +31,9 @@ class Service extends React.PureComponent<IProps> {
           {(children as IServiceCleaningRecord).carpetClean && (
             <li>
               Carpet clean:{' '}
-              {renderTrueFalse((children as IServiceCleaningRecord).carpetClean)}
+              {renderTrueFalse(
+                (children as IServiceCleaningRecord).carpetClean,
+              )}
             </li>
           )}
           {(children as IServiceIroningRecord).collectAndReturn && (
@@ -56,7 +58,8 @@ class Service extends React.PureComponent<IProps> {
           )}
           {(children as IServiceIroningRecord).other && (
             <li>
-              Other: {renderTrueFalse((children as IServiceIroningRecord).other)}
+              Other:{' '}
+              {renderTrueFalse((children as IServiceIroningRecord).other)}
             </li>
           )}
           {(children as IServiceCleaningRecord).ovenClean && (
@@ -75,7 +78,9 @@ class Service extends React.PureComponent<IProps> {
             <li>Specialist ironing: {renderTrueFalse(children.specialist)}</li>
           )}
           {children.service === 'gardening' && (
-            <li>Specialist gardening: {renderTrueFalse(children.specialist)}</li>
+            <li>
+              Specialist gardening: {renderTrueFalse(children.specialist)}
+            </li>
           )}
           {(children as IServiceIroningRecord).trousers && (
             <li>
