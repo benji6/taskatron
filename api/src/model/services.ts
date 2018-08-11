@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { CLEANING, GARDENING, IRONING } from '../constants/services'
 import {
   IServiceCleaningRecord,
   IServiceGardeningRecord,
@@ -7,11 +8,47 @@ import {
 } from '../shared/types'
 import withDb from './withDb'
 
+export const getCleaningService = async (
+  userId: string,
+): Promise<IServiceCleaningRecord | undefined> =>
+  withDb(async db => {
+    const results = await db
+      .collection('services')
+      .find({ service: CLEANING, userId: new ObjectId(userId) })
+      .toArray()
+
+    return results[0]
+  })
+
+export const getGardeningService = async (
+  userId: string,
+): Promise<IServiceCleaningRecord | undefined> =>
+  withDb(async db => {
+    const results = await db
+      .collection('services')
+      .find({ service: GARDENING, userId: new ObjectId(userId) })
+      .toArray()
+
+    return results[0]
+  })
+
+export const getIroningService = async (
+  userId: string,
+): Promise<IServiceCleaningRecord | undefined> =>
+  withDb(async db => {
+    const results = await db
+      .collection('services')
+      .find({ service: IRONING, userId: new ObjectId(userId) })
+      .toArray()
+
+    return results[0]
+  })
+
 export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
   withDb(async db =>
     db
       .collection('services')
-      .find({ userId })
+      .find({ userId: new ObjectId(userId) })
       .toArray(),
   )
 

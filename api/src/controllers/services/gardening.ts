@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { GARDENING } from '../../constants/services'
-import { setGardeningService } from '../../model/services'
+import { getGardeningService, setGardeningService } from '../../model/services'
 import pino from '../../pino'
 import { IServiceGardeningPostBody } from '../../shared/types'
 import { isBoolean, isDecimal } from '../../shared/validation'
@@ -11,6 +11,8 @@ interface IRequest extends Request {
 
 export const post = async (req: Request, res: Response) => {
   const body: IServiceGardeningPostBody = req.body
+  const userId = (req as IRequest).user
+
   if (
     !isBoolean(body.general) ||
     !isBoolean(body.hasOwnEquipment) ||
@@ -23,11 +25,17 @@ export const post = async (req: Request, res: Response) => {
   }
 
   try {
+    if (await getGardeningService(userId)) {
+      res.status(400).send('record already exists')
+      return
+    }
+
     const serviceRecord = await setGardeningService({
       ...body,
       service: GARDENING,
-      userId: (req as IRequest).user,
+      userId,
     })
+
     res.status(200).send(serviceRecord)
   } catch (e) {
     pino.error('services/gardening post fail', e)
