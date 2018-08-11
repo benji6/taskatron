@@ -1,3 +1,7 @@
+type TCleaning = 'cleaning'
+type TGardening = 'gardening'
+type TIroning = 'ironing'
+
 export interface IServiceCleaningPostBody {
   carpetClean: boolean
   deepClean: boolean
@@ -29,7 +33,7 @@ export interface IServiceIroningPostBody {
 
 export interface IServiceGardeningRecord extends IServiceGardeningPostBody {
   _id: string
-  service: 'gardening'
+  service: TGardening
   userId: string
 }
 
@@ -40,13 +44,13 @@ export type IServiceRecord =
 
 export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
   _id: string
-  service: 'cleaning'
+  service: TCleaning
   userId: string
 }
 
 export interface IServiceIroningRecord extends IServiceIroningPostBody {
   _id: string
-  service: 'ironing'
+  service: TIroning
   userId: string
 }
 
@@ -60,3 +64,5 @@ export interface IUserPostBody {
 export interface IUserRecord extends IUserPostBody {
   _id: string
 }
+
+export type TService = TCleaning | TGardening | TIroning

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { getServices } from '../../../api'
 import { IServiceRecord } from '../../../shared/types'
 import Service from './Service'
@@ -30,6 +31,11 @@ class Services extends React.PureComponent<{}, IState> {
     return (
       <main>
         <h2>Services</h2>
+        <p>
+          Add a new service - <Link to="/services/cleaning">cleaning</Link>,{' '}
+          <Link to="/services/gardening">gardening</Link>, or{' '}
+          <Link to="/services/ironing">ironing</Link>.
+        </p>
         {error ? (
           <p>
             Oops, there was an error fetching your services, please try again
@@ -37,7 +43,9 @@ class Services extends React.PureComponent<{}, IState> {
         ) : (
           services &&
           services.map(service => (
-            <Service key={service._id}>{service}</Service>
+            <Service key={service._id} service={service.service}>
+              {service}
+            </Service>
           ))
         )}
       </main>

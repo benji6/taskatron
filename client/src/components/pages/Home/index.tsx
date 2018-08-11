@@ -23,12 +23,6 @@ class Home extends React.PureComponent<IProps> {
             <p>
               Take a look at <Link to="/services">your services here</Link>.
             </p>
-            <p>
-              Tell us what service you have to offer -{' '}
-              <Link to="/services/cleaning">cleaning</Link>,{' '}
-              <Link to="/services/gardening">gardening</Link>, or{' '}
-              <Link to="/services/ironing">ironing</Link>.
-            </p>
             <ButtonGroup>
               <Button onClick={onSignOut}>Sign out</Button>
             </ButtonGroup>

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { CLEANING, GARDENING, IRONING } from '../constants/services'
+import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
   IServiceCleaningRecord,
   IServiceGardeningRecord,

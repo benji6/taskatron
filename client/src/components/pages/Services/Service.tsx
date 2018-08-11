@@ -1,25 +1,40 @@
 import { Card } from 'eri'
 import * as React from 'react'
+import { Link } from 'react-router-dom'
+import { CLEANING, GARDENING, IRONING } from '../../../shared/services'
 import {
   IServiceCleaningRecord,
   IServiceIroningRecord,
   IServiceRecord,
+  TService,
 } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
 
 interface IProps {
   children: IServiceRecord
+  service: TService
 }
 
 const renderTrueFalse = (a: boolean) => (a ? '✓' : '×')
 
 class Service extends React.PureComponent<IProps> {
   public render() {
-    const { children } = this.props
+    const { children, service } = this.props
+
+    const editTo = `services/${
+      service === GARDENING
+        ? GARDENING
+        : service === IRONING
+          ? IRONING
+          : CLEANING
+    }`
 
     return (
       <Card>
-        <h3>{capitalizeFirst(children.service)}</h3>
+        <h3>
+          {capitalizeFirst(children.service)} (<Link to={editTo}>edit</Link>)
+        </h3>
+
         <ul>
           <li>Hourly rate: £{String(children.hourlyRate)}</li>
           {(children as IServiceIroningRecord).bedLinen && (
