@@ -31,22 +31,22 @@ export interface IServiceIroningPostBody {
   trousers: boolean
 }
 
-export interface IServiceGardeningRecord extends IServiceGardeningPostBody {
+export interface IServiceGardeningDocument extends IServiceGardeningPostBody {
   service: TGardening
   userId: string
 }
 
-export type IServiceRecord =
-  | IServiceCleaningRecord
-  | IServiceGardeningRecord
-  | IServiceIroningRecord
+export type IServiceDocument =
+  | IServiceCleaningDocument
+  | IServiceGardeningDocument
+  | IServiceIroningDocument
 
-export interface IServiceCleaningRecord extends IServiceCleaningPostBody {
+export interface IServiceCleaningDocument extends IServiceCleaningPostBody {
   service: TCleaning
   userId: string
 }
 
-export interface IServiceIroningRecord extends IServiceIroningPostBody {
+export interface IServiceIroningDocument extends IServiceIroningPostBody {
   service: TIroning
   userId: string
 }
@@ -58,7 +58,7 @@ export interface IUserPostBody {
   postcode: string
 }
 
-export interface IUserRecord extends IUserPostBody {
+export interface IUserDocument extends IUserPostBody {
   _id: string
 }
 

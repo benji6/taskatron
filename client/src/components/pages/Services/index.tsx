@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { getServices } from '../../../api'
-import { IServiceRecord } from '../../../shared/types'
+import { IServiceDocument } from '../../../shared/types'
 import Service from './Service'
 
 interface IState {
   error: boolean
-  services?: IServiceRecord[]
+  services?: IServiceDocument[]
 }
 
 class Services extends React.PureComponent {

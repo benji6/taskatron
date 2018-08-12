@@ -4,7 +4,7 @@ import * as passwordless from 'passwordless'
 const MongoStore = require('passwordless-mongostore') // tslint:disable-line no-var-requires
 import { getUser } from './model/user'
 import pino from './pino'
-import { IUserRecord } from './shared/types'
+import { IUserDocument } from './shared/types'
 
 const clientHost = 'localhost:3000'
 const mailgunDomain = 'sandboxe27535c7d6394776b917ab1bf7c49eed.mailgun.org'
@@ -34,7 +34,7 @@ passwordless.addDelivery(
 
     getUser(uidToSend)
       .then(
-        (user?: IUserRecord): void => {
+        (user?: IUserDocument): void => {
           if (!user) throw Error('user not found')
 
           const data = {

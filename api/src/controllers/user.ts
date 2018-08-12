@@ -26,11 +26,11 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (await getUserByEmail(body.email)) return res.status(400).end()
 
-    const userRecord = await setUser(body)
+    const userDocument = await setUser(body)
     passwordless.requestToken(
       (user: string, delivery: any, callback: any) => {
-        pino.info(`user post success: ${userRecord._id}`)
-        res.status(200).send(userRecord)
+        pino.info(`user post success: ${userDocument._id}`)
+        res.status(200).send(userDocument)
         callback(null, user)
       },
       { userField: 'email' },

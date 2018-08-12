@@ -29,17 +29,17 @@ export const post = async (req: Request, res: Response) => {
 
   try {
     if (await getIroningService(userId)) {
-      res.status(400).send('record already exists')
+      res.status(400).send('document already exists')
       return
     }
 
-    const serviceRecord = await setIroningService({
+    const serviceDocument = await setIroningService({
       ...body,
       service: IRONING,
       userId,
     })
 
-    res.status(200).send(serviceRecord)
+    res.status(200).send(serviceDocument)
   } catch (e) {
     pino.error('services/ironing post fail', e)
     res.status(500).end()

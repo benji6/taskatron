@@ -1,16 +1,16 @@
 import { ObjectId, WriteOpResult } from 'mongodb'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
-  IServiceCleaningRecord,
-  IServiceGardeningRecord,
-  IServiceIroningRecord,
-  IServiceRecord,
+  IServiceCleaningDocument,
+  IServiceDocument,
+  IServiceGardeningDocument,
+  IServiceIroningDocument,
 } from '../shared/types'
 import withDb from './withDb'
 
 export const getCleaningService = async (
   userId: string,
-): Promise<IServiceCleaningRecord | undefined> =>
+): Promise<IServiceCleaningDocument | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('services')
@@ -22,7 +22,7 @@ export const getCleaningService = async (
 
 export const getGardeningService = async (
   userId: string,
-): Promise<IServiceCleaningRecord | undefined> =>
+): Promise<IServiceCleaningDocument | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('services')
@@ -34,7 +34,7 @@ export const getGardeningService = async (
 
 export const getIroningService = async (
   userId: string,
-): Promise<IServiceCleaningRecord | undefined> =>
+): Promise<IServiceCleaningDocument | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('services')
@@ -46,7 +46,7 @@ export const getIroningService = async (
 
 export const getService = async (
   id: string,
-): Promise<IServiceRecord | undefined> =>
+): Promise<IServiceDocument | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('services')
@@ -56,7 +56,9 @@ export const getService = async (
     return results[0]
   })
 
-export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
+export const getServices = async (
+  userId: string,
+): Promise<IServiceDocument[]> =>
   withDb(db =>
     db
       .collection('services')
@@ -65,7 +67,7 @@ export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
   )
 
 export const setService = async (
-  document: IServiceRecord,
+  document: IServiceDocument,
 ): Promise<WriteOpResult> =>
   withDb(async db =>
     db.collection('services').save({
@@ -76,8 +78,8 @@ export const setService = async (
   )
 
 export const setCleaningService = async (
-  service: IServiceCleaningRecord,
-): Promise<IServiceCleaningRecord> =>
+  service: IServiceCleaningDocument,
+): Promise<IServiceCleaningDocument> =>
   withDb(async db => {
     await db.collection('services').insertOne({
       ...service,
@@ -88,8 +90,8 @@ export const setCleaningService = async (
   })
 
 export const setGardeningService = async (
-  service: IServiceGardeningRecord,
-): Promise<IServiceGardeningRecord> =>
+  service: IServiceGardeningDocument,
+): Promise<IServiceGardeningDocument> =>
   withDb(async db => {
     await db.collection('services').insertOne({
       ...service,
@@ -100,8 +102,8 @@ export const setGardeningService = async (
   })
 
 export const setIroningService = async (
-  service: IServiceIroningRecord,
-): Promise<IServiceIroningRecord> =>
+  service: IServiceIroningDocument,
+): Promise<IServiceIroningDocument> =>
   withDb(async db => {
     await db.collection('services').insertOne({
       ...service,

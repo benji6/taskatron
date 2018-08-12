@@ -3,15 +3,15 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { CLEANING, GARDENING, IRONING } from '../../../shared/services'
 import {
-  IServiceCleaningRecord,
-  IServiceIroningRecord,
-  IServiceRecord,
+  IServiceCleaningDocument,
+  IServiceDocument,
+  IServiceIroningDocument,
   TService,
 } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
 
 interface IProps {
-  children: IServiceRecord
+  children: IServiceDocument
   service: TService
 }
 
@@ -37,33 +37,35 @@ class Service extends React.PureComponent<IProps> {
 
         <ul>
           <li>Hourly rate: £{String(children.hourlyRate)}</li>
-          {(children as IServiceIroningRecord).bedLinen !== undefined && (
+          {(children as IServiceIroningDocument).bedLinen !== undefined && (
             <li>
               Bed linen:{' '}
-              {renderTrueFalse((children as IServiceIroningRecord).bedLinen)}
+              {renderTrueFalse((children as IServiceIroningDocument).bedLinen)}
             </li>
           )}
-          {(children as IServiceCleaningRecord).carpetClean !== undefined && (
+          {(children as IServiceCleaningDocument).carpetClean !== undefined && (
             <li>
               Carpet clean:{' '}
               {renderTrueFalse(
-                (children as IServiceCleaningRecord).carpetClean,
+                (children as IServiceCleaningDocument).carpetClean,
               )}
             </li>
           )}
-          {(children as IServiceIroningRecord).collectAndReturn !==
+          {(children as IServiceIroningDocument).collectAndReturn !==
             undefined && (
             <li>
               Collect and return:{' '}
               {renderTrueFalse(
-                (children as IServiceIroningRecord).collectAndReturn,
+                (children as IServiceIroningDocument).collectAndReturn,
               )}
             </li>
           )}
-          {(children as IServiceCleaningRecord).deepClean !== undefined && (
+          {(children as IServiceCleaningDocument).deepClean !== undefined && (
             <li>
               Deep clean:{' '}
-              {renderTrueFalse((children as IServiceCleaningRecord).deepClean)}
+              {renderTrueFalse(
+                (children as IServiceCleaningDocument).deepClean,
+              )}
             </li>
           )}
           {children.service === 'cleaning' && (
@@ -72,22 +74,24 @@ class Service extends React.PureComponent<IProps> {
           {children.service === 'gardening' && (
             <li>General gardening: {renderTrueFalse(children.general)}</li>
           )}
-          {(children as IServiceIroningRecord).other !== undefined && (
+          {(children as IServiceIroningDocument).other !== undefined && (
             <li>
               Other:{' '}
-              {renderTrueFalse((children as IServiceIroningRecord).other)}
+              {renderTrueFalse((children as IServiceIroningDocument).other)}
             </li>
           )}
-          {(children as IServiceCleaningRecord).ovenClean !== undefined && (
+          {(children as IServiceCleaningDocument).ovenClean !== undefined && (
             <li>
               Oven clean:{' '}
-              {renderTrueFalse((children as IServiceCleaningRecord).ovenClean)}
+              {renderTrueFalse(
+                (children as IServiceCleaningDocument).ovenClean,
+              )}
             </li>
           )}
-          {(children as IServiceIroningRecord).shirts !== undefined && (
+          {(children as IServiceIroningDocument).shirts !== undefined && (
             <li>
               Shirts:{' '}
-              {renderTrueFalse((children as IServiceIroningRecord).shirts)}
+              {renderTrueFalse((children as IServiceIroningDocument).shirts)}
             </li>
           )}
           {children.service === 'ironing' && (
@@ -98,18 +102,18 @@ class Service extends React.PureComponent<IProps> {
               Specialist gardening: {renderTrueFalse(children.specialist)}
             </li>
           )}
-          {(children as IServiceIroningRecord).trousers !== undefined && (
+          {(children as IServiceIroningDocument).trousers !== undefined && (
             <li>
               Trousers:{' '}
-              {renderTrueFalse((children as IServiceIroningRecord).trousers)}
+              {renderTrueFalse((children as IServiceIroningDocument).trousers)}
             </li>
           )}
-          {(children as IServiceCleaningRecord).hasOwnProducts !==
+          {(children as IServiceCleaningDocument).hasOwnProducts !==
             undefined && (
             <li>
               Have own products:{' '}
               {renderTrueFalse(
-                (children as IServiceCleaningRecord).hasOwnProducts,
+                (children as IServiceCleaningDocument).hasOwnProducts,
               )}
             </li>
           )}

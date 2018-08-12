@@ -14,7 +14,7 @@ import {
   postServiceCleaning,
   putServiceCleaning,
 } from '../../../api'
-import { IServiceCleaningRecord } from '../../../shared/types'
+import { IServiceCleaningDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
 import getFieldError from '../../../utils/getFieldError'
 
@@ -31,7 +31,7 @@ interface IFormValues {
 interface IState {
   error: boolean
   isLoading: boolean
-  service?: IServiceCleaningRecord
+  service?: IServiceCleaningDocument
   submittedSuccessfully: boolean
 }
 

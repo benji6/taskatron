@@ -8,8 +8,8 @@ import {
 import pino from '../../pino'
 import { CLEANING } from '../../shared/services'
 import {
+  IServiceCleaningDocument,
   IServiceCleaningPostBody,
-  IServiceCleaningRecord,
 } from '../../shared/types'
 import { isBoolean, isDecimal, isString } from '../../shared/validation'
 
@@ -18,7 +18,7 @@ interface IRequest extends Request {
 }
 
 export const put = async (req: Request, res: Response) => {
-  const body: IServiceCleaningRecord = req.body
+  const body: IServiceCleaningDocument = req.body
   const userId = (req as IRequest).user
 
   if (
@@ -36,17 +36,17 @@ export const put = async (req: Request, res: Response) => {
     return
   }
 
-  const record = await getService((body as any)._id)
+  const document = await getService((body as any)._id)
 
   try {
-    if (!record) {
-      res.status(400).send('record does not exist')
+    if (!document) {
+      res.status(400).send('document does not exist')
       return
     }
 
-    const serviceRecord = await setService(body)
+    const serviceDocument = await setService(body)
 
-    res.status(200).send(serviceRecord)
+    res.status(200).send(serviceDocument)
   } catch (e) {
     pino.error('services/cleaning put fail', e)
     res.status(500).end()
@@ -72,17 +72,17 @@ export const post = async (req: Request, res: Response) => {
 
   try {
     if (await getCleaningService(userId)) {
-      res.status(400).send('record already exists')
+      res.status(400).send('document already exists')
       return
     }
 
-    const serviceRecord = await setCleaningService({
+    const serviceDocument = await setCleaningService({
       ...body,
       service: CLEANING,
       userId,
     })
 
-    res.status(200).send(serviceRecord)
+    res.status(200).send(serviceDocument)
   } catch (e) {
     pino.error('services/cleaning post fail', e)
     res.status(500).end()

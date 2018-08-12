@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { IUserPostBody, IUserRecord } from '../shared/types'
+import { IUserDocument, IUserPostBody } from '../shared/types'
 import withDb from './withDb'
 
 export const setUser = async (user: IUserPostBody): Promise<any> =>
@@ -12,7 +12,7 @@ export const setUser = async (user: IUserPostBody): Promise<any> =>
     return user
   })
 
-export const getUser = async (id: string): Promise<IUserRecord | undefined> =>
+export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('users')
@@ -24,7 +24,7 @@ export const getUser = async (id: string): Promise<IUserRecord | undefined> =>
 
 export const getUserByEmail = async (
   email: string,
-): Promise<IUserRecord | undefined> =>
+): Promise<IUserDocument | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('users')

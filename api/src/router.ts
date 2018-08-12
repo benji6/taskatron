@@ -15,15 +15,15 @@ import { post as postIroning } from './controllers/services/ironing'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
-import { IUserRecord } from './shared/types'
+import { IUserDocument } from './shared/types'
 
 const router = express.Router()
 
 const sendTokenMiddleware = passwordless.requestToken(
   (email: string, delivery: any, callback: any) => {
     getUserByEmail(email)
-      .then((userRecord?: IUserRecord) => {
-        if (userRecord) return callback(null, userRecord._id)
+      .then((userDocument?: IUserDocument) => {
+        if (userDocument) return callback(null, userDocument._id)
         callback(Error(`Email address not recognised: ${email}`))
       })
       .catch((err: Error) => callback(err))

@@ -1,13 +1,13 @@
 import { getCredentials } from './localStorage'
 import { CLEANING } from './shared/services'
 import {
+  IServiceCleaningDocument,
   IServiceCleaningPostBody,
-  IServiceCleaningRecord,
+  IServiceDocument,
   IServiceGardeningPostBody,
   IServiceIroningPostBody,
-  IServiceRecord,
+  IUserDocument,
   IUserPostBody,
-  IUserRecord,
 } from './shared/types'
 import ICredentials from './types/ICredentials'
 
@@ -34,7 +34,7 @@ const credentialsQueryString = ({ token, uid }: ICredentials): string =>
 
 export const getMe = (
   credentialsPromise: Promise<ICredentials>,
-): Promise<IUserRecord> =>
+): Promise<IUserDocument> =>
   credentialsPromise
     .then(credentials =>
       fetch(`${origin}/me?${credentialsQueryString(credentials)}`),
@@ -47,7 +47,7 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getServices = async (): Promise<IServiceRecord[]> => {
+export const getServices = async (): Promise<IServiceDocument[]> => {
   const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/services?${credentialsQueryString(credentials)}`,
@@ -58,11 +58,11 @@ export const getServices = async (): Promise<IServiceRecord[]> => {
 }
 
 export const getCleaningServices = async (): Promise<
-  IServiceCleaningRecord | undefined
+  IServiceCleaningDocument | undefined
 > => {
   const services = await getServices()
 
-  return (services as IServiceCleaningRecord[]).find(
+  return (services as IServiceCleaningDocument[]).find(
     ({ service }) => service === CLEANING,
   )
 }
@@ -128,7 +128,7 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
   })
 
 export const putServiceCleaning = async (
-  service: IServiceCleaningRecord,
+  service: IServiceCleaningDocument,
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
