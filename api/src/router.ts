@@ -5,7 +5,10 @@ import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
-import { get as getServices } from './controllers/services'
+import {
+  del as deleteServices,
+  get as getServices,
+} from './controllers/services'
 import {
   post as postCleaning,
   put as putCleaning,
@@ -44,6 +47,7 @@ router.post(
   postSendTokenErrorMiddleware,
   postSendToken,
 )
+router.delete('/services', passwordless.restricted(), deleteServices)
 router.get('/services', passwordless.restricted(), getServices)
 router.post('/services/cleaning', passwordless.restricted(), postCleaning)
 router.put('/services/cleaning', passwordless.restricted(), putCleaning)

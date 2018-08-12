@@ -1,4 +1,4 @@
-import { ObjectId, WriteOpResult } from 'mongodb'
+import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
   IServiceCleaningDocument,
@@ -10,6 +10,13 @@ import {
   IServiceIroningModelParams,
 } from '../shared/types'
 import withDb from './withDb'
+
+export const deleteService = async (
+  id: string,
+): Promise<DeleteWriteOpResultObject> =>
+  withDb(async db =>
+    db.collection('services').deleteOne({ _id: new ObjectId(id) }),
+  )
 
 export const getCleaningService = async (
   userId: string,

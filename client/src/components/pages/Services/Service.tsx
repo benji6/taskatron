@@ -1,6 +1,7 @@
 import { Card } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
+import { deleteService } from '../../../api'
 import { CLEANING, GARDENING, IRONING } from '../../../shared/services'
 import {
   IServiceCleaningDocument,
@@ -12,12 +13,22 @@ import capitalizeFirst from '../../../utils/capitalizeFirst'
 
 interface IProps {
   children: IServiceDocument
+  onDelete: any
   service: TService
 }
 
 const renderTrueFalse = (a: boolean) => (a ? '✓' : '×')
 
 class Service extends React.PureComponent<IProps> {
+  public handleDelete = async () => {
+    try {
+      await deleteService(this.props.children._id)
+      this.props.onDelete()
+    } catch {
+      // TODO
+    }
+  }
+
   public render() {
     const { children, service } = this.props
 
@@ -34,7 +45,6 @@ class Service extends React.PureComponent<IProps> {
         <h3>
           {capitalizeFirst(children.service)} (<Link to={editTo}>edit</Link>)
         </h3>
-
         <ul>
           <li>Hourly rate: £{String(children.hourlyRate)}</li>
           {(children as IServiceIroningDocument).bedLinen !== undefined && (
@@ -121,6 +131,7 @@ class Service extends React.PureComponent<IProps> {
             Have own equipment: {renderTrueFalse(children.hasOwnEquipment)}
           </li>
         </ul>
+        <button onClick={this.handleDelete}>Delete</button>
       </Card>
     )
   }

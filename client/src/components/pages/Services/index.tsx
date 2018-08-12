@@ -15,7 +15,7 @@ class Services extends React.PureComponent {
     services: undefined,
   }
 
-  public async componentDidMount() {
+  public fetchServices = async () => {
     try {
       const services = await getServices()
       this.setState({
@@ -24,6 +24,10 @@ class Services extends React.PureComponent {
     } catch {
       this.setState({ error: true })
     }
+  }
+
+  public componentDidMount() {
+    this.fetchServices()
   }
 
   public render() {
@@ -42,7 +46,11 @@ class Services extends React.PureComponent {
         ) : (
           services &&
           services.map(service => (
-            <Service key={service._id} service={service.service}>
+            <Service
+              key={service._id}
+              service={service.service}
+              onDelete={this.fetchServices}
+            >
               {service}
             </Service>
           ))

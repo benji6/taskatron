@@ -19,6 +19,12 @@ const jsonHeaders = {
   'Content-Type': 'application/json',
 }
 
+const deleteConfig = (body: any) => ({
+  body: JSON.stringify(body),
+  headers: jsonHeaders,
+  method: 'delete',
+})
+
 const postConfig = (body: any) => ({
   body: JSON.stringify(body),
   headers: jsonHeaders,
@@ -33,6 +39,17 @@ const putConfig = (body: any) => ({
 
 const credentialsQueryString = ({ token, uid }: ICredentials): string =>
   `token=${token}&uid=${encodeURIComponent(uid)}`
+
+export const deleteService = async (id: string): Promise<Response> => {
+  const credentials = await getCredentials()
+  const response = await fetch(
+    `${origin}/services?${credentialsQueryString(credentials)}`,
+    deleteConfig({ _id: id }),
+  )
+
+  if (!response.ok) throw Error(String(response.status))
+  return response
+}
 
 export const getMe = (
   credentialsPromise: Promise<ICredentials>,
