@@ -79,11 +79,9 @@ class CleaningService extends React.PureComponent {
           <p>Oops, there was an error, please try again.</p>
         ) : submittedSuccessfully ? (
           <>
-            <h2>Cleaning service added!</h2>
+            <h2>Cleaning service {service ? 'updated' : 'added'}!</h2>
             <p>
-              Have a different service to offer? Click{' '}
-              <Link to="/services/gardening">here for gardening</Link> or{' '}
-              <Link to="/services/ironing">here for ironing</Link>!
+              <Link to="/services">Manage your services here</Link>.
             </p>
           </>
         ) : (

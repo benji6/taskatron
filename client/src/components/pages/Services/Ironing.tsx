@@ -44,9 +44,7 @@ class IroningService extends React.PureComponent {
           <>
             <h2>Gardening service added!</h2>
             <p>
-              Have a different service to offer? Click{' '}
-              <Link to="/services/cleaning">here for cleaning</Link> or{' '}
-              <Link to="/services/gardening">here for gardening</Link>!
+              <Link to="/services">Manage your services here</Link>.
             </p>
           </>
         ) : (
