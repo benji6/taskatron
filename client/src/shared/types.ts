@@ -31,28 +31,39 @@ export interface IServiceIroningPostBody {
   trousers: boolean
 }
 
-export interface IServiceGardeningDocument extends IServiceGardeningPostBody {
-  _id: string
+export interface IServiceCleaningModelParams extends IServiceCleaningPostBody {
+  service: TCleaning
+  userId: string
+}
+
+export interface IServiceGardeningModelParams
+  extends IServiceGardeningPostBody {
   service: TGardening
   userId: string
+}
+
+export interface IServiceIroningModelParams extends IServiceIroningPostBody {
+  service: TIroning
+  userId: string
+}
+
+export interface IServiceCleaningDocument extends IServiceCleaningModelParams {
+  _id: string
+}
+
+export interface IServiceGardeningDocument
+  extends IServiceGardeningModelParams {
+  _id: string
+}
+
+export interface IServiceIroningDocument extends IServiceIroningModelParams {
+  _id: string
 }
 
 export type IServiceDocument =
   | IServiceCleaningDocument
   | IServiceGardeningDocument
   | IServiceIroningDocument
-
-export interface IServiceCleaningDocument extends IServiceCleaningPostBody {
-  _id: string
-  service: TCleaning
-  userId: string
-}
-
-export interface IServiceIroningDocument extends IServiceIroningPostBody {
-  _id: string
-  service: TIroning
-  userId: string
-}
 
 export interface IUserPostBody {
   email: string

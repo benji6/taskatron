@@ -22,7 +22,7 @@ export const put = async (req: Request, res: Response) => {
   const userId = (req as IRequest).user
 
   if (
-    !isString((body as any)._id) ||
+    !isString(body._id) ||
     body.userId !== userId ||
     !isBoolean(body.carpetClean) ||
     !isBoolean(body.deepClean) ||
@@ -36,7 +36,7 @@ export const put = async (req: Request, res: Response) => {
     return
   }
 
-  const document = await getService((body as any)._id)
+  const document = await getService(body._id)
 
   try {
     if (!document) {

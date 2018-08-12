@@ -2,9 +2,12 @@ import { ObjectId, WriteOpResult } from 'mongodb'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
   IServiceCleaningDocument,
+  IServiceCleaningModelParams,
   IServiceDocument,
   IServiceGardeningDocument,
+  IServiceGardeningModelParams,
   IServiceIroningDocument,
+  IServiceIroningModelParams,
 } from '../shared/types'
 import withDb from './withDb'
 
@@ -78,7 +81,7 @@ export const setService = async (
   )
 
 export const setCleaningService = async (
-  service: IServiceCleaningDocument,
+  service: IServiceCleaningModelParams,
 ): Promise<IServiceCleaningDocument> =>
   withDb(async db => {
     await db.collection('services').insertOne({
@@ -86,11 +89,11 @@ export const setCleaningService = async (
       userId: new ObjectId(service.userId),
     })
 
-    return service
+    return service as IServiceCleaningDocument
   })
 
 export const setGardeningService = async (
-  service: IServiceGardeningDocument,
+  service: IServiceGardeningModelParams,
 ): Promise<IServiceGardeningDocument> =>
   withDb(async db => {
     await db.collection('services').insertOne({
@@ -98,11 +101,11 @@ export const setGardeningService = async (
       userId: new ObjectId(service.userId),
     })
 
-    return service
+    return service as IServiceGardeningDocument
   })
 
 export const setIroningService = async (
-  service: IServiceIroningDocument,
+  service: IServiceIroningModelParams,
 ): Promise<IServiceIroningDocument> =>
   withDb(async db => {
     await db.collection('services').insertOne({
@@ -110,5 +113,5 @@ export const setIroningService = async (
       userId: new ObjectId(service.userId),
     })
 
-    return service
+    return service as IServiceIroningDocument
   })
