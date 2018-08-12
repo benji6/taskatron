@@ -18,7 +18,9 @@ class Services extends React.PureComponent {
   public async componentDidMount() {
     try {
       const services = await getServices()
-      this.setState({ services })
+      this.setState({
+        services: services.sort((a, b) => a.service.localeCompare(b.service)),
+      })
     } catch {
       this.setState({ error: true })
     }
