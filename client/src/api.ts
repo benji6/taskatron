@@ -13,14 +13,20 @@ import ICredentials from './types/ICredentials'
 
 const origin = 'http://localhost:3001'
 
-const postHeaders = {
+const jsonHeaders = {
   'Content-Type': 'application/json',
 }
 
 const postConfig = (body: any) => ({
   body: JSON.stringify(body),
-  headers: postHeaders,
+  headers: jsonHeaders,
   method: 'post',
+})
+
+const putConfig = (body: any) => ({
+  body: JSON.stringify(body),
+  headers: jsonHeaders,
+  method: 'put',
 })
 
 const credentialsQueryString = ({ token, uid }: ICredentials): string =>
@@ -120,6 +126,19 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
     if (!response.ok) throw Error(String(response.status))
     return response
   })
+
+export const putServiceCleaning = async (
+  service: IServiceCleaningRecord,
+): Promise<Response> => {
+  const credentials = await getCredentials()
+  const response = await fetch(
+    `${origin}/services/cleaning?${credentialsQueryString(credentials)}`,
+    putConfig(service),
+  )
+
+  if (!response.ok) throw Error(String(response.status))
+  return response
+}
 
 export const sendToken = (email: string): Promise<Response> =>
   fetch(`${origin}/send-token`, postConfig({ user: email })).then(response => {

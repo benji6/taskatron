@@ -12,7 +12,7 @@ export const setUser = async (user: IUserPostBody): Promise<any> =>
     return user
   })
 
-export const getUser = async (id: string): Promise<IUserRecord> =>
+export const getUser = async (id: string): Promise<IUserRecord | undefined> =>
   withDb(async db => {
     const results = await db
       .collection('users')

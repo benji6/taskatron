@@ -6,7 +6,10 @@ import {
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
 import { get as getServices } from './controllers/services'
-import { post as postCleaning } from './controllers/services/cleaning'
+import {
+  post as postCleaning,
+  put as putCleaning,
+} from './controllers/services/cleaning'
 import { post as postGardening } from './controllers/services/gardening'
 import { post as postIroning } from './controllers/services/ironing'
 import { get as getSignOut } from './controllers/signOut'
@@ -37,6 +40,7 @@ router.post(
 )
 router.get('/services', passwordless.restricted(), getServices)
 router.post('/services/cleaning', passwordless.restricted(), postCleaning)
+router.put('/services/cleaning', passwordless.restricted(), putCleaning)
 router.post('/services/gardening', passwordless.restricted(), postGardening)
 router.post('/services/ironing', passwordless.restricted(), postIroning)
 router.post('/user', postUser)

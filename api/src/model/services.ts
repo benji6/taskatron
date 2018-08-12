@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb'
+import { ObjectId, WriteOpResult } from 'mongodb'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
   IServiceCleaningRecord,
@@ -44,12 +44,35 @@ export const getIroningService = async (
     return results[0]
   })
 
+export const getService = async (
+  id: string,
+): Promise<IServiceRecord | undefined> =>
+  withDb(async db => {
+    const results = await db
+      .collection('services')
+      .find(new ObjectId(id))
+      .toArray()
+
+    return results[0]
+  })
+
 export const getServices = async (userId: string): Promise<IServiceRecord[]> =>
-  withDb(async db =>
+  withDb(db =>
     db
       .collection('services')
       .find({ userId: new ObjectId(userId) })
       .toArray(),
+  )
+
+export const setService = async (
+  document: IServiceRecord,
+): Promise<WriteOpResult> =>
+  withDb(async db =>
+    db.collection('services').save({
+      ...document,
+      _id: new ObjectId((document as any)._id),
+      userId: new ObjectId(document.userId),
+    }),
   )
 
 export const setCleaningService = async (
