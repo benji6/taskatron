@@ -81,7 +81,7 @@ class CleaningService extends React.PureComponent {
           <>
             <h2>Cleaning service {service ? 'updated' : 'added'}!</h2>
             <p>
-              <Link to="/services">Manage your services here</Link>.
+              <Link to="/services">Manage your other services</Link>.
             </p>
           </>
         ) : (
@@ -172,9 +172,7 @@ class CleaningService extends React.PureComponent {
                   <Button disabled={isSubmitting}>Save</Button>
                 </ButtonGroup>
                 <p e-util="center">
-                  Have a different service to offer? Click{' '}
-                  <Link to="/services/gardening">here for gardening</Link> or{' '}
-                  <Link to="/services/ironing">here for ironing</Link>!
+                  <Link to="/services">Manage your other services</Link>
                 </p>
               </Form>
             )}
