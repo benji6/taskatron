@@ -26,10 +26,10 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",
-    "@types/node": "^9.6.6",
+    "@types/node": "^10.7.0",
     "@types/react": "^16.3.12",
     "@types/react-dom": "^16.0.5",
-    "@types/react-redux": "^5.0.19",
+    "@types/react-redux": "^6.0.6",
     "@types/react-router-dom": "^4.2.6",
     "@types/redux-actions": "^2.3.0",
     "css-loader": "0.28.7",
