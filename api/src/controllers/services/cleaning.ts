@@ -11,7 +11,12 @@ import {
   IServiceCleaningDocument,
   IServiceCleaningPostBody,
 } from '../../shared/types'
-import { isBoolean, isDecimal, isString } from '../../shared/validation'
+import {
+  isBoolean,
+  isDecimal,
+  isService,
+  isString,
+} from '../../shared/validation'
 
 interface IRequest extends Request {
   user: string
@@ -22,15 +27,16 @@ export const put = async (req: Request, res: Response) => {
   const userId = (req as IRequest).user
 
   if (
-    !isString(body._id) ||
-    body.userId !== userId ||
     !isBoolean(body.carpetClean) ||
     !isBoolean(body.deepClean) ||
     !isBoolean(body.general) ||
     !isBoolean(body.hasOwnEquipment) ||
     !isBoolean(body.hasOwnProducts) ||
     !isBoolean(body.ovenClean) ||
-    !isDecimal(body.hourlyRate)
+    !isDecimal(body.hourlyRate) ||
+    !isService(body.service) ||
+    !isString(body._id) ||
+    body.userId !== userId
   ) {
     res.status(400).send('invalid request body')
     return
@@ -44,9 +50,9 @@ export const put = async (req: Request, res: Response) => {
       return
     }
 
-    const serviceDocument = await setService(body)
+    await setService(body)
 
-    res.status(200).send(serviceDocument)
+    res.status(200).send(body)
   } catch (e) {
     pino.error('services/cleaning put fail', e)
     res.status(500).end()
