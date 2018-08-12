@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Checkbox, CurrencyField } from 'eri'
+import { Button, ButtonGroup, Checkbox, CurrencyField, Spinner } from 'eri'
 import {
   Field,
   FieldProps,
@@ -9,7 +9,12 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { postServiceIroning } from '../../../api'
+import {
+  getIroningService,
+  postServiceIroning,
+  putServiceIroning,
+} from '../../../api'
+import { IServiceIroningDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
 import getFieldError from '../../../utils/getFieldError'
 
@@ -24,11 +29,30 @@ interface IFormValues {
   trousers: boolean
 }
 
+interface IState {
+  error: boolean
+  isLoading: boolean
+  service?: IServiceIroningDocument
+  submittedSuccessfully: boolean
+}
+
 class IroningService extends React.PureComponent {
   public hasUnmounted = false
 
-  public state = {
+  public state: IState = {
+    error: false,
+    isLoading: true,
+    service: undefined,
     submittedSuccessfully: false,
+  }
+
+  public async componentDidMount() {
+    try {
+      const service = await getIroningService()
+      this.setState({ isLoading: false, service })
+    } catch {
+      this.setState({ error: true, isLoading: false })
+    }
   }
 
   public componentWillUnmount() {
@@ -36,34 +60,40 @@ class IroningService extends React.PureComponent {
   }
 
   public render() {
-    const { submittedSuccessfully } = this.state
+    const { error, isLoading, service, submittedSuccessfully } = this.state
+
+    const initialValues = {
+      bedLinen: service ? service.bedLinen : false,
+      collectAndReturn: service ? service.collectAndReturn : false,
+      hasOwnEquipment: service ? service.hasOwnEquipment : false,
+      hourlyRate: service ? String(service.hourlyRate) : '',
+      other: service ? service.other : false,
+      shirts: service ? service.shirts : false,
+      specialist: service ? service.specialist : false,
+      trousers: service ? service.trousers : false,
+    }
 
     return (
       <main>
-        {submittedSuccessfully ? (
+        {isLoading ? (
+          <Spinner variation="page" />
+        ) : error ? (
+          <p>Oops, there was an error, please try again.</p>
+        ) : submittedSuccessfully ? (
           <>
-            <h2>Gardening service added!</h2>
+            <h2>Ironing service added!</h2>
             <p>
               <Link to="/services">Manage your services here</Link>.
             </p>
           </>
         ) : (
           <Formik
-            initialValues={{
-              bedLinen: false,
-              collectAndReturn: false,
-              hasOwnEquipment: false,
-              hourlyRate: '',
-              other: false,
-              shirts: false,
-              specialist: false,
-              trousers: false,
-            }}
+            initialValues={initialValues}
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
               <Form noValidate>
-                <h2>Ironing</h2>
+                <h2>{service ? 'Edit' : 'Add'} ironing service</h2>
                 <p>Tell us about the ironing service you're offering.</p>
                 <Field
                   name="hourlyRate"
@@ -80,6 +110,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'bedLinen')}
                       label="Bed linen"
                     />
@@ -90,6 +121,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'shirts')}
                       label="Shirts"
                     />
@@ -100,6 +132,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'trousers')}
                       label="Trousers"
                     />
@@ -110,6 +143,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'other')}
                       label="Other standard garments"
                     />
@@ -120,6 +154,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'specialist')}
                       label="Specialist ironing - MOA"
                     />
@@ -130,6 +165,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'hasOwnEquipment')}
                       label="I have my own ironing equipment"
                     />
@@ -140,6 +176,7 @@ class IroningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'collectAndReturn')}
                       label="Will collect, iron &amp; return"
                     />
@@ -166,11 +203,21 @@ class IroningService extends React.PureComponent {
     actions: FormikActions<IFormValues>,
   ) => {
     try {
-      await postServiceIroning({
-        ...values,
-        hourlyRate: Number(values.hourlyRate),
-      })
+      if (this.state.service) {
+        await putServiceIroning({
+          ...this.state.service,
+          ...values,
+          hourlyRate: Number(values.hourlyRate),
+        })
+      } else {
+        await postServiceIroning({
+          ...values,
+          hourlyRate: Number(values.hourlyRate),
+        })
+      }
+
       if (this.hasUnmounted) return
+
       actions.setSubmitting(false)
       this.setState({ submittedSuccessfully: true })
     } catch (e) {

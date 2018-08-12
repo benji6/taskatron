@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Checkbox, CurrencyField } from 'eri'
+import { Button, ButtonGroup, Checkbox, CurrencyField, Spinner } from 'eri'
 import {
   Field,
   FieldProps,
@@ -9,7 +9,12 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { postServiceGardening } from '../../../api'
+import {
+  getGardeningService,
+  postServiceGardening,
+  putServiceGardening,
+} from '../../../api'
+import { IServiceGardeningDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
 import getFieldError from '../../../utils/getFieldError'
 
@@ -21,11 +26,30 @@ interface IFormValues {
   specialist: boolean
 }
 
+interface IState {
+  error: boolean
+  isLoading: boolean
+  service?: IServiceGardeningDocument
+  submittedSuccessfully: boolean
+}
+
 class GardeningService extends React.PureComponent {
   public hasUnmounted = false
 
-  public state = {
+  public state: IState = {
+    error: false,
+    isLoading: true,
+    service: undefined,
     submittedSuccessfully: false,
+  }
+
+  public async componentDidMount() {
+    try {
+      const service = await getGardeningService()
+      this.setState({ isLoading: false, service })
+    } catch {
+      this.setState({ error: true, isLoading: false })
+    }
   }
 
   public componentWillUnmount() {
@@ -33,31 +57,37 @@ class GardeningService extends React.PureComponent {
   }
 
   public render() {
-    const { submittedSuccessfully } = this.state
+    const { error, isLoading, service, submittedSuccessfully } = this.state
+
+    const initialValues = {
+      general: service ? service.general : false,
+      hasOwnEquipment: service ? service.hasOwnEquipment : false,
+      hasOwnProducts: service ? service.hasOwnProducts : false,
+      hourlyRate: service ? String(service.hourlyRate) : '',
+      specialist: service ? service.specialist : false,
+    }
 
     return (
       <main>
-        {submittedSuccessfully ? (
+        {isLoading ? (
+          <Spinner variation="page" />
+        ) : error ? (
+          <p>Oops, there was an error, please try again.</p>
+        ) : submittedSuccessfully ? (
           <>
-            <h2>Gardening service added!</h2>
+            <h2>Gardening service {service ? 'updated' : 'added'}!</h2>
             <p>
               <Link to="/services">Manage your services here</Link>.
             </p>
           </>
         ) : (
           <Formik
-            initialValues={{
-              general: false,
-              hasOwnEquipment: false,
-              hasOwnProducts: false,
-              hourlyRate: '',
-              specialist: false,
-            }}
+            initialValues={initialValues}
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
               <Form noValidate>
-                <h2>Gardening</h2>
+                <h2>{service ? 'Edit' : 'Add'} gardening service</h2>
                 <p>Tell us about the gardening service you're offering.</p>
                 <Field
                   name="hourlyRate"
@@ -74,6 +104,7 @@ class GardeningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'general')}
                       label="General gardening services"
                     />
@@ -84,6 +115,7 @@ class GardeningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'specialist')}
                       label="Specialist Gardening services - MOA (what actually is MOA?)"
                     />
@@ -94,8 +126,9 @@ class GardeningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'hasOwnProducts')}
-                      label="I have my own cleaning products"
+                      label="I have my own gardening products"
                     />
                   )}
                 />
@@ -104,8 +137,9 @@ class GardeningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'hasOwnEquipment')}
-                      label="I have my own cleaning equipment"
+                      label="I have my own gardening equipment"
                     />
                   )}
                 />
@@ -130,11 +164,21 @@ class GardeningService extends React.PureComponent {
     actions: FormikActions<IFormValues>,
   ) => {
     try {
-      await postServiceGardening({
-        ...values,
-        hourlyRate: Number(values.hourlyRate),
-      })
+      if (this.state.service) {
+        await putServiceGardening({
+          ...this.state.service,
+          ...values,
+          hourlyRate: Number(values.hourlyRate),
+        })
+      } else {
+        await postServiceGardening({
+          ...values,
+          hourlyRate: Number(values.hourlyRate),
+        })
+      }
+
       if (this.hasUnmounted) return
+
       actions.setSubmitting(false)
       this.setState({ submittedSuccessfully: true })
     } catch (e) {

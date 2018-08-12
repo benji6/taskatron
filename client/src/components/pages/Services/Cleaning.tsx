@@ -10,7 +10,7 @@ import {
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getCleaningServices,
+  getCleaningService,
   postServiceCleaning,
   putServiceCleaning,
 } from '../../../api'
@@ -47,7 +47,7 @@ class CleaningService extends React.PureComponent {
 
   public async componentDidMount() {
     try {
-      const service = await getCleaningServices()
+      const service = await getCleaningService()
       this.setState({ isLoading: false, service })
     } catch {
       this.setState({ error: true, isLoading: false })
