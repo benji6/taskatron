@@ -9,7 +9,8 @@ interface IRequest extends Request {
 
 export const get = (req: Request, res: Response): void => {
   getUser((req as IRequest).user)
-    .then((user: IUserRecord) => {
+    .then((user?: IUserRecord) => {
+      if (!user) throw Error('user not found')
       res.status(200).send(user)
     })
     .catch((err: Error) => {

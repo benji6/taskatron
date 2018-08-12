@@ -34,12 +34,14 @@ passwordless.addDelivery(
 
     getUser(uidToSend)
       .then(
-        ({ email }: IUserRecord): void => {
+        (user?: IUserRecord): void => {
+          if (!user) throw Error('user not found')
+
           const data = {
             from: `Excited User <mailgun@${mailgunDomain}>`,
             subject: `Token for ${clientHost}`,
             text,
-            to: email,
+            to: user.email,
           }
 
           mailgun.messages().send(data, (err, body) => {
