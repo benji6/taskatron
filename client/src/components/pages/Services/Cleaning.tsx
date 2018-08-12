@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Checkbox, CurrencyField } from 'eri'
+import { Button, ButtonGroup, Checkbox, CurrencyField, Spinner } from 'eri'
 import {
   Field,
   FieldProps,
@@ -9,7 +9,8 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { postServiceCleaning } from '../../../api'
+import { getCleaningServices, postServiceCleaning } from '../../../api'
+import { IServiceCleaningRecord } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
 import getFieldError from '../../../utils/getFieldError'
 
@@ -23,11 +24,30 @@ interface IFormValues {
   ovenClean: boolean
 }
 
+interface IState {
+  error: boolean
+  isLoading: boolean
+  service?: IServiceCleaningRecord
+  submittedSuccessfully: boolean
+}
+
 class CleaningService extends React.PureComponent {
   public hasUnmounted = false
 
-  public state = {
+  public state: IState = {
+    error: false,
+    isLoading: true,
+    service: undefined,
     submittedSuccessfully: false,
+  }
+
+  public async componentDidMount() {
+    try {
+      const service = await getCleaningServices()
+      this.setState({ isLoading: false, service })
+    } catch {
+      this.setState({ error: true, isLoading: false })
+    }
   }
 
   public componentWillUnmount() {
@@ -35,11 +55,25 @@ class CleaningService extends React.PureComponent {
   }
 
   public render() {
-    const { submittedSuccessfully } = this.state
+    const { error, isLoading, service, submittedSuccessfully } = this.state
+
+    const initialValues = {
+      carpetClean: service ? service.carpetClean : false,
+      deepClean: service ? service.deepClean : false,
+      general: service ? service.general : false,
+      hasOwnEquipment: service ? service.hasOwnEquipment : false,
+      hasOwnProducts: service ? service.hasOwnProducts : false,
+      hourlyRate: service ? String(service.hourlyRate) : '',
+      ovenClean: service ? service.ovenClean : false,
+    }
 
     return (
       <main>
-        {submittedSuccessfully ? (
+        {isLoading ? (
+          <Spinner variation="page" />
+        ) : error ? (
+          <p>Oops, there was an error, please try again.</p>
+        ) : submittedSuccessfully ? (
           <>
             <h2>Cleaning service added!</h2>
             <p>
@@ -50,20 +84,12 @@ class CleaningService extends React.PureComponent {
           </>
         ) : (
           <Formik
-            initialValues={{
-              carpetClean: false,
-              deepClean: false,
-              general: false,
-              hasOwnEquipment: false,
-              hasOwnProducts: false,
-              hourlyRate: '',
-              ovenClean: false,
-            }}
+            initialValues={initialValues}
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
               <Form noValidate>
-                <h2>Cleaning</h2>
+                <h2>{service ? 'Edit' : 'Add'} cleaning service</h2>
                 <p>Tell us about the cleaning service you're offering.</p>
                 <Field
                   name="hourlyRate"
@@ -80,6 +106,7 @@ class CleaningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'general')}
                       label="General clean"
                     />
@@ -90,6 +117,7 @@ class CleaningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'deepClean')}
                       label="One-off deep clean"
                     />
@@ -100,6 +128,7 @@ class CleaningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'carpetClean')}
                       label="Specialist clean - carpets"
                     />
@@ -110,6 +139,7 @@ class CleaningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'ovenClean')}
                       label="Specialist clean - oven"
                     />
@@ -120,6 +150,7 @@ class CleaningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'hasOwnProducts')}
                       label="I have my own cleaning products"
                     />

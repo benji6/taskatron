@@ -5,23 +5,22 @@ import { IServiceRecord } from '../../../shared/types'
 import Service from './Service'
 
 interface IState {
-  error?: Error
+  error: boolean
   services?: IServiceRecord[]
 }
 
-class Services extends React.PureComponent<{}, IState> {
-  public state = {
-    error: undefined,
+class Services extends React.PureComponent {
+  public state: IState = {
+    error: false,
     services: undefined,
   }
 
   public async componentDidMount() {
     try {
-      const response = await getServices()
-      const services: IServiceRecord[] = await response.json()
+      const services = await getServices()
       this.setState({ services })
-    } catch (e) {
-      this.setState({ error: e })
+    } catch {
+      this.setState({ error: true })
     }
   }
 
@@ -37,9 +36,7 @@ class Services extends React.PureComponent<{}, IState> {
           <Link to="/services/ironing">ironing</Link>.
         </p>
         {error ? (
-          <p>
-            Oops, there was an error fetching your services, please try again
-          </p>
+          <p>Oops, there was an error, please try again.</p>
         ) : (
           services &&
           services.map(service => (

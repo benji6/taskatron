@@ -1,8 +1,11 @@
 import { getCredentials } from './localStorage'
+import { CLEANING } from './shared/services'
 import {
   IServiceCleaningPostBody,
+  IServiceCleaningRecord,
   IServiceGardeningPostBody,
   IServiceIroningPostBody,
+  IServiceRecord,
   IUserPostBody,
   IUserRecord,
 } from './shared/types'
@@ -38,14 +41,24 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getServices = async (): Promise<Response> => {
+export const getServices = async (): Promise<IServiceRecord[]> => {
   const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/services?${credentialsQueryString(credentials)}`,
   )
 
   if (!response.ok) throw Error(String(response.status))
-  return response
+  return response.json()
+}
+
+export const getCleaningServices = async (): Promise<
+  IServiceCleaningRecord | undefined
+> => {
+  const services = await getServices()
+
+  return (services as IServiceCleaningRecord[]).find(
+    ({ service }) => service === CLEANING,
+  )
 }
 
 export const getSignOut = (
