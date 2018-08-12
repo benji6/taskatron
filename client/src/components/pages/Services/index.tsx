@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { getServices } from '../../../api'
+import serviceConstants from '../../../shared/services'
 import { IServiceDocument } from '../../../shared/types'
 import Service from './Service'
 
@@ -33,13 +34,29 @@ class Services extends React.PureComponent {
   public render() {
     const { error, services } = this.state as IState
 
+    const newServices =
+      services &&
+      serviceConstants.filter(
+        serviceConstant =>
+          !services.find(({ service }) => service === serviceConstant),
+      )
+
     return (
       <main>
         <h2>Services</h2>
         <p>
-          Add a new service - <Link to="/services/cleaning">cleaning</Link>,{' '}
-          <Link to="/services/gardening">gardening</Link>, or{' '}
-          <Link to="/services/ironing">ironing</Link>.
+          {newServices &&
+            Boolean(newServices.length) && (
+              <>
+                Add a new service -{' '}
+                {newServices.map((service, i, { length }) => (
+                  <span key={service}>
+                    <Link to={`/services/${service}`}>{service}</Link>
+                    {i === length - 1 ? '.' : i === length - 2 ? ' or ' : ', '}
+                  </span>
+                ))}
+              </>
+            )}
         </p>
         {error ? (
           <p>Oops, there was an error, please try again.</p>
