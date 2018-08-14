@@ -117,7 +117,7 @@ class GardeningService extends React.PureComponent {
                       {...field}
                       checked={field.value}
                       error={getFieldError(form, 'specialist')}
-                      label="Specialist Gardening services - MOA (what actually is MOA?)"
+                      label="Specialist gardening services - MOA (what actually is MOA?)"
                     />
                   )}
                 />

@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { getServices } from '../../../api'
-import serviceConstants from '../../../shared/services'
+import serviceConstants, { CLEANING, GARDENING } from '../../../shared/services'
 import { IServiceDocument } from '../../../shared/types'
-import Service from './Service'
+import CleaningCard from './CleaningCard'
+import GardeningCard from './GardeningCard'
+import IroningCard from './IroningCard'
 
 interface IState {
   error: boolean
@@ -62,15 +64,22 @@ class Services extends React.PureComponent {
           <p>Oops, there was an error, please try again.</p>
         ) : (
           services &&
-          services.map(service => (
-            <Service
-              key={service._id}
-              service={service.service}
-              onDelete={this.fetchServices}
-            >
-              {service}
-            </Service>
-          ))
+          services.map(
+            service =>
+              service.service === CLEANING ? (
+                <CleaningCard key={service._id} onDelete={this.fetchServices}>
+                  {service}
+                </CleaningCard>
+              ) : service.service === GARDENING ? (
+                <GardeningCard key={service._id} onDelete={this.fetchServices}>
+                  {service}
+                </GardeningCard>
+              ) : (
+                <IroningCard key={service._id} onDelete={this.fetchServices}>
+                  {service}
+                </IroningCard>
+              ),
+          )
         )}
       </main>
     )
