@@ -1,4 +1,4 @@
-import { Card } from 'eri'
+import { Button, ButtonGroup, Card } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { deleteService } from '../../../api'
@@ -42,11 +42,20 @@ class Service extends React.PureComponent<IProps> {
 
     return (
       <Card>
-        <h3>
-          {capitalizeFirst(children.service)} (<Link to={editTo}>edit</Link>)
-        </h3>
+        <h3>{capitalizeFirst(children.service)}</h3>
         <ul>
           <li>Hourly rate: £{String(children.hourlyRate)}</li>
+          {children.service === 'cleaning' && (
+            <li>General clean: {renderTrueFalse(children.general)}</li>
+          )}
+          {(children as IServiceCleaningDocument).deepClean !== undefined && (
+            <li>
+              Deep clean:{' '}
+              {renderTrueFalse(
+                (children as IServiceCleaningDocument).deepClean,
+              )}
+            </li>
+          )}
           {(children as IServiceIroningDocument).bedLinen !== undefined && (
             <li>
               Bed linen:{' '}
@@ -69,17 +78,6 @@ class Service extends React.PureComponent<IProps> {
                 (children as IServiceIroningDocument).collectAndReturn,
               )}
             </li>
-          )}
-          {(children as IServiceCleaningDocument).deepClean !== undefined && (
-            <li>
-              Deep clean:{' '}
-              {renderTrueFalse(
-                (children as IServiceCleaningDocument).deepClean,
-              )}
-            </li>
-          )}
-          {children.service === 'cleaning' && (
-            <li>General clean: {renderTrueFalse(children.general)}</li>
           )}
           {children.service === 'gardening' && (
             <li>General gardening: {renderTrueFalse(children.general)}</li>
@@ -131,7 +129,14 @@ class Service extends React.PureComponent<IProps> {
             Have own equipment: {renderTrueFalse(children.hasOwnEquipment)}
           </li>
         </ul>
-        <button onClick={this.handleDelete}>Delete</button>
+        <ButtonGroup>
+          <Link className="e-button e-button--primary" to={editTo}>
+            Edit
+          </Link>
+          <Button onClick={this.handleDelete} variant="secondary">
+            Delete
+          </Button>
+        </ButtonGroup>
       </Card>
     )
   }
