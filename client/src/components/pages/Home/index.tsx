@@ -19,9 +19,10 @@ class Home extends React.PureComponent<IProps> {
       <main>
         {firstName ? (
           <>
-            <p>Welcome back {firstName}!</p>
-            <p>
-              Take a look at <Link to="/services">your services here</Link>.
+            <h2>Welcome</h2>
+            <p>Hi {firstName}!</p>
+            <p e-util="center">
+              <Link to="/services">Manage your services</Link>
             </p>
             <ButtonGroup>
               <Button onClick={onSignOut}>Sign out</Button>

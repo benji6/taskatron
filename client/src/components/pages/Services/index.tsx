@@ -1,18 +1,32 @@
+import { Card } from 'eri'
 import * as React from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getServices } from '../../../api'
+import {
+  userEmailSelector,
+  userFirstNameSelector,
+  userLastNameSelector,
+} from '../../../selectors'
 import serviceConstants, { CLEANING, GARDENING } from '../../../shared/services'
 import { IServiceDocument } from '../../../shared/types'
+import IStore from '../../../types/IStore'
 import CleaningCard from './CleaningCard'
 import GardeningCard from './GardeningCard'
 import IroningCard from './IroningCard'
+
+interface IProps {
+  email: string
+  firstName: string
+  lastName: string
+}
 
 interface IState {
   error: boolean
   services?: IServiceDocument[]
 }
 
-class Services extends React.PureComponent {
+class Services extends React.PureComponent<IProps> {
   public state: IState = {
     error: false,
     services: undefined,
@@ -34,6 +48,7 @@ class Services extends React.PureComponent {
   }
 
   public render() {
+    const { email, firstName, lastName } = this.props
     const { error, services } = this.state as IState
 
     const newServices =
@@ -45,6 +60,15 @@ class Services extends React.PureComponent {
 
     return (
       <main>
+        <h2>Profile</h2>
+        <Card>
+          <h3>About me</h3>
+          <ul>
+            <li>First name: {firstName}</li>
+            <li>Last name: {lastName}</li>
+            <li>Email: {email}</li>
+          </ul>
+        </Card>
         <h2>Services</h2>
         <p>
           {newServices &&
@@ -86,4 +110,10 @@ class Services extends React.PureComponent {
   }
 }
 
-export default Services
+const mapStateToProps = (state: IStore) => ({
+  email: userEmailSelector(state) as string,
+  firstName: userFirstNameSelector(state) as string,
+  lastName: userLastNameSelector(state) as string,
+})
+
+export default connect(mapStateToProps)(Services)
