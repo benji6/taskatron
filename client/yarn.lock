@@ -1341,8 +1341,8 @@ entities@~1.1.1:
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
 eri@^3.14.2:
-  version "3.17.0"
-  resolved "https://registry.yarnpkg.com/eri/-/eri-3.17.0.tgz#c102584e8019608a9ed7341338c3551d38d1f0ea"
+  version "3.18.1"
+  resolved "https://registry.yarnpkg.com/eri/-/eri-3.18.1.tgz#41c92d3543ea0982b5e2f5387a41016dd363403f"
   dependencies:
     classnames "^2.2.6"
 
@@ -1782,8 +1782,8 @@ for-own@^0.1.4:
     for-in "^1.0.1"
 
 formik@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/formik/-/formik-1.0.2.tgz#333962ab3f09f137992b13198fefa4ec91b15af5"
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-1.0.3.tgz#73972b8c91d0ee22cb30f00766cdb0019d40177e"
   dependencies:
     create-react-context "^0.2.2"
     deepmerge "^2.1.1"
