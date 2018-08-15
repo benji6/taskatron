@@ -15,6 +15,7 @@ export interface IState {
   lastName?: string
   postcode?: string
   logInFail: boolean
+  radius?: number
 }
 
 const initialState = {

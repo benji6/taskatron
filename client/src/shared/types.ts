@@ -70,6 +70,7 @@ export interface IUserPostBody {
   firstName: string
   lastName: string
   postcode: string
+  radius: number
 }
 
 export interface IUserDocument extends IUserPostBody {
