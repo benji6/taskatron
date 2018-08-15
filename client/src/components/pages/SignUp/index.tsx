@@ -74,7 +74,7 @@ class SignUp extends React.PureComponent<{}, IState> {
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form>
+              <Form noValidate>
                 <h2>Sign up</h2>
                 <p>We just need a few details to get started.</p>
                 <Field
