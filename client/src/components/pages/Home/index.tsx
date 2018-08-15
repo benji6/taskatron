@@ -3,23 +3,23 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { userSignOut } from '../../../actions'
-import { userEmailSelector } from '../../../selectors'
+import { userFirstNameSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 
 interface IProps {
-  email: string | undefined
+  firstName: string | undefined
   onSignOut: typeof userSignOut
 }
 
 class Home extends React.PureComponent<IProps> {
   public render(): React.ReactNode {
-    const { email, onSignOut } = this.props
+    const { firstName, onSignOut } = this.props
 
     return (
       <main>
-        {email ? (
+        {firstName ? (
           <>
-            <p>Welcome back {email}!</p>
+            <p>Welcome back {firstName}!</p>
             <p>
               Take a look at <Link to="/services">your services here</Link>.
             </p>
@@ -43,7 +43,7 @@ class Home extends React.PureComponent<IProps> {
 }
 
 const mapStateToProps = (state: IStore) => ({
-  email: userEmailSelector(state),
+  firstName: userFirstNameSelector(state),
 })
 
 const mapDispatchToProps = {
