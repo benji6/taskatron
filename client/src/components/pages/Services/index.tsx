@@ -7,6 +7,7 @@ import {
   userEmailSelector,
   userFirstNameSelector,
   userLastNameSelector,
+  userPostcodeSelector,
 } from '../../../selectors'
 import serviceConstants, { CLEANING, GARDENING } from '../../../shared/services'
 import { IServiceDocument } from '../../../shared/types'
@@ -19,6 +20,7 @@ interface IProps {
   email: string
   firstName: string
   lastName: string
+  postcode: string
 }
 
 interface IState {
@@ -48,7 +50,7 @@ class Services extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { email, firstName, lastName } = this.props
+    const { email, firstName, lastName, postcode } = this.props
     const { error, services } = this.state as IState
 
     const newServices =
@@ -67,6 +69,7 @@ class Services extends React.PureComponent<IProps> {
             <li>First name: {firstName}</li>
             <li>Last name: {lastName}</li>
             <li>Email: {email}</li>
+            <li>Postcode: {postcode}</li>
           </ul>
         </Card>
         <h2>Services</h2>
@@ -114,6 +117,7 @@ const mapStateToProps = (state: IStore) => ({
   email: userEmailSelector(state) as string,
   firstName: userFirstNameSelector(state) as string,
   lastName: userLastNameSelector(state) as string,
+  postcode: userPostcodeSelector(state) as string,
 })
 
 export default connect(mapStateToProps)(Services)

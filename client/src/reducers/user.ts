@@ -13,6 +13,7 @@ export interface IState {
   firstName?: string
   isLoading: boolean
   lastName?: string
+  postcode?: string
   logInFail: boolean
 }
 
