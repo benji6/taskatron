@@ -17,9 +17,9 @@ class Home extends React.PureComponent<IProps> {
 
     return (
       <main>
+        <h2>Welcome</h2>
         {firstName ? (
           <>
-            <h2>Welcome</h2>
             <p>Hi {firstName}!</p>
             <p e-util="center">
               <Link to="/services">Manage your services</Link>
@@ -30,12 +30,8 @@ class Home extends React.PureComponent<IProps> {
           </>
         ) : (
           <ButtonGroup>
-            <Link to="sign-up">
-              <Button>Join us!</Button>
-            </Link>
-            <Link to="sign-in">
-              <Button>Sign in</Button>
-            </Link>
+            <Button to="sign-up">Join us!</Button>
+            <Button to="sign-in">Sign in</Button>
           </ButtonGroup>
         )}
       </main>
