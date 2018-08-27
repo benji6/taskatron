@@ -7,11 +7,11 @@
   "scripts": {
     "build": "rm -rf build && tsc",
     "format": "prettier --write \"src/**/*.ts*\"",
-    "format:check": "prettier --list-different \"src/**/*.ts*\"",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "server:watch": "PORT=3001 nodemon .",
     "start": "rm -rf build && run-p tsc:watch server:watch",
-    "test": "run-p format:check lint test:types",
+    "test": "run-p test:*",
+    "test:format": "prettier --list-different \"src/**/*.ts*\"",
+    "test:lint": "tslint -c tslint.json 'src/**/*.ts'",
     "test:types": "tsc --noEmit",
     "tsc:watch": "tsc -w"
   },
