@@ -84,6 +84,7 @@ class SignUp extends React.PureComponent<{}, IState> {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <TextField
                       {...field}
+                      autoComplete="email"
                       error={getFieldError(form, 'email')}
                       label="Email"
                       type="email"
@@ -91,6 +92,7 @@ class SignUp extends React.PureComponent<{}, IState> {
                   )}
                 />
                 <Field
+                  autocomplete="given-name"
                   name="firstName"
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <TextField
@@ -101,6 +103,7 @@ class SignUp extends React.PureComponent<{}, IState> {
                   )}
                 />
                 <Field
+                  autocomplete="family-name"
                   name="lastName"
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <TextField
@@ -111,6 +114,7 @@ class SignUp extends React.PureComponent<{}, IState> {
                   )}
                 />
                 <Field
+                  autocomplete="postal-code"
                   name="postcode"
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <TextField

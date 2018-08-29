@@ -59,6 +59,7 @@ class SignIn extends React.PureComponent<{}, IState> {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <TextField
                       {...field}
+                      autoComplete="email"
                       error={getFieldError(form, 'email')}
                       label="Email"
                       type="email"
