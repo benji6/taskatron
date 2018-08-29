@@ -63,6 +63,7 @@ class SignUp extends React.PureComponent<{}, IState> {
           <>
             <h2>Sign up Email Sent!</h2>
             <p>Please check your email and click the link to sign in.</p>
+            <p>You can close this window now.</p>
           </>
         ) : (
           <Formik
