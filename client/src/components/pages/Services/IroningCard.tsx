@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card } from 'eri'
+import { Button, ButtonGroup, Card, Icon } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { deleteService } from '../../../api'
@@ -11,7 +11,7 @@ interface IProps {
   onDelete(): void
 }
 
-const renderTrueFalse = (a: boolean) => (a ? '✓' : '×')
+const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
 class IroningCard extends React.PureComponent<IProps> {
   public handleDelete = async () => {
