@@ -170,10 +170,8 @@ class CleaningService extends React.PureComponent {
                 />
                 <ButtonGroup>
                   <Button disabled={isSubmitting}>Save</Button>
+                  <Link to="/services">Cancel</Link>
                 </ButtonGroup>
-                <p e-util="center">
-                  <Link to="/services">Manage your other services</Link>
-                </p>
               </Form>
             )}
           />
