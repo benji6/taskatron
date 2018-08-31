@@ -58,7 +58,11 @@ class GardeningCard extends React.PureComponent<IProps> {
           <Link className="e-button e-button--primary" to={editTo}>
             Edit
           </Link>
-          <Button onClick={this.handleDelete} variant="secondary">
+          <Button
+            onClick={this.handleDelete}
+            sentiment="negative"
+            variant="secondary"
+          >
             Delete
           </Button>
         </ButtonGroup>
