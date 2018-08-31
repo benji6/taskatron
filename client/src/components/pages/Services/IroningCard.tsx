@@ -1,10 +1,11 @@
-import { Button, ButtonGroup, Card, Icon } from 'eri'
+import { Button, ButtonGroup, Card, Dialog, Icon } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { deleteService } from '../../../api'
 import { IRONING } from '../../../shared/services'
 import { IServiceIroningDocument } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
+import DeleteDialog from './DeleteDialog'
 
 interface IProps {
   children: IServiceIroningDocument
@@ -14,16 +15,32 @@ interface IProps {
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
 class IroningCard extends React.PureComponent<IProps> {
-  public handleDelete = async () => {
+  public state = {
+    isDeleteDialogOpen: false,
+    isDeleting: false,
+  }
+
+  public deleteService = async () => {
+    this.setState({ isDeleting: true })
+
     try {
       await deleteService(this.props.children._id)
       this.props.onDelete()
     } catch {
       // TODO
+    } finally {
+      this.setState({ isDeleteDialogOpen: false, isDeleting: false })
     }
   }
 
+  public openDeleteDialog = () => {
+    this.setState({ isDeleteDialogOpen: true })
+  }
+
+  public closeDeleteDialog = () => this.setState({ isDeleteDialogOpen: false })
+
   public render() {
+    const { isDeleteDialogOpen, isDeleting } = this.state
     const {
       children: {
         bedLinen,
@@ -61,13 +78,20 @@ class IroningCard extends React.PureComponent<IProps> {
             Edit
           </Link>
           <Button
-            onClick={this.handleDelete}
+            onClick={this.openDeleteDialog}
             sentiment="negative"
             variant="secondary"
           >
             Delete
           </Button>
         </ButtonGroup>
+        <DeleteDialog
+          disabled={isDeleting}
+          onClose={this.closeDeleteDialog}
+          onDelete={this.deleteService}
+          open={isDeleteDialogOpen}
+          serviceName={IRONING}
+        />
       </Card>
     )
   }
