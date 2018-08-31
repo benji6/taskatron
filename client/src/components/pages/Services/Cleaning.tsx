@@ -201,7 +201,7 @@ class CleaningService extends React.PureComponent {
     } catch (e) {
       if (this.hasUnmounted) return
       actions.setSubmitting(false)
-      this.setState({ errorCode: e.message === '400' ? 400 : 500 })
+      this.setState({ error: true })
     }
   }
 
