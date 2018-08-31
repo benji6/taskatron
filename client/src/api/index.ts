@@ -1,5 +1,5 @@
-import { getCredentials } from './localStorage'
-import { CLEANING, GARDENING, IRONING } from './shared/services'
+import { getCredentials } from '../localStorage'
+import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
   IServiceCleaningDocument,
   IServiceCleaningPostBody,
@@ -9,36 +9,18 @@ import {
   IServiceIroningDocument,
   IServiceIroningPostBody,
   IUserDocument,
+  IUserPatchBody,
   IUserPostBody,
-} from './shared/types'
-import ICredentials from './types/ICredentials'
-
-const origin = 'http://localhost:3001'
-
-const jsonHeaders = {
-  'Content-Type': 'application/json',
-}
-
-const deleteConfig = (body: any) => ({
-  body: JSON.stringify(body),
-  headers: jsonHeaders,
-  method: 'delete',
-})
-
-const postConfig = (body: any) => ({
-  body: JSON.stringify(body),
-  headers: jsonHeaders,
-  method: 'post',
-})
-
-const putConfig = (body: any) => ({
-  body: JSON.stringify(body),
-  headers: jsonHeaders,
-  method: 'put',
-})
-
-const credentialsQueryString = ({ token, uid }: ICredentials): string =>
-  `token=${token}&uid=${encodeURIComponent(uid)}`
+} from '../shared/types'
+import ICredentials from '../types/ICredentials'
+import {
+  credentialsQueryString,
+  deleteConfig,
+  origin,
+  patchConfig,
+  postConfig,
+  putConfig,
+} from './utils'
 
 export const deleteService = async (id: string): Promise<Response> => {
   const credentials = await getCredentials()
@@ -120,6 +102,17 @@ export const getSignOut = (
       return response
     })
     .then(response => response.json())
+
+export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
+  const credentials = await getCredentials()
+
+  const response = await fetch(
+    `${origin}/me?${credentialsQueryString(credentials)}`,
+    patchConfig(body),
+  )
+  if (!response.ok) throw Error(String(response.status))
+  return response
+}
 
 export const postServiceCleaning = async (
   service: IServiceCleaningPostBody,

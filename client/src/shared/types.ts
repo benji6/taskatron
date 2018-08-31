@@ -65,6 +65,13 @@ export type IServiceDocument =
   | IServiceGardeningDocument
   | IServiceIroningDocument
 
+export interface IUserPatchBody {
+  firstName: string
+  lastName: string
+  postcode: string
+  radius: number
+}
+
 export interface IUserPostBody {
   email: string
   firstName: string

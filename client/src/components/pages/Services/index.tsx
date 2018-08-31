@@ -1,4 +1,4 @@
-import { Card } from 'eri'
+import { ButtonGroup, Card } from 'eri'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -74,6 +74,11 @@ class Services extends React.PureComponent<IProps> {
             <li>Postcode: {postcode}</li>
             <li>Radius: {radius} miles</li>
           </ul>
+          <ButtonGroup>
+            <Link className="e-button e-button--primary" to="/services/profile">
+              Edit
+            </Link>
+          </ButtonGroup>
         </Card>
         <h2>Services</h2>
         <p>

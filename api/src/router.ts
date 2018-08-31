@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as passwordless from 'passwordless'
-import { get as getMe } from './controllers/me'
+import { get as getMe, patch as patchMe } from './controllers/me'
 import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
@@ -40,6 +40,7 @@ const sendTokenMiddleware = passwordless.requestToken(
 )
 
 router.get('/me', passwordless.restricted(), getMe)
+router.patch('/me', passwordless.restricted(), patchMe)
 router.get('/sign-out', passwordless.logout(), getSignOut)
 router.post(
   '/send-token',

@@ -1,98 +1,90 @@
 import { Button, ButtonGroup, Select, TextField } from 'eri'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import {
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikActions,
+  FormikProps,
+} from 'formik'
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { postUser } from '../../../api'
+import { connect } from 'react-redux'
+import { Link, Redirect } from 'react-router-dom'
+import { userSet } from '../../../actions'
+import { patchMe } from '../../../api'
+import {
+  userFirstNameSelector,
+  userLastNameSelector,
+  userPostcodeSelector,
+  userRadiusSelector,
+} from '../../../selectors'
 import { radii } from '../../../shared/constants'
 import {
-  isValidEmail,
   isValidFirstName,
   isValidLastName,
   isValidPostcode,
 } from '../../../shared/validation'
+import IStore from '../../../types/IStore'
 import getFieldError from '../../../utils/getFieldError'
 
 interface IFormValues {
-  email: string
   firstName: string
   lastName: string
   postcode: string
   radius: string
 }
 
+interface IProps {
+  firstName: string
+  lastName: string
+  postcode: string
+  radius: number
+  setUser: typeof userSet
+}
+
 interface IState {
-  email: string
-  errorCode?: number
+  error: boolean
   submittedSuccessfully: boolean
 }
 
-class SignUp extends React.PureComponent<{}, IState> {
-  public state = {
-    email: '',
-    errorCode: undefined,
+class Profile extends React.PureComponent<IProps> {
+  public hasUnmounted = false
+
+  public state: IState = {
+    error: false,
     submittedSuccessfully: false,
   }
-
-  public hasUnmounted = false
 
   public componentWillUnmount() {
     this.hasUnmounted = true
   }
 
-  public render(): React.ReactNode {
-    const { email, errorCode, submittedSuccessfully } = this.state
+  public render() {
+    const { firstName, lastName, postcode, radius } = this.props
+    const { error, submittedSuccessfully } = this.state
+
+    const initialValues = {
+      firstName,
+      lastName,
+      postcode,
+      radius: String(radius),
+    }
 
     return (
       <main>
-        {errorCode === 400 ? (
-          <>
-            <h2>Sign up Failed</h2>
-            <p>Looks like we already have an account for {email}.</p>
-            <p>
-              Try <Link to="/sign-in">signing in</Link>.
-            </p>
-          </>
-        ) : errorCode === 500 ? (
-          <>
-            <h2>Sign up Failed</h2>
-            <p>
-              We're sorry, something has gone wrong, please refresh the page and
-              try again.
-            </p>
-          </>
+        {error ? (
+          <p>Oops, there was an error, please try again.</p>
         ) : submittedSuccessfully ? (
-          <>
-            <h2>Sign up Email Sent!</h2>
-            <p>Please check your email and click the link to sign in.</p>
-            <p>You can close this window now.</p>
-          </>
+          <Redirect to="/services" />
         ) : (
           <Formik
-            initialValues={{
-              email: '',
-              firstName: '',
-              lastName: '',
-              postcode: '',
-              radius: '_initial',
-            }}
+            initialValues={initialValues}
             onSubmit={this.handleSubmit}
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
               <Form noValidate>
-                <h2>Sign up</h2>
-                <p>We just need a few details to get started.</p>
-                <Field
-                  name="email"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      autoComplete="email"
-                      error={getFieldError(form, 'email')}
-                      label="Email"
-                      type="email"
-                    />
-                  )}
-                />
+                <h2>About me</h2>
+                <p>Tell us about yourself.</p>
                 <Field
                   autocomplete="given-name"
                   name="firstName"
@@ -134,9 +126,6 @@ class SignUp extends React.PureComponent<{}, IState> {
                       error={getFieldError(form, 'radius')}
                       label="Working radius"
                     >
-                      <option hidden value="_initial">
-                        Select
-                      </option>
                       {radii.map(r => (
                         <option key={r} value={r}>
                           {r} mile
@@ -147,11 +136,9 @@ class SignUp extends React.PureComponent<{}, IState> {
                   )}
                 />
                 <ButtonGroup>
-                  <Button disabled={isSubmitting}>Send link</Button>
+                  <Button disabled={isSubmitting}>Save</Button>
+                  <Link to="/services">Cancel</Link>
                 </ButtonGroup>
-                <p e-util="center">
-                  Already have an account? <Link to="/sign-in">Sign in</Link>!
-                </p>
               </Form>
             )}
           />
@@ -160,17 +147,28 @@ class SignUp extends React.PureComponent<{}, IState> {
     )
   }
 
-  private validate = ({
-    email,
-    firstName,
-    lastName,
-    postcode,
-    radius,
-  }: IFormValues) => {
-    const errors: any = {}
-    if (!isValidEmail(email)) {
-      errors.email = 'Please enter a valid email address'
+  private handleSubmit = async (
+    values: IFormValues,
+    actions: FormikActions<IFormValues>,
+  ) => {
+    try {
+      const body = { ...values, radius: Number(values.radius) }
+      await patchMe(body)
+      this.props.setUser(body)
+
+      if (this.hasUnmounted) return
+
+      actions.setSubmitting(false)
+      this.setState({ submittedSuccessfully: true })
+    } catch (e) {
+      if (this.hasUnmounted) return
+      actions.setSubmitting(false)
+      this.setState({ error: true })
     }
+  }
+
+  private validate = ({ firstName, lastName, postcode }: IFormValues) => {
+    const errors: any = {}
     if (!isValidFirstName(firstName)) {
       errors.firstName = 'Please enter a first name'
     }
@@ -178,24 +176,22 @@ class SignUp extends React.PureComponent<{}, IState> {
     if (!isValidPostcode(postcode)) {
       errors.postcode = 'Please enter a valid postcode'
     }
-    if (radius === '_initial') {
-      errors.radius = 'Please select a radius'
-    }
     return errors
-  }
-
-  private handleSubmit = async (values: IFormValues) => {
-    this.setState({ email: values.email })
-
-    try {
-      await postUser({ ...values, radius: Number(values.radius) })
-      if (this.hasUnmounted) return
-      this.setState({ submittedSuccessfully: true })
-    } catch (e) {
-      if (this.hasUnmounted) return
-      this.setState({ errorCode: e.message === '400' ? 400 : 500 })
-    }
   }
 }
 
-export default SignUp
+const mapStateToProps = (state: IStore) => ({
+  firstName: userFirstNameSelector(state) as string,
+  lastName: userLastNameSelector(state) as string,
+  postcode: userPostcodeSelector(state) as string,
+  radius: userRadiusSelector(state) as number,
+})
+
+const mapDispatchToProps = {
+  setUser: userSet,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Profile)

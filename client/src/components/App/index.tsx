@@ -12,6 +12,7 @@ import Services from '../pages/Services'
 import Cleaning from '../pages/Services/Cleaning'
 import Gardening from '../pages/Services/Gardening'
 import Ironing from '../pages/Services/Ironing'
+import Profile from '../pages/Services/Profile'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import PrivateRoute from '../PrivateRoute'
@@ -42,6 +43,12 @@ class App extends React.PureComponent<IProps> {
                 exact
                 path="/services"
                 component={Services}
+                isSignedIn={isSignedIn}
+              />
+              <PrivateRoute
+                exact
+                path="/services/profile"
+                component={Profile}
                 isSignedIn={isSignedIn}
               />
               <PrivateRoute

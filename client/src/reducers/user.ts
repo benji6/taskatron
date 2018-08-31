@@ -3,6 +3,7 @@ import {
   userGetFailure,
   userGetSuccess,
   userLogInFail,
+  userSet,
   userSignOut,
 } from '../actions'
 import IAction from '../types/IAction'
@@ -37,6 +38,8 @@ export default (
       return { ...state, isLoading: false, logInFail: true }
     case String(userSignOut):
       return { ...initialState, isLoading: false }
+    case String(userSet):
+      return { ...state, ...payload }
     default:
       return state
   }
