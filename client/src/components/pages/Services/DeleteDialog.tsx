@@ -18,7 +18,7 @@ export default class DeleteDialog extends React.PureComponent<IProps> {
       <Dialog
         onClose={onClose}
         open={open}
-        title={`Are you sure you want to delete your ${serviceName} service?`}
+        title={`Delete your ${serviceName} service?`}
       >
         <ButtonGroup>
           <Button disabled={disabled} onClick={onDelete} sentiment="negative">
