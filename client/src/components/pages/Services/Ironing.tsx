@@ -8,7 +8,7 @@ import {
   FormikProps,
 } from 'formik'
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import {
   getIroningService,
   postServiceIroning,
@@ -80,12 +80,7 @@ class IroningService extends React.PureComponent {
         ) : error ? (
           <p>Oops, there was an error, please try again.</p>
         ) : submittedSuccessfully ? (
-          <>
-            <h2>Ironing service added!</h2>
-            <p>
-              <Link to="/services">Manage your other services</Link>.
-            </p>
-          </>
+          <Redirect to="/services" />
         ) : (
           <Formik
             initialValues={initialValues}

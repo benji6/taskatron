@@ -8,7 +8,7 @@ import {
   FormikProps,
 } from 'formik'
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import {
   getCleaningService,
   postServiceCleaning,
@@ -78,12 +78,7 @@ class CleaningService extends React.PureComponent {
         ) : error ? (
           <p>Oops, there was an error, please try again.</p>
         ) : submittedSuccessfully ? (
-          <>
-            <h2>Cleaning service {service ? 'updated' : 'added'}!</h2>
-            <p>
-              <Link to="/services">Manage your other services</Link>.
-            </p>
-          </>
+          <Redirect to="/services" />
         ) : (
           <Formik
             initialValues={initialValues}
@@ -163,6 +158,7 @@ class CleaningService extends React.PureComponent {
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
+                      checked={field.value}
                       error={getFieldError(form, 'hasOwnEquipment')}
                       label="I have my own cleaning equipment"
                     />
