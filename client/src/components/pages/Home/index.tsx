@@ -1,7 +1,6 @@
 import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { userSignOut } from '../../../actions'
 import { userFirstNameSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
@@ -21,11 +20,11 @@ class Home extends React.PureComponent<IProps> {
         {firstName ? (
           <>
             <p>Hi {firstName}!</p>
-            <p e-util="center">
-              <Link to="/services">Manage your services</Link>
-            </p>
             <ButtonGroup>
-              <Button onClick={onSignOut}>Sign out</Button>
+              <Button to="/services">Manage your services</Button>
+              <Button onClick={onSignOut} variant="secondary">
+                Sign out
+              </Button>
             </ButtonGroup>
           </>
         ) : (
