@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf build && tsc",
     "format": "prettier --write \"src/**/*.ts*\"",
-    "server:watch": "PORT=3001 nodemon .",
+    "server:watch": "nodemon .",
     "start": "rm -rf build && run-p tsc:watch server:watch",
     "test": "run-p test:*",
     "test:format": "prettier --list-different \"src/**/*.ts*\"",
