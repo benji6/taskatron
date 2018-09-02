@@ -2,3 +2,7 @@
   base = "client"
   publish = "client/build"
   command = "yarn build"
+[[redirects]]
+  from = "/*"
+  status = 200
+  to = "/"
