@@ -1,6 +1,6 @@
 import ICredentials from '../types/ICredentials'
 
-export const origin = 'http://localhost:3001'
+export const origin = process.env.API_ORIGIN
 
 export const credentialsQueryString = ({ token, uid }: ICredentials): string =>
   `token=${token}&uid=${encodeURIComponent(uid)}`

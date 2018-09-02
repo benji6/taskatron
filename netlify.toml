@@ -2,6 +2,8 @@
   base = "client"
   publish = "client/build"
   command = "yarn build"
+[build.environment]
+  API_ORIGIN='http://35.178.47.228'
 [[redirects]]
   from = "/*"
   status = 200
