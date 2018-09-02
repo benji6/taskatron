@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, Dialog, Icon } from 'eri'
+import { Button, ButtonGroup, Card, Icon } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { deleteService } from '../../../api'
