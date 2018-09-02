@@ -1,6 +1,6 @@
 [build]
   base = "client"
-  publish = "client/build"
+  publish = "client/dist"
   command = "yarn build"
 [build.environment]
   API_ORIGIN='http://35.178.47.228'
