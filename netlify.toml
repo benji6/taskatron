@@ -3,7 +3,7 @@
   publish = "client/dist"
   command = "yarn build"
 [build.environment]
-  API_ORIGIN='http://35.178.47.228'
+  API_URL='https://37g2d87rp7.execute-api.eu-west-2.amazonaws.com/prod'
 [[redirects]]
   from = "/*"
   status = 200
