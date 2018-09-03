@@ -6,7 +6,7 @@ import { getUser } from './model/user'
 import pino from './pino'
 import { IUserDocument } from './shared/types'
 
-const clientHost = 'localhost:3000'
+const clientHost = config.get('clientHost')
 const mailgunDomain = 'sandboxe27535c7d6394776b917ab1bf7c49eed.mailgun.org'
 
 const mailgun = Mailgun({
@@ -28,17 +28,22 @@ passwordless.addDelivery(
     recipient: string,
     callback: any,
   ) => {
-    const text = `Hello!\nAccess your account here: http://${clientHost}/login?token=${tokenToSend}&uid=${encodeURIComponent(
-      uidToSend,
-    )}`
-
     getUser(uidToSend)
       .then(
         (user?: IUserDocument): void => {
           if (!user) throw Error('user not found')
 
+          const text = `Hello ${user.firstName},
+
+Here's your Taskatron sign in link: http://${clientHost}/login?token=${tokenToSend}&uid=${encodeURIComponent(
+            uidToSend,
+          )}
+
+Have fun,
+Taskatron`
+
           const data = {
-            from: `Excited User <mailgun@${mailgunDomain}>`,
+            from: `Taskatron <mailgun@${mailgunDomain}>`,
             subject: `Token for ${clientHost}`,
             text,
             to: user.email,
