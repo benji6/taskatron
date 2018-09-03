@@ -58,4 +58,8 @@ router.post('/services/ironing', passwordless.restricted(), postIroning)
 router.put('/services/ironing', passwordless.restricted(), putIroning)
 router.post('/user', postUser)
 
+router.get('/pokemon', (_, res) => {
+  res.send(['bulbasaur', 'squirtle', 'charmander'])
+})
+
 export default router
