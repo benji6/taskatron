@@ -24,14 +24,16 @@ export const getUserByEmail = async (
     return results[0]
   })
 
-export const setUser = async (user: IUserPostBody): Promise<any> =>
+export const setUser = async (user: IUserPostBody): Promise<IUserDocument> =>
   withDb(async db => {
-    await db.collection('users').insertOne({
+    const document = {
       ...user,
       email: user.email.toLowerCase(),
-    })
+    }
 
-    return user
+    await db.collection('users').insertOne(document)
+
+    return document as IUserDocument
   })
 
 export const updateUser = async (
