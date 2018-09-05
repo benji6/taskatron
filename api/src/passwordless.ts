@@ -34,7 +34,7 @@ passwordless.addDelivery(
 
           const text = `Hello ${user.firstName},
 
-Here's your Taskatron sign in link: http://${config.get(
+Here's your Taskatron sign in link: ${config.get(
             'clientUrl',
           )}/login?token=${tokenToSend}&uid=${encodeURIComponent(uidToSend)}
 
