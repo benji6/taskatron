@@ -2,10 +2,10 @@ import * as bodyParser from 'body-parser'
 import * as config from 'config'
 import * as cors from 'cors'
 import * as express from 'express'
-import * as passwordless from 'passwordless'
-import './passwordless'
+import passwordless from './passwordless/index'
 import pino from './pino'
 import router from './router'
+import './setupPasswordless'
 
 const port = config.get('port')
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import * as passwordless from 'passwordless'
 import { getUserByEmail, setUser } from '../model/user'
+import passwordless from '../passwordless/index'
 import pino from '../pino'
 import { IUserPostBody } from '../shared/types'
 import {

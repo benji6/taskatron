@@ -1,6 +1,6 @@
 import * as config from 'config'
 import * as Mailgun from 'mailgun-js'
-import * as passwordless from 'passwordless'
+import passwordless from './passwordless'
 const MongoStore = require('passwordless-mongostore') // tslint:disable-line no-var-requires
 import { getUser } from './model/user'
 import pino from './pino'

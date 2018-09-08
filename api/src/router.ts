@@ -1,5 +1,4 @@
 import * as express from 'express'
-import * as passwordless from 'passwordless'
 import { get as getMe, patch as patchMe } from './controllers/me'
 import {
   post as postSendToken,
@@ -24,6 +23,7 @@ import {
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
+import passwordless from './passwordless/index'
 import { IUserDocument } from './shared/types'
 
 const router = express.Router()
