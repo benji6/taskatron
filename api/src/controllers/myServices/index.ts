@@ -1,5 +1,9 @@
 import { Request, Response } from 'express'
-import { deleteService, getService, getServices } from '../../model/services'
+import {
+  deleteService,
+  getService,
+  getServicesByUserId,
+} from '../../model/services'
 import pino from '../../pino'
 
 interface IRequest extends Request {
@@ -30,17 +34,17 @@ export const del = async (req: Request, res: Response) => {
     await deleteService(body._id)
     res.status(204).end()
   } catch (e) {
-    pino.error('DELETE /services error', e)
+    pino.error('DELETE /me/services', e)
     res.status(500).end()
   }
 }
 
 export const get = async (req: Request, res: Response) => {
   try {
-    const serviceDocument = await getServices((req as IRequest).user)
-    res.status(200).send(serviceDocument)
+    const serviceDocuments = await getServicesByUserId((req as IRequest).user)
+    res.status(200).send(serviceDocuments)
   } catch (e) {
-    pino.error('GET /services error', e)
+    pino.error('GET /me/services', e)
     res.status(500).end()
   }
 }

@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import {
-  getGardeningService,
+  getIroningService,
   getService,
-  setGardeningService,
+  setIroningService,
   setService,
 } from '../../model/services'
 import pino from '../../pino'
-import { GARDENING } from '../../shared/services'
+import { IRONING } from '../../shared/services'
 import {
-  IServiceGardeningDocument,
-  IServiceGardeningPostBody,
+  IServiceIroningDocument,
+  IServiceIroningPostBody,
 } from '../../shared/types'
 import {
   isBoolean,
@@ -23,14 +23,17 @@ interface IRequest extends Request {
 }
 
 export const put = async (req: Request, res: Response) => {
-  const body: IServiceGardeningDocument = req.body
+  const body: IServiceIroningDocument = req.body
   const userId = (req as IRequest).user
 
   if (
-    !isBoolean(body.general) ||
+    !isBoolean(body.bedLinen) ||
+    !isBoolean(body.collectAndReturn) ||
     !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.hasOwnProducts) ||
+    !isBoolean(body.other) ||
+    !isBoolean(body.shirts) ||
     !isBoolean(body.specialist) ||
+    !isBoolean(body.trousers) ||
     !isDecimal(body.hourlyRate) ||
     !isService(body.service) ||
     !isString(body._id) ||
@@ -52,20 +55,23 @@ export const put = async (req: Request, res: Response) => {
 
     res.status(200).send(body)
   } catch (e) {
-    pino.error('services/gardening put fail', e)
+    pino.error('PUT me/services/gardening', e)
     res.status(500).end()
   }
 }
 
 export const post = async (req: Request, res: Response) => {
-  const body: IServiceGardeningPostBody = req.body
+  const body: IServiceIroningPostBody = req.body
   const userId = (req as IRequest).user
 
   if (
-    !isBoolean(body.general) ||
+    !isBoolean(body.bedLinen) ||
+    !isBoolean(body.collectAndReturn) ||
     !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.hasOwnProducts) ||
+    !isBoolean(body.other) ||
+    !isBoolean(body.shirts) ||
     !isBoolean(body.specialist) ||
+    !isBoolean(body.trousers) ||
     !isDecimal(body.hourlyRate)
   ) {
     res.status(400).send('invalid request body')
@@ -73,20 +79,20 @@ export const post = async (req: Request, res: Response) => {
   }
 
   try {
-    if (await getGardeningService(userId)) {
+    if (await getIroningService(userId)) {
       res.status(400).send('document already exists')
       return
     }
 
-    const serviceDocument = await setGardeningService({
+    const serviceDocument = await setIroningService({
       ...body,
-      service: GARDENING,
+      service: IRONING,
       userId,
     })
 
     res.status(200).send(serviceDocument)
   } catch (e) {
-    pino.error('services/gardening post fail', e)
+    pino.error('POST me/services/ironing', e)
     res.status(500).end()
   }
 }

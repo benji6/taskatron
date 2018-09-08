@@ -25,7 +25,7 @@ import {
 export const deleteService = async (id: string): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services?${credentialsQueryString(credentials)}`,
     deleteConfig({ _id: id }),
   )
 
@@ -51,7 +51,7 @@ export const getMe = (
 export const getServices = async (): Promise<IServiceDocument[]> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services?${credentialsQueryString(credentials)}`,
   )
 
   if (!response.ok) throw Error(String(response.status))
@@ -119,7 +119,7 @@ export const postServiceCleaning = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/cleaning?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services/cleaning?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -132,7 +132,7 @@ export const postServiceGardening = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/gardening?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services/gardening?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -145,7 +145,7 @@ export const postServiceIroning = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/ironing?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services/ironing?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -164,7 +164,7 @@ export const putServiceCleaning = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/cleaning?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services/cleaning?${credentialsQueryString(credentials)}`,
     putConfig(service),
   )
 
@@ -177,7 +177,7 @@ export const putServiceGardening = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/gardening?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services/gardening?${credentialsQueryString(credentials)}`,
     putConfig(service),
   )
 
@@ -190,7 +190,7 @@ export const putServiceIroning = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/ironing?${credentialsQueryString(credentials)}`,
+    `${origin}/me/services/ironing?${credentialsQueryString(credentials)}`,
     putConfig(service),
   )
 

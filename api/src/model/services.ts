@@ -66,7 +66,15 @@ export const getService = async (
     return results[0]
   })
 
-export const getServices = async (
+export const getServices = async (): Promise<IServiceDocument[]> =>
+  withDb(db =>
+    db
+      .collection('services')
+      .find()
+      .toArray(),
+  )
+
+export const getServicesByUserId = async (
   userId: string,
 ): Promise<IServiceDocument[]> =>
   withDb(db =>

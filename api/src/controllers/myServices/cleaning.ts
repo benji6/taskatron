@@ -54,7 +54,7 @@ export const put = async (req: Request, res: Response) => {
 
     res.status(200).send(body)
   } catch (e) {
-    pino.error('services/cleaning put fail', e)
+    pino.error('PUT me/services/cleaning', e)
     res.status(500).end()
   }
 }
@@ -90,7 +90,7 @@ export const post = async (req: Request, res: Response) => {
 
     res.status(200).send(serviceDocument)
   } catch (e) {
-    pino.error('services/cleaning post fail', e)
+    pino.error('POST me/services/cleaning', e)
     res.status(500).end()
   }
 }
