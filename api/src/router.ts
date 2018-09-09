@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { get as getMe, patch as patchMe } from './controllers/me'
 import {
-  del as deleteServices,
-  get as getServices,
+  del as deleteMyServices,
+  get as getMyServices,
 } from './controllers/myServices'
 import {
   post as postCleaning,
@@ -20,6 +20,7 @@ import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
+import { get as getServices } from './controllers/services'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
@@ -42,8 +43,8 @@ const sendTokenMiddleware = passwordless.requestToken(
 router.get('/me', passwordless.restricted(), getMe)
 router.patch('/me', passwordless.restricted(), patchMe)
 
-router.delete('/me/services', passwordless.restricted(), deleteServices)
-router.get('/me/services', passwordless.restricted(), getServices)
+router.delete('/me/services', passwordless.restricted(), deleteMyServices)
+router.get('/me/services', passwordless.restricted(), getMyServices)
 
 router.post('/me/services/cleaning', passwordless.restricted(), postCleaning)
 router.put('/me/services/cleaning', passwordless.restricted(), putCleaning)
@@ -60,6 +61,8 @@ router.post(
   postSendTokenErrorMiddleware,
   postSendToken,
 )
+
+router.get('/services', getServices)
 
 router.get('/sign-out', passwordless.logout(), getSignOut)
 

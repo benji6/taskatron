@@ -65,6 +65,25 @@ export type IServiceDocument =
   | IServiceGardeningDocument
   | IServiceIroningDocument
 
+export interface IServiceCleaningResponseObject
+  extends IServiceCleaningDocument {
+  providerName: string
+}
+
+export interface IServiceGardeningResponseObject
+  extends IServiceGardeningDocument {
+  providerName: string
+}
+
+export interface IServiceIroningResponseObject extends IServiceIroningDocument {
+  providerName: string
+}
+
+export type IServiceResponseObject =
+  | IServiceCleaningResponseObject
+  | IServiceGardeningResponseObject
+  | IServiceIroningResponseObject
+
 export interface IUserPatchBody {
   firstName: string
   lastName: string
