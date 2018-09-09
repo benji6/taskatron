@@ -78,7 +78,7 @@ class IroningService extends React.PureComponent {
         {isLoading ? (
           <Spinner variation="page" />
         ) : error ? (
-          <p>Oops, there was an error, please try again.</p>
+          <p e-util="negative">Oops, there was an error, please try again.</p>
         ) : submittedSuccessfully ? (
           <Redirect to="/services" />
         ) : (

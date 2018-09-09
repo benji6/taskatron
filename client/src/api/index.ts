@@ -8,6 +8,7 @@ import {
   IServiceGardeningPostBody,
   IServiceIroningDocument,
   IServiceIroningPostBody,
+  IServiceResponseObject,
   IUserDocument,
   IUserPatchBody,
   IUserPostBody,
@@ -48,7 +49,13 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getServices = async (): Promise<IServiceDocument[]> => {
+export const getServices = async (): Promise<IServiceResponseObject[]> => {
+  const response = await fetch(`${origin}/services`)
+  if (!response.ok) throw Error(String(response.status))
+  return response.json()
+}
+
+export const getUserServices = async (): Promise<IServiceDocument[]> => {
   const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/me/services?${credentialsQueryString(credentials)}`,
@@ -61,7 +68,7 @@ export const getServices = async (): Promise<IServiceDocument[]> => {
 export const getCleaningService = async (): Promise<
   IServiceCleaningDocument | undefined
 > => {
-  const services = await getServices()
+  const services = await getUserServices()
 
   return (services as IServiceCleaningDocument[]).find(
     ({ service }) => service === CLEANING,
@@ -71,7 +78,7 @@ export const getCleaningService = async (): Promise<
 export const getGardeningService = async (): Promise<
   IServiceGardeningDocument | undefined
 > => {
-  const services = await getServices()
+  const services = await getUserServices()
 
   return (services as IServiceGardeningDocument[]).find(
     ({ service }) => service === GARDENING,
@@ -81,7 +88,7 @@ export const getGardeningService = async (): Promise<
 export const getIroningService = async (): Promise<
   IServiceIroningDocument | undefined
 > => {
-  const services = await getServices()
+  const services = await getUserServices()
 
   return (services as IServiceIroningDocument[]).find(
     ({ service }) => service === IRONING,

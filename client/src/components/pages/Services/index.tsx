@@ -2,7 +2,7 @@ import { ButtonGroup, Card } from 'eri'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { getServices } from '../../../api'
+import { getUserServices } from '../../../api'
 import {
   userEmailSelector,
   userFirstNameSelector,
@@ -38,7 +38,7 @@ class Services extends React.PureComponent<IProps> {
 
   public fetchServices = async () => {
     try {
-      const services = await getServices()
+      const services = await getUserServices()
       this.setState({
         services: services.sort((a, b) => a.service.localeCompare(b.service)),
       })
@@ -96,7 +96,7 @@ class Services extends React.PureComponent<IProps> {
             )}
         </p>
         {error ? (
-          <p>Oops, there was an error, please try again.</p>
+          <p e-util="negative">Oops, there was an error, please try again.</p>
         ) : (
           services &&
           services.map(
