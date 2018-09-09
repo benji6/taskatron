@@ -8,6 +8,7 @@ import {
   IServiceGardeningModelParams,
   IServiceIroningDocument,
   IServiceIroningModelParams,
+  TService,
 } from '../shared/types'
 import withDb from './withDb'
 
@@ -66,11 +67,15 @@ export const getService = async (
     return results[0]
   })
 
-export const getServices = async (): Promise<IServiceDocument[]> =>
+export const searchServices = async ({
+  serviceType: service,
+}: {
+  serviceType: TService
+}): Promise<IServiceDocument[]> =>
   withDb(db =>
     db
       .collection('services')
-      .find()
+      .find({ service })
       .toArray(),
   )
 
