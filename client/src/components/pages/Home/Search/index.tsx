@@ -44,17 +44,20 @@ export default class Search extends React.PureComponent {
   }
 
   public render(): React.ReactNode {
-    const { isLoading, services, servicesError } = this.state
+    const { isLoading, serviceType, services, servicesError } = this.state
 
     return (
       <>
         <h2>Services (under construction)</h2>
-        <RadioGroup
-          label="What type of service are you looking for?"
-          onChange={this.handleServiceChange}
-        >
+        <RadioGroup label="What type of service are you looking for?">
           {serviceNames.map(serviceName => (
-            <RadioButton key={serviceName} name="service" value={serviceName}>
+            <RadioButton
+              checked={serviceName === serviceType}
+              key={serviceName}
+              name="service"
+              onChange={this.handleServiceChange}
+              value={serviceName}
+            >
               {serviceName}
             </RadioButton>
           ))}
