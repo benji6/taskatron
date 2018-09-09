@@ -1,8 +1,8 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { GARDENING } from '../../../shared/services'
-import { IServiceGardeningResponseObject } from '../../../shared/types'
-import capitalizeFirst from '../../../utils/capitalizeFirst'
+import { GARDENING } from '../../../../shared/services'
+import { IServiceGardeningResponseObject } from '../../../../shared/types'
+import capitalizeFirst from '../../../../utils/capitalizeFirst'
 
 interface IProps {
   children: IServiceGardeningResponseObject

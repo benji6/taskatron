@@ -12,6 +12,7 @@ import {
   IUserDocument,
   IUserPatchBody,
   IUserPostBody,
+  TService,
 } from '../shared/types'
 import ICredentials from '../types/ICredentials'
 import {
@@ -49,8 +50,12 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getServices = async (): Promise<IServiceResponseObject[]> => {
-  const response = await fetch(`${origin}/services`)
+export const getServices = async ({
+  serviceType,
+}: {
+  serviceType: TService
+}): Promise<IServiceResponseObject[]> => {
+  const response = await fetch(`${origin}/services?serviceType=${serviceType}`)
   if (!response.ok) throw Error(String(response.status))
   return response.json()
 }
