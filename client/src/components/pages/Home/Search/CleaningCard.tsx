@@ -1,6 +1,5 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { CLEANING } from '../../../../shared/services'
 import { IServiceCleaningResponseObject } from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
 
@@ -27,9 +26,7 @@ export default class CleaningCard extends React.PureComponent<IProps> {
 
     return (
       <Card>
-        <h3>
-          {capitalizeFirst(providerName)}: {CLEANING}
-        </h3>
+        <h3>{capitalizeFirst(providerName)}</h3>
         <ul>
           <li>Hourly rate: £{String(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>

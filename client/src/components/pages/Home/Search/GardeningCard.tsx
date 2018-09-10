@@ -1,6 +1,5 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { GARDENING } from '../../../../shared/services'
 import { IServiceGardeningResponseObject } from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
 
@@ -25,9 +24,7 @@ export default class GardeningCard extends React.PureComponent<IProps> {
 
     return (
       <Card>
-        <h3>
-          {capitalizeFirst(providerName)}: {GARDENING}
-        </h3>
+        <h3>{capitalizeFirst(providerName)}</h3>
         <ul>
           <li>Hourly rate: £{String(hourlyRate)}</li>
           <li>General gardening services: {renderTrueFalse(general)}</li>

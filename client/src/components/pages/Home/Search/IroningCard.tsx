@@ -1,6 +1,5 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { IRONING } from '../../../../shared/services'
 import { IServiceIroningResponseObject } from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
 
@@ -28,9 +27,7 @@ export default class IroningCard extends React.PureComponent<IProps> {
 
     return (
       <Card>
-        <h3>
-          {capitalizeFirst(providerName)}: {IRONING}
-        </h3>
+        <h3>{capitalizeFirst(providerName)}</h3>
         <ul>
           <li>Hourly rate: £{String(hourlyRate)}</li>
           <li>Bed linen: {renderTrueFalse(bedLinen)}</li>
