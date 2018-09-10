@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import {
   getGardeningService,
-  getService,
   setGardeningService,
   setService,
 } from '../../model/services'
@@ -40,11 +39,11 @@ export const put = async (req: Request, res: Response) => {
     return
   }
 
-  const document = await getService(body._id)
+  const document = await getGardeningService(body._id)
 
   try {
     if (!document) {
-      res.status(400).send('document does not exist')
+      res.status(404).end()
       return
     }
 
