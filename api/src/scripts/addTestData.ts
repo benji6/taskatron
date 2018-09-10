@@ -1,6 +1,10 @@
-import { setCleaningService } from '../model/cleaningServices'
+import { ObjectId } from 'mongodb'
+import { CLEANING_SERVICES } from '../model/collections'
 import { setUser } from '../model/user'
+import withDb from '../model/withDb'
 import { IServiceCleaningModelParams } from '../shared/types'
+
+const numberOfServices = 1024
 
 const randomBoolean = (): boolean => !Math.round(Math.random())
 const randomHourlyRate = (): number =>
@@ -17,7 +21,7 @@ const main = async () => {
   } as any)
 
   const cleaningServices: IServiceCleaningModelParams[] = [
-    ...Array(16).keys(),
+    ...Array(numberOfServices).keys(),
   ].map(() => ({
     carpetClean: randomBoolean(),
     deepClean: randomBoolean(),
@@ -30,7 +34,14 @@ const main = async () => {
     userId: user._id,
   }))
 
-  cleaningServices.forEach(setCleaningService)
+  withDb(db =>
+    db.collection(CLEANING_SERVICES).insertMany(
+      cleaningServices.map(service => ({
+        ...service,
+        userId: new ObjectId(service.userId),
+      })),
+    ),
+  )
 }
 
 main()

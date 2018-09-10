@@ -1,16 +1,16 @@
 import { getCredentials } from '../localStorage'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
+  ICleaningServiceSearchResponse,
+  IGardeningServiceSearchResponse,
+  IIroningServiceSearchResponse,
   IServiceCleaningDocument,
   IServiceCleaningPostBody,
-  IServiceCleaningResponseObject,
   IServiceDocument,
   IServiceGardeningDocument,
   IServiceGardeningPostBody,
-  IServiceGardeningResponseObject,
   IServiceIroningDocument,
   IServiceIroningPostBody,
-  IServiceIroningResponseObject,
   IUserDocument,
   IUserPatchBody,
   IUserPostBody,
@@ -79,26 +79,44 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getCleaningServices = async (): Promise<
-  IServiceCleaningResponseObject[]
-> => {
-  const response = await fetch(`${origin}/services/cleaning`)
+export const getCleaningServices = async ({
+  limit,
+  skip,
+}: {
+  limit: number
+  skip: number
+}): Promise<ICleaningServiceSearchResponse> => {
+  const response = await fetch(
+    `${origin}/services/${CLEANING}?limit=${limit}&skip=${skip}`,
+  )
   if (!response.ok) throw Error(String(response.status))
   return response.json()
 }
 
-export const getGardeningServices = async (): Promise<
-  IServiceGardeningResponseObject[]
-> => {
-  const response = await fetch(`${origin}/services/${GARDENING}`)
+export const getGardeningServices = async ({
+  limit,
+  skip,
+}: {
+  limit: number
+  skip: number
+}): Promise<IGardeningServiceSearchResponse> => {
+  const response = await fetch(
+    `${origin}/services/${GARDENING}?limit=${limit}&skip=${skip}`,
+  )
   if (!response.ok) throw Error(String(response.status))
   return response.json()
 }
 
-export const getIroningServices = async (): Promise<
-  IServiceIroningResponseObject[]
-> => {
-  const response = await fetch(`${origin}/services/ironing`)
+export const getIroningServices = async ({
+  limit,
+  skip,
+}: {
+  limit: number
+  skip: number
+}): Promise<IIroningServiceSearchResponse> => {
+  const response = await fetch(
+    `${origin}/services/${IRONING}?limit=${limit}&skip=${skip}`,
+  )
   if (!response.ok) throw Error(String(response.status))
   return response.json()
 }
@@ -176,7 +194,7 @@ export const postCleaningService = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/cleaning?${credentialsQueryString(credentials)}`,
+    `${origin}/services/${CLEANING}?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -202,7 +220,7 @@ export const postIroningService = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/ironing?${credentialsQueryString(credentials)}`,
+    `${origin}/services/${IRONING}?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 

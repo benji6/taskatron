@@ -6,6 +6,14 @@ import {
 import { GARDENING_SERVICES } from './collections'
 import withDb from './withDb'
 
+export const countGardeningServices = async (): Promise<number> =>
+  withDb(db =>
+    db
+      .collection(GARDENING_SERVICES)
+      .find()
+      .count(),
+  )
+
 export const deleteGardeningService = async (
   id: string,
 ): Promise<DeleteWriteOpResultObject> =>
@@ -25,13 +33,19 @@ export const getGardeningService = async (
     return result
   })
 
-export const searchGardeningServices = async (): Promise<
-  IServiceGardeningDocument[]
-> =>
+export const searchGardeningServices = async ({
+  limit,
+  skip,
+}: {
+  limit: number
+  skip: number
+}): Promise<IServiceGardeningDocument[]> =>
   withDb(db =>
     db
       .collection(GARDENING_SERVICES)
       .find()
+      .skip(skip)
+      .limit(limit)
       .toArray(),
   )
 

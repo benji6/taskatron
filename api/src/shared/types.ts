@@ -91,10 +91,20 @@ export interface IServiceIroningResponseObject extends IServiceIroningDocument {
   providerName: string
 }
 
-export type IServiceResponseObject =
-  | IServiceCleaningResponseObject
-  | IServiceGardeningResponseObject
-  | IServiceIroningResponseObject
+export interface ICleaningServiceSearchResponse {
+  results: IServiceCleaningResponseObject[]
+  total: number
+}
+
+export interface IGardeningServiceSearchResponse {
+  results: IServiceGardeningResponseObject[]
+  total: number
+}
+
+export interface IIroningServiceSearchResponse {
+  results: IServiceIroningResponseObject[]
+  total: number
+}
 
 export interface IUserPatchBody {
   firstName: string

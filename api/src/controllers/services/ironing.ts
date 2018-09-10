@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import {
+  countIroningServices,
   deleteIroningService,
   getIroningService,
   searchIroningServices,
@@ -9,9 +10,9 @@ import {
 import { getUser } from '../../model/user'
 import pino from '../../pino'
 import {
+  IIroningServiceSearchResponse,
   IServiceIroningDocument,
   IServiceIroningPostBody,
-  IServiceResponseObject,
   IUserDocument,
 } from '../../shared/types'
 import { isBoolean, isDecimal } from '../../shared/validation'
@@ -46,9 +47,15 @@ export const del = async (req: Request, res: Response) => {
 }
 
 export const get = async (req: Request, res: Response) => {
+  const { limit = 0, skip = 0 } = req.query
+
   try {
-    const serviceDocuments = await searchIroningServices()
-    const responseBody: IServiceResponseObject[] = await Promise.all(
+    const serviceDocuments = await searchIroningServices({
+      limit: Number(limit),
+      skip: Number(skip),
+    })
+
+    const results = await Promise.all(
       serviceDocuments.map(async serviceDocument => {
         const { firstName, lastName } = (await getUser(
           serviceDocument.userId,
@@ -60,6 +67,14 @@ export const get = async (req: Request, res: Response) => {
         }
       }),
     )
+
+    const total = await countIroningServices()
+
+    const responseBody: IIroningServiceSearchResponse = {
+      results,
+      total,
+    }
+
     res.status(200).send(responseBody)
   } catch (e) {
     pino.error('GET /services', e)
