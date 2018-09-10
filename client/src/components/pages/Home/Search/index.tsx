@@ -3,6 +3,7 @@ import * as React from 'react'
 import { getServices } from '../../../../api'
 import serviceNames, { CLEANING, GARDENING } from '../../../../shared/services'
 import { IServiceResponseObject, TService } from '../../../../shared/types'
+import capitalizeFirst from '../../../../utils/capitalizeFirst'
 import CleaningCard from './CleaningCard'
 import GardeningCard from './GardeningCard'
 import IroningCard from './IroningCard'
@@ -58,7 +59,7 @@ export default class Search extends React.PureComponent {
               onChange={this.handleServiceChange}
               value={serviceName}
             >
-              {serviceName}
+              {capitalizeFirst(serviceName)}
             </RadioButton>
           ))}
         </RadioGroup>
