@@ -11,7 +11,7 @@ import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import {
   getGardeningService,
-  postServiceGardening,
+  postGardeningService,
   putServiceGardening,
 } from '../../../api'
 import { IServiceGardeningDocument } from '../../../shared/types'
@@ -162,7 +162,7 @@ class GardeningService extends React.PureComponent {
           hourlyRate: Number(values.hourlyRate),
         })
       } else {
-        await postServiceGardening({
+        await postGardeningService({
           ...values,
           hourlyRate: Number(values.hourlyRate),
         })

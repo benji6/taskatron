@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { getUserByEmail, setUser } from '../model/user'
+import { getUserByEmail, getUserServices, setUser } from '../model/user'
 import passwordless from '../passwordless/index'
 import pino from '../pino'
 import { IUserPostBody } from '../shared/types'
@@ -9,6 +9,18 @@ import {
   isValidLastName,
   isValidPostcode,
 } from '../shared/validation'
+
+export const getServices = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  try {
+    const serviceDocuments = await getUserServices(id)
+    res.status(200).send(serviceDocuments)
+  } catch (e) {
+    pino.error('GET /user/:id/services', e)
+    res.status(500).end()
+  }
+}
 
 export const post = async (req: Request, res: Response, next: NextFunction) => {
   const body: IUserPostBody = req.body
@@ -32,7 +44,7 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
       (email: string, delivery: any, callback: any) => {
         pino.info(`user post success, user id: ${userDocument._id}`)
         callback(null, userDocument._id)
-        res.status(200).send(userDocument)
+        res.status(201).send(userDocument)
       },
       { userField: 'email' },
     )(req, res, next)

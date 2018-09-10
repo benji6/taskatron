@@ -11,7 +11,12 @@ import {
   userRadiusSelector,
 } from '../../../selectors'
 import serviceConstants, { CLEANING, GARDENING } from '../../../shared/services'
-import { IServiceDocument } from '../../../shared/types'
+import {
+  IServiceCleaningDocument,
+  IServiceDocument,
+  IServiceGardeningDocument,
+  IServiceIroningDocument,
+} from '../../../shared/types'
 import IStore from '../../../types/IStore'
 import CleaningCard from './CleaningCard'
 import GardeningCard from './GardeningCard'
@@ -40,7 +45,9 @@ class Services extends React.PureComponent<IProps> {
     try {
       const services = await getUserServices()
       this.setState({
-        services: services.sort((a, b) => a.service.localeCompare(b.service)),
+        services: services.sort((a, b) =>
+          a.serviceType.localeCompare(b.serviceType),
+        ),
       })
     } catch {
       this.setState({ error: true })
@@ -59,7 +66,7 @@ class Services extends React.PureComponent<IProps> {
       services &&
       serviceConstants.filter(
         serviceConstant =>
-          !services.find(({ service }) => service === serviceConstant),
+          !services.find(({ serviceType }) => serviceType === serviceConstant),
       )
 
     return (
@@ -101,17 +108,17 @@ class Services extends React.PureComponent<IProps> {
           services &&
           services.map(
             service =>
-              service.service === CLEANING ? (
+              service.serviceType === CLEANING ? (
                 <CleaningCard key={service._id} onDelete={this.fetchServices}>
-                  {service}
+                  {service as IServiceCleaningDocument}
                 </CleaningCard>
-              ) : service.service === GARDENING ? (
+              ) : service.serviceType === GARDENING ? (
                 <GardeningCard key={service._id} onDelete={this.fetchServices}>
-                  {service}
+                  {service as IServiceGardeningDocument}
                 </GardeningCard>
               ) : (
                 <IroningCard key={service._id} onDelete={this.fetchServices}>
-                  {service}
+                  {service as IServiceIroningDocument}
                 </IroningCard>
               ),
           )

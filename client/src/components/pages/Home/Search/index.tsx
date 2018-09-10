@@ -1,8 +1,22 @@
 import { Button, ButtonGroup, RadioButton, RadioGroup, Spinner } from 'eri'
 import * as React from 'react'
-import { getServices } from '../../../../api'
-import serviceNames, { CLEANING, GARDENING } from '../../../../shared/services'
-import { IServiceResponseObject, TService } from '../../../../shared/types'
+import {
+  getCleaningServices,
+  getGardeningServices,
+  getIroningServices,
+} from '../../../../api'
+import serviceNames, {
+  CLEANING,
+  GARDENING,
+  IRONING,
+} from '../../../../shared/services'
+import {
+  IServiceCleaningResponseObject,
+  IServiceGardeningResponseObject,
+  IServiceIroningResponseObject,
+  IServiceResponseObject,
+  TService,
+} from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
 import CleaningCard from './CleaningCard'
 import GardeningCard from './GardeningCard'
@@ -10,6 +24,7 @@ import IroningCard from './IroningCard'
 
 interface IState {
   isLoading: boolean
+  loadedServiceType: TService
   services?: IServiceResponseObject[]
   servicesError: boolean
   serviceType: TService
@@ -18,6 +33,7 @@ interface IState {
 export default class Search extends React.PureComponent {
   public state: IState = {
     isLoading: false,
+    loadedServiceType: CLEANING,
     serviceType: CLEANING,
     services: undefined,
     servicesError: false,
@@ -34,9 +50,16 @@ export default class Search extends React.PureComponent {
 
     this.setState({ isLoading: true })
 
+    const apiFn =
+      serviceType === GARDENING
+        ? getGardeningServices
+        : serviceType === IRONING
+          ? getIroningServices
+          : getCleaningServices
+
     try {
-      const services = await getServices({ serviceType })
-      this.setState({ services })
+      const services = await apiFn()
+      this.setState({ services, loadedServiceType: serviceType })
     } catch {
       this.setState({ servicesError: true })
     } finally {
@@ -45,7 +68,13 @@ export default class Search extends React.PureComponent {
   }
 
   public render(): React.ReactNode {
-    const { isLoading, serviceType, services, servicesError } = this.state
+    const {
+      isLoading,
+      loadedServiceType,
+      serviceType,
+      services,
+      servicesError,
+    } = this.state
 
     return (
       <>
@@ -75,12 +104,18 @@ export default class Search extends React.PureComponent {
         ) : services ? (
           services.map(
             service =>
-              service.service === CLEANING ? (
-                <CleaningCard key={service._id}>{service}</CleaningCard>
-              ) : service.service === GARDENING ? (
-                <GardeningCard key={service._id}>{service}</GardeningCard>
+              loadedServiceType === CLEANING ? (
+                <CleaningCard key={service._id}>
+                  {service as IServiceCleaningResponseObject}
+                </CleaningCard>
+              ) : loadedServiceType === GARDENING ? (
+                <GardeningCard key={service._id}>
+                  {service as IServiceGardeningResponseObject}
+                </GardeningCard>
               ) : (
-                <IroningCard key={service._id}>{service}</IroningCard>
+                <IroningCard key={service._id}>
+                  {service as IServiceIroningResponseObject}
+                </IroningCard>
               ),
           )
         ) : (

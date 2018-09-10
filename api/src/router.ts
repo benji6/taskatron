@@ -1,30 +1,35 @@
 import * as express from 'express'
 import { get as getMe, patch as patchMe } from './controllers/me'
 import {
-  del as deleteMyServices,
-  get as getMyServices,
-} from './controllers/myServices'
-import {
-  post as postCleaning,
-  put as putCleaning,
-} from './controllers/myServices/cleaning'
-import {
-  post as postGardening,
-  put as putGardening,
-} from './controllers/myServices/gardening'
-import {
-  post as postIroning,
-  put as putIroning,
-} from './controllers/myServices/ironing'
-import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
-import { get as getServices } from './controllers/services'
+import {
+  del as deleteCleaning,
+  get as getCleaning,
+  post as postCleaning,
+  put as putCleaning,
+} from './controllers/services/cleaning'
+import {
+  del as deleteGardening,
+  get as getGardening,
+  post as postGardening,
+  put as putGardening,
+} from './controllers/services/gardening'
+import {
+  del as deleteIroning,
+  get as getIroning,
+  post as postIroning,
+  put as putIroning,
+} from './controllers/services/ironing'
 import { get as getSignOut } from './controllers/signOut'
-import { post as postUser } from './controllers/user'
+import {
+  getServices as getUserServices,
+  post as postUser,
+} from './controllers/user'
 import { getUserByEmail } from './model/user'
 import passwordless from './passwordless/index'
+import { CLEANING, GARDENING, IRONING } from './shared/services'
 import { IUserDocument } from './shared/types'
 
 const router = express.Router()
@@ -43,18 +48,6 @@ const sendTokenMiddleware = passwordless.requestToken(
 router.get('/me', passwordless.restricted(), getMe)
 router.patch('/me', passwordless.restricted(), patchMe)
 
-router.delete('/me/services', passwordless.restricted(), deleteMyServices)
-router.get('/me/services', passwordless.restricted(), getMyServices)
-
-router.post('/me/services/cleaning', passwordless.restricted(), postCleaning)
-router.put('/me/services/cleaning', passwordless.restricted(), putCleaning)
-
-router.post('/me/services/gardening', passwordless.restricted(), postGardening)
-router.put('/me/services/gardening', passwordless.restricted(), putGardening)
-
-router.post('/me/services/ironing', passwordless.restricted(), postIroning)
-router.put('/me/services/ironing', passwordless.restricted(), putIroning)
-
 router.post(
   '/send-token',
   sendTokenMiddleware,
@@ -62,10 +55,40 @@ router.post(
   postSendToken,
 )
 
-router.get('/services', getServices)
+router.delete(
+  `/services/${CLEANING}/:id`,
+  passwordless.restricted(),
+  deleteCleaning,
+)
+router.get(`/services/${CLEANING}`, getCleaning)
+router.post(`/services/${CLEANING}`, passwordless.restricted(), postCleaning)
+router.put(`/services/${CLEANING}/:id`, passwordless.restricted(), putCleaning)
+
+router.delete(
+  `/services/${GARDENING}/:id`,
+  passwordless.restricted(),
+  deleteGardening,
+)
+router.get(`/services/${GARDENING}`, getGardening)
+router.post(`/services/${GARDENING}`, passwordless.restricted(), postGardening)
+router.put(
+  `/services/${GARDENING}/:id`,
+  passwordless.restricted(),
+  putGardening,
+)
+
+router.delete(
+  `/services/${IRONING}/:id`,
+  passwordless.restricted(),
+  deleteIroning,
+)
+router.get(`/services/${IRONING}`, getIroning)
+router.post(`/services/${IRONING}`, passwordless.restricted(), postIroning)
+router.put(`/services/${IRONING}/:id`, passwordless.restricted(), putIroning)
 
 router.get('/sign-out', passwordless.logout(), getSignOut)
 
 router.post('/user', postUser)
+router.get('/user/:id/services', getUserServices)
 
 export default router

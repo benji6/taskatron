@@ -32,18 +32,15 @@ export interface IServiceIroningPostBody {
 }
 
 export interface IServiceCleaningModelParams extends IServiceCleaningPostBody {
-  service: TCleaning
   userId: string
 }
 
 export interface IServiceGardeningModelParams
   extends IServiceGardeningPostBody {
-  service: TGardening
   userId: string
 }
 
 export interface IServiceIroningModelParams extends IServiceIroningPostBody {
-  service: TIroning
   userId: string
 }
 
@@ -60,10 +57,25 @@ export interface IServiceIroningDocument extends IServiceIroningModelParams {
   _id: string
 }
 
+interface IServiceCleaningDocumentWithServiceType
+  extends IServiceCleaningDocument {
+  serviceType: TService
+}
+
+interface IServiceGardeningDocumentWithServiceType
+  extends IServiceGardeningDocument {
+  serviceType: TService
+}
+
+interface IServiceIroningDocumentWithServiceType
+  extends IServiceIroningDocument {
+  serviceType: TService
+}
+
 export type IServiceDocument =
-  | IServiceCleaningDocument
-  | IServiceGardeningDocument
-  | IServiceIroningDocument
+  | IServiceCleaningDocumentWithServiceType
+  | IServiceGardeningDocumentWithServiceType
+  | IServiceIroningDocumentWithServiceType
 
 export interface IServiceCleaningResponseObject
   extends IServiceCleaningDocument {

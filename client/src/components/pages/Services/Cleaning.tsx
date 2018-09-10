@@ -11,7 +11,7 @@ import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import {
   getCleaningService,
-  postServiceCleaning,
+  postCleaningService,
   putServiceCleaning,
 } from '../../../api'
 import { IServiceCleaningDocument } from '../../../shared/types'
@@ -188,7 +188,7 @@ class CleaningService extends React.PureComponent {
           hourlyRate: Number(values.hourlyRate),
         })
       } else {
-        await postServiceCleaning({
+        await postCleaningService({
           ...values,
           hourlyRate: Number(values.hourlyRate),
         })

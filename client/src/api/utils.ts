@@ -9,8 +9,7 @@ export const jsonHeaders = {
   'Content-Type': 'application/json',
 }
 
-export const deleteConfig = (body: any) => ({
-  body: JSON.stringify(body),
+export const deleteConfig = () => ({
   headers: jsonHeaders,
   method: 'DELETE',
 })

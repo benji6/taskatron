@@ -11,7 +11,7 @@ import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import {
   getIroningService,
-  postServiceIroning,
+  postIroningService,
   putServiceIroning,
 } from '../../../api'
 import { IServiceIroningDocument } from '../../../shared/types'
@@ -201,7 +201,7 @@ class IroningService extends React.PureComponent {
           hourlyRate: Number(values.hourlyRate),
         })
       } else {
-        await postServiceIroning({
+        await postIroningService({
           ...values,
           hourlyRate: Number(values.hourlyRate),
         })

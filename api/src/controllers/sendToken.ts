@@ -18,5 +18,5 @@ export const postErrorMiddleware = (
 }
 
 export const post = (req: Request, res: Response): void => {
-  res.status(200).end()
+  res.status(201).end()
 }

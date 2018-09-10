@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Card, Icon } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { deleteService } from '../../../api'
+import { deleteIroningService } from '../../../api'
 import { IRONING } from '../../../shared/services'
 import { IServiceIroningDocument } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
@@ -24,7 +24,7 @@ class IroningCard extends React.PureComponent<IProps> {
     this.setState({ isDeleting: true })
 
     try {
-      await deleteService(this.props.children._id)
+      await deleteIroningService(this.props.children._id)
       this.props.onDelete()
     } catch {
       // TODO
