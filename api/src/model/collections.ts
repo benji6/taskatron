@@ -4,6 +4,7 @@ import { TService } from '../shared/types'
 export const CLEANING_SERVICES = 'cleaningServices'
 export const GARDENING_SERVICES = 'gardeningServices'
 export const IRONING_SERVICES = 'ironingServices'
+export const USERS = 'users'
 
 type TServiceCollectionName =
   | 'cleaningServices'

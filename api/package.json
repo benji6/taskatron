@@ -13,6 +13,8 @@
     "test:format": "prettier --list-different \"src/**/*.ts*\"",
     "test:lint": "tslint -c tslint.json 'src/**/*.ts'",
     "test:types": "tsc --noEmit",
+    "testData:add": "yarn build && node build/scripts/addTestData",
+    "testData:remove": "yarn build && node build/scripts/removeTestData",
     "tsc:watch": "tsc -w"
   },
   "dependencies": {

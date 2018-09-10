@@ -8,13 +8,14 @@ import {
 import {
   collectionNameToServiceType,
   serviceCollectionNames,
+  USERS,
 } from './collections'
 import withDb from './withDb'
 
 export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
   withDb(async db => {
     const results = await db
-      .collection('users')
+      .collection(USERS)
       .find(new ObjectId(id))
       .toArray()
 
@@ -26,7 +27,7 @@ export const getUserByEmail = async (
 ): Promise<IUserDocument | undefined> =>
   withDb(async db => {
     const results = await db
-      .collection('users')
+      .collection(USERS)
       .find({ email: email.toLowerCase() })
       .toArray()
 
@@ -62,7 +63,7 @@ export const setUser = async (user: IUserPostBody): Promise<IUserDocument> =>
       email: user.email.toLowerCase(),
     }
 
-    await db.collection('users').insertOne(document)
+    await db.collection(USERS).insertOne(document)
 
     return document as IUserDocument
   })
@@ -73,6 +74,6 @@ export const updateUser = async (
 ): Promise<void> =>
   withDb(async db => {
     await db
-      .collection('users')
+      .collection(USERS)
       .updateOne({ _id: new ObjectId(id) }, { $set: updateObj })
   })
