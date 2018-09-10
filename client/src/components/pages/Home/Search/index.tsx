@@ -143,7 +143,7 @@ export default class Search extends React.PureComponent {
                   </IroningCard>
                 ),
             )}
-            {pageCount && (
+            {pageCount > 1 && (
               <div
                 style={{
                   display: 'flex',
