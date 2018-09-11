@@ -1,4 +1,11 @@
-import { Button, ButtonGroup, RadioButton, RadioGroup, Spinner } from 'eri'
+import {
+  Button,
+  ButtonGroup,
+  Pagination,
+  RadioButton,
+  RadioGroup,
+  Spinner,
+} from 'eri'
 import * as React from 'react'
 import {
   getCleaningServices,
@@ -143,31 +150,11 @@ export default class Search extends React.PureComponent {
                   </IroningCard>
                 ),
             )}
-            {pageCount > 1 && (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  margin: '1rem',
-                }}
-              >
-                {currentPage !== 0 && (
-                  <button onClick={() => this.search(currentPage - 1)}>
-                    previous
-                  </button>
-                )}
-                {Array.from({ length: Math.min(pageCount, 6) }, (_, i) => (
-                  <button key={i} onClick={() => this.search(i)}>
-                    {i + 1}
-                  </button>
-                ))}
-                {currentPage !== pageCount - 1 && (
-                  <button onClick={() => this.search(currentPage + 1)}>
-                    next
-                  </button>
-                )}
-              </div>
-            )}
+            <Pagination
+              onChange={this.search}
+              page={currentPage}
+              pageCount={pageCount}
+            />
           </>
         ) : (
           isLoading && <Spinner variation="page" />
