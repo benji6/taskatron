@@ -1,5 +1,6 @@
 import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
 import {
+  ICleaningSearchParams,
   IServiceCleaningDocument,
   IServiceCleaningModelParams,
 } from '../shared/types'
@@ -36,14 +37,12 @@ export const getCleaningService = async (
 export const searchCleaningServices = async ({
   limit,
   skip,
-}: {
-  limit: number
-  skip: number
-}): Promise<IServiceCleaningDocument[]> =>
+  ...findParams
+}: ICleaningSearchParams): Promise<IServiceCleaningDocument[]> =>
   withDb(db =>
     db
       .collection(CLEANING_SERVICES)
-      .find()
+      .find(findParams)
       .skip(skip)
       .limit(limit)
       .toArray(),

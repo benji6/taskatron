@@ -126,3 +126,17 @@ export interface IUserDocument extends IUserPostBody {
 }
 
 export type TService = TCleaning | TGardening | TIroning
+
+export interface ICleaningFilters {
+  carpetClean?: boolean
+  deepClean?: boolean
+  general?: boolean
+  hasOwnEquipment?: boolean
+  hasOwnProducts?: boolean
+  ovenClean?: boolean
+}
+
+export interface ICleaningSearchParams extends ICleaningFilters {
+  limit: number
+  skip: number
+}

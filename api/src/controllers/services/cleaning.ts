@@ -15,7 +15,9 @@ import {
   IServiceCleaningPostBody,
   IUserDocument,
 } from '../../shared/types'
-import { isBoolean, isDecimal } from '../../shared/validation'
+import { removeUndefinedValues } from '../../shared/utils'
+import { isBoolean, isDecimal, isValidNumber } from '../../shared/validation'
+import { parseBooleanQuery } from '../utils'
 
 interface IRequest extends Request {
   user: string
@@ -47,10 +49,31 @@ export const del = async (req: Request, res: Response) => {
 }
 
 export const get = async (req: Request, res: Response) => {
-  const { limit = 0, skip = 0 } = req.query
+  const {
+    carpetClean,
+    deepClean,
+    general,
+    hasOwnEquipment,
+    hasOwnProducts,
+    limit = '0',
+    ovenClean,
+    skip = '0',
+  } = req.query
+
+  if (!isValidNumber(limit) || !isValidNumber(skip)) {
+    res.status(400).end()
+  }
 
   try {
     const serviceDocuments = await searchCleaningServices({
+      ...removeUndefinedValues({
+        carpetClean: parseBooleanQuery(carpetClean),
+        deepClean: parseBooleanQuery(deepClean),
+        general: parseBooleanQuery(general),
+        hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
+        hasOwnProducts: parseBooleanQuery(hasOwnProducts),
+        ovenClean: parseBooleanQuery(ovenClean),
+      }),
       limit: Number(limit),
       skip: Number(skip),
     })
