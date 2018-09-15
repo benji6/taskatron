@@ -10,6 +10,7 @@ import {
 import { getUser } from '../../model/user'
 import pino from '../../pino'
 import {
+  ICleaningFilters,
   ICleaningServiceSearchResponse,
   IServiceCleaningDocument,
   IServiceCleaningPostBody,
@@ -64,16 +65,18 @@ export const get = async (req: Request, res: Response) => {
     res.status(400).end()
   }
 
+  const filters: ICleaningFilters = removeUndefinedValues({
+    carpetClean: parseBooleanQuery(carpetClean),
+    deepClean: parseBooleanQuery(deepClean),
+    general: parseBooleanQuery(general),
+    hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
+    hasOwnProducts: parseBooleanQuery(hasOwnProducts),
+    ovenClean: parseBooleanQuery(ovenClean),
+  })
+
   try {
     const serviceDocuments = await searchCleaningServices({
-      ...removeUndefinedValues({
-        carpetClean: parseBooleanQuery(carpetClean),
-        deepClean: parseBooleanQuery(deepClean),
-        general: parseBooleanQuery(general),
-        hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
-        hasOwnProducts: parseBooleanQuery(hasOwnProducts),
-        ovenClean: parseBooleanQuery(ovenClean),
-      }),
+      ...filters,
       limit: Number(limit),
       skip: Number(skip),
     })
@@ -91,7 +94,7 @@ export const get = async (req: Request, res: Response) => {
       }),
     )
 
-    const total = await countCleaningServices()
+    const total = await countCleaningServices(filters)
 
     const responseBody: ICleaningServiceSearchResponse = {
       results,

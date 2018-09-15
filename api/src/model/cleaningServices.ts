@@ -1,5 +1,6 @@
 import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
 import {
+  ICleaningFilters,
   ICleaningSearchParams,
   IServiceCleaningDocument,
   IServiceCleaningModelParams,
@@ -7,11 +8,13 @@ import {
 import { CLEANING_SERVICES } from './collections'
 import withDb from './withDb'
 
-export const countCleaningServices = async (): Promise<number> =>
+export const countCleaningServices = async (
+  findParams: ICleaningFilters,
+): Promise<number> =>
   withDb(db =>
     db
       .collection(CLEANING_SERVICES)
-      .find()
+      .find(findParams)
       .count(),
   )
 
