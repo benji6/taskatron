@@ -20,13 +20,16 @@ import serviceNames, {
   IRONING,
 } from '../../../../shared/services'
 import {
+  ICleaningFilters,
   IServiceCleaningResponseObject,
   IServiceGardeningResponseObject,
   IServiceIroningResponseObject,
   TService,
 } from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
+import createSearchString from '../../../../utils/createSearchString'
 import CleaningCard from './CleaningCard'
+import CleaningFilters from './CleaningFilters'
 import GardeningCard from './GardeningCard'
 import IroningCard from './IroningCard'
 
@@ -41,6 +44,7 @@ interface IState {
   currentPage?: number
   isLoading: boolean
   loadedServiceType: TService
+  filters?: ICleaningFilters
   pageCount: number
   services?:
     | IServiceCleaningResponseObject[]
@@ -50,24 +54,10 @@ interface IState {
   serviceType: TService
 }
 
-const createSearchString = ({
-  page,
-  serviceType,
-}: {
-  page: number
-  serviceType: TService
-}): string => {
-  const params = new URLSearchParams()
-
-  params.set('serviceType', serviceType)
-  params.set('page', String(page))
-
-  return `?${params}`
-}
-
 class Search extends React.PureComponent<IProps> {
   public state: IState = {
     currentPage: undefined,
+    filters: undefined,
     isLoading: false,
     loadedServiceType: CLEANING,
     pageCount: 0,
@@ -92,6 +82,10 @@ class Search extends React.PureComponent<IProps> {
 
   get serviceType() {
     return new URLSearchParams(this.props.location.search).get('serviceType')
+  }
+
+  public setFilters = (filters: ICleaningFilters) => {
+    this.setState({ filters })
   }
 
   public componentDidMount() {
@@ -145,22 +139,26 @@ class Search extends React.PureComponent<IProps> {
   }
 
   public search = async (page = 0) => {
-    const { serviceType } = this.state
+    const { filters, serviceType } = this.state
 
-    this.setState({ isLoading: true })
-
-    const apiFn =
-      serviceType === GARDENING
-        ? getGardeningServices
-        : serviceType === IRONING
-          ? getIroningServices
-          : getCleaningServices
+    this.setState({ isLoading: true, servicesError: false })
 
     try {
-      const responseBody = await apiFn({
-        limit: resultsPerPage,
-        skip: page * resultsPerPage,
-      })
+      const responseBody = await (serviceType === GARDENING
+        ? getGardeningServices({
+            limit: resultsPerPage,
+            skip: page * resultsPerPage,
+          })
+        : serviceType === IRONING
+          ? getIroningServices({
+              limit: resultsPerPage,
+              skip: page * resultsPerPage,
+            })
+          : getCleaningServices({
+              ...filters,
+              limit: resultsPerPage,
+              skip: page * resultsPerPage,
+            }))
 
       this.setState({
         currentPage: page,
@@ -185,6 +183,7 @@ class Search extends React.PureComponent<IProps> {
   public render(): React.ReactNode {
     const {
       currentPage,
+      filters,
       isLoading,
       loadedServiceType,
       pageCount,
@@ -193,10 +192,18 @@ class Search extends React.PureComponent<IProps> {
       servicesError,
     } = this.state
 
-    const search = createSearchString({
-      page: Number(this.page) || 0,
-      serviceType,
-    })
+    const search = createSearchString(
+      serviceType === CLEANING
+        ? {
+            page: Number(currentPage) || 0,
+            serviceType,
+            ...filters,
+          }
+        : {
+            page: Number(currentPage) || 0,
+            serviceType,
+          },
+    )
 
     return (
       <>
@@ -214,6 +221,9 @@ class Search extends React.PureComponent<IProps> {
             </RadioButton>
           ))}
         </RadioGroup>
+        {serviceType === CLEANING && (
+          <CleaningFilters setFilters={this.setFilters} />
+        )}
         <ButtonGroup>
           <Button
             to={{

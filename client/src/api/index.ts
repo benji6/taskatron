@@ -1,6 +1,7 @@
 import { getCredentials } from '../localStorage'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
+  ICleaningSearchParams,
   ICleaningServiceSearchResponse,
   IGardeningServiceSearchResponse,
   IIroningServiceSearchResponse,
@@ -16,6 +17,7 @@ import {
   IUserPostBody,
 } from '../shared/types'
 import ICredentials from '../types/ICredentials'
+import createSearchString from '../utils/createSearchString'
 import {
   credentialsQueryString,
   deleteConfig,
@@ -79,15 +81,11 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getCleaningServices = async ({
-  limit,
-  skip,
-}: {
-  limit: number
-  skip: number
-}): Promise<ICleaningServiceSearchResponse> => {
+export const getCleaningServices = async (
+  searchParams: ICleaningSearchParams,
+): Promise<ICleaningServiceSearchResponse> => {
   const response = await fetch(
-    `${origin}/services/${CLEANING}?limit=${limit}&skip=${skip}`,
+    `${origin}/services/${CLEANING}${createSearchString(searchParams)}`,
   )
   if (!response.ok) throw Error(String(response.status))
   return response.json()
