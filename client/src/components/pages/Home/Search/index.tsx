@@ -52,6 +52,7 @@ interface IState {
     | IServiceIroningResponseObject[]
   servicesError: boolean
   serviceType: TService
+  total: number
 }
 
 class Search extends React.PureComponent<IProps> {
@@ -64,6 +65,7 @@ class Search extends React.PureComponent<IProps> {
     serviceType: this.initialServiceType,
     services: undefined,
     servicesError: false,
+    total: 0,
   }
 
   get initialServiceType(): TService {
@@ -144,7 +146,7 @@ class Search extends React.PureComponent<IProps> {
     this.setState({ isLoading: true, servicesError: false })
 
     try {
-      const responseBody = await (serviceType === GARDENING
+      const { results, total } = await (serviceType === GARDENING
         ? getGardeningServices({
             limit: resultsPerPage,
             skip: page * resultsPerPage,
@@ -163,8 +165,9 @@ class Search extends React.PureComponent<IProps> {
       this.setState({
         currentPage: page,
         loadedServiceType: serviceType,
-        pageCount: Math.ceil(responseBody.total / resultsPerPage),
-        services: responseBody.results,
+        pageCount: Math.ceil(total / resultsPerPage),
+        services: results,
+        total,
       })
     } catch {
       this.setState({ servicesError: true })
@@ -190,6 +193,7 @@ class Search extends React.PureComponent<IProps> {
       serviceType,
       services,
       servicesError,
+      total,
     } = this.state
 
     const search = createSearchString(
@@ -240,6 +244,17 @@ class Search extends React.PureComponent<IProps> {
           </p>
         ) : services ? (
           <>
+            {total === 0 ? (
+              <p e-util="center">
+                We can't find any results for your search, try searching again
+                with some different filters.
+              </p>
+            ) : (
+              <p e-util="center">
+                {total} result
+                {total > 1 && 's'} found
+              </p>
+            )}
             {(services as any).map(
               (service: any) =>
                 loadedServiceType === CLEANING ? (
