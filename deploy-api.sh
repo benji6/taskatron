@@ -1,6 +1,7 @@
 set -e
 
-git pull
+git fetch
+git reset --hard origin/master
 cd api
 yarn
 yarn build
