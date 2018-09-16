@@ -107,12 +107,12 @@ class Services extends React.PureComponent<IProps> {
         ) : (
           services &&
           services.map(
-            service =>
-              service.serviceType === CLEANING ? (
+            ({ serviceType, ...service }) =>
+              serviceType === CLEANING ? (
                 <CleaningCard key={service._id} onDelete={this.fetchServices}>
                   {service as IServiceCleaningDocument}
                 </CleaningCard>
-              ) : service.serviceType === GARDENING ? (
+              ) : serviceType === GARDENING ? (
                 <GardeningCard key={service._id} onDelete={this.fetchServices}>
                   {service as IServiceGardeningDocument}
                 </GardeningCard>

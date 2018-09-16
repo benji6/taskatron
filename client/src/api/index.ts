@@ -1,12 +1,12 @@
 import { getCredentials } from '../localStorage'
 import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
+  ICleaningPostBody,
   ICleaningSearchParams,
   ICleaningServiceSearchResponse,
   IGardeningServiceSearchResponse,
   IIroningServiceSearchResponse,
   IServiceCleaningDocument,
-  IServiceCleaningPostBody,
   IServiceDocument,
   IServiceGardeningDocument,
   IServiceGardeningPostBody,
@@ -136,9 +136,14 @@ export const getCleaningService = async (): Promise<
 > => {
   const services = await getUserServices()
 
-  return services.find(({ serviceType }) => serviceType === CLEANING) as
-    | IServiceCleaningDocument
-    | undefined
+  const service = services.find(({ serviceType }) => serviceType === CLEANING)
+
+  if (service) {
+    const { serviceType, ...actualService } = service
+    return actualService as IServiceCleaningDocument
+  }
+
+  return service
 }
 
 export const getGardeningService = async (): Promise<
@@ -188,7 +193,7 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
 }
 
 export const postCleaningService = async (
-  service: IServiceCleaningPostBody,
+  service: ICleaningPostBody,
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(

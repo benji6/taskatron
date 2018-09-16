@@ -1,16 +1,56 @@
+import * as t from 'io-ts'
+
 type TCleaning = 'cleaning'
 type TGardening = 'gardening'
 type TIroning = 'ironing'
 
-export interface IServiceCleaningPostBody {
-  carpetClean: boolean
-  deepClean: boolean
-  general: boolean
-  hasOwnEquipment: boolean
-  hasOwnProducts: boolean
-  hourlyRate: number
-  ovenClean: boolean
+const cleaningPostBodyObj = {
+  carpetClean: t.boolean,
+  deepClean: t.boolean,
+  general: t.boolean,
+  hasOwnEquipment: t.boolean,
+  hasOwnProducts: t.boolean,
+  hourlyRate: t.number,
+  ovenClean: t.boolean,
 }
+
+export const CleaningPostBody = t.exact(t.type(cleaningPostBodyObj))
+
+export type ICleaningPostBody = t.TypeOf<typeof CleaningPostBody>
+
+export const CleaningDocument = t.exact(
+  t.type({
+    ...cleaningPostBodyObj,
+    _id: t.string,
+    userId: t.string,
+  }),
+)
+
+const cleaningFiltersObj = {
+  carpetClean: t.boolean,
+  deepClean: t.boolean,
+  general: t.boolean,
+  hasOwnEquipment: t.boolean,
+  hasOwnProducts: t.boolean,
+  hourlyRate: t.number,
+  ovenClean: t.boolean,
+}
+
+export const CleaningFilters = t.partial(cleaningFiltersObj)
+
+export type ICleaningFilters = t.TypeOf<typeof CleaningFilters>
+
+export const CleaningSearchParams = t.exact(
+  t.intersection([
+    CleaningFilters,
+    t.type({
+      limit: t.number,
+      skip: t.number,
+    }),
+  ]),
+)
+
+export type ICleaningSearchParams = t.TypeOf<typeof CleaningSearchParams>
 
 export interface IServiceGardeningPostBody {
   general: boolean
@@ -31,7 +71,7 @@ export interface IServiceIroningPostBody {
   trousers: boolean
 }
 
-export interface IServiceCleaningModelParams extends IServiceCleaningPostBody {
+export interface IServiceCleaningModelParams extends ICleaningPostBody {
   userId: string
 }
 
@@ -126,17 +166,3 @@ export interface IUserDocument extends IUserPostBody {
 }
 
 export type TService = TCleaning | TGardening | TIroning
-
-export interface ICleaningFilters {
-  carpetClean?: boolean
-  deepClean?: boolean
-  general?: boolean
-  hasOwnEquipment?: boolean
-  hasOwnProducts?: boolean
-  ovenClean?: boolean
-}
-
-export interface ICleaningSearchParams extends ICleaningFilters {
-  limit: number
-  skip: number
-}

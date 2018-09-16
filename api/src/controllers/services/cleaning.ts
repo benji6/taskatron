@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { PathReporter } from 'io-ts/lib/PathReporter'
 import {
   countCleaningServices,
   deleteCleaningService,
@@ -10,19 +11,36 @@ import {
 import { getUser } from '../../model/user'
 import pino from '../../pino'
 import {
+  CleaningDocument,
+  CleaningPostBody,
+  CleaningSearchParams,
   ICleaningFilters,
+  ICleaningPostBody,
   ICleaningServiceSearchResponse,
   IServiceCleaningDocument,
-  IServiceCleaningPostBody,
   IUserDocument,
 } from '../../shared/types'
 import { removeUndefinedValues } from '../../shared/utils'
-import { isBoolean, isDecimal, isValidNumber } from '../../shared/validation'
+import { isDecimal } from '../../shared/validation'
 import { parseBooleanQuery } from '../utils'
 
 interface IRequest extends Request {
   user: string
 }
+
+const log = (resource: string) => (
+  method: 'GET' | 'DELETE' | 'PATCH' | 'POST' | 'PUT',
+) => (...args: Array<unknown>): void => {
+  const [status, msg] = args as [string, unknown]
+  if (args.length === 1) pino.error(`${method} ${resource} ${status}`)
+  else pino.error(`${method} ${resource} ${status}`, msg)
+}
+
+const logCleaning = log('services/cleaning')
+const logGet = logCleaning('GET')
+const logDelete = logCleaning('DELETE')
+const logPost = logCleaning('POST')
+const logPut = logCleaning('PUT')
 
 export const del = async (req: Request, res: Response) => {
   const { user: userId } = req as IRequest
@@ -32,20 +50,24 @@ export const del = async (req: Request, res: Response) => {
     const document = await getCleaningService(id)
 
     if (!document) {
-      res.status(400).end()
-      return
+      res.status(404).end()
+      return logDelete(404, `id: ${id}`)
     }
 
     if (!(document.userId as any).equals(userId)) {
       res.status(403).end()
-      return
+      return logDelete(
+        403,
+        `userId: ${userId} does not match document.userId: ${document.userId}`,
+      )
     }
 
     await deleteCleaningService(id)
+
     res.status(204).end()
   } catch (e) {
-    pino.error('DELETE /services/cleaning', e)
     res.status(500).end()
+    logDelete(500, e)
   }
 }
 
@@ -56,14 +78,10 @@ export const get = async (req: Request, res: Response) => {
     general,
     hasOwnEquipment,
     hasOwnProducts,
-    limit = '0',
+    limit,
     ovenClean,
-    skip = '0',
+    skip,
   } = req.query
-
-  if (!isValidNumber(limit) || !isValidNumber(skip)) {
-    res.status(400).end()
-  }
 
   const filters: ICleaningFilters = removeUndefinedValues({
     carpetClean: parseBooleanQuery(carpetClean),
@@ -74,12 +92,22 @@ export const get = async (req: Request, res: Response) => {
     ovenClean: parseBooleanQuery(ovenClean),
   })
 
+  const searchParams = {
+    ...filters,
+    limit: Number(limit),
+    skip: Number(skip),
+  }
+
+  if (!CleaningSearchParams.is(searchParams)) {
+    res.status(400).end()
+    return logGet(
+      400,
+      PathReporter.report(CleaningSearchParams.decode(searchParams)),
+    )
+  }
+
   try {
-    const serviceDocuments = await searchCleaningServices({
-      ...filters,
-      limit: Number(limit),
-      skip: Number(skip),
-    })
+    const serviceDocuments = await searchCleaningServices(searchParams)
 
     const results = await Promise.all(
       serviceDocuments.map(async serviceDocument => {
@@ -103,32 +131,29 @@ export const get = async (req: Request, res: Response) => {
 
     res.status(200).send(responseBody)
   } catch (e) {
-    pino.error('GET /services/cleaning', e)
     res.status(500).end()
+    logGet(500, e)
   }
 }
 
 export const post = async (req: Request, res: Response) => {
-  const body: IServiceCleaningPostBody = req.body
+  const body: ICleaningPostBody = req.body
   const userId = (req as IRequest).user
 
-  if (
-    !isBoolean(body.carpetClean) ||
-    !isBoolean(body.deepClean) ||
-    !isBoolean(body.general) ||
-    !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.hasOwnProducts) ||
-    !isBoolean(body.ovenClean) ||
-    !isDecimal(body.hourlyRate)
-  ) {
-    res.status(400).send('invalid request body')
-    return
+  if (!CleaningPostBody.is(body)) {
+    res.status(400).end()
+    return logPost(400, PathReporter.report(CleaningPostBody.decode(body)))
+  }
+
+  if (!isDecimal(body.hourlyRate)) {
+    res.status(400).end()
+    return logPost(400, `hourlyRate is not decimal: ${body.hourlyRate}`)
   }
 
   try {
     if (await getCleaningService(userId)) {
-      res.status(400).send('document already exists')
-      return
+      res.status(409).end()
+      return logPost(409, `record for userId: ${userId} already exists`)
     }
 
     const serviceDocument = await setCleaningService({
@@ -138,8 +163,8 @@ export const post = async (req: Request, res: Response) => {
 
     res.status(201).send(serviceDocument)
   } catch (e) {
-    pino.error('POST services/cleaning', e)
-    res.status(500).end()
+    pino.error('POST services/cleaning 500', e)
+    logPost(500, e)
   }
 }
 
@@ -148,19 +173,25 @@ export const put = async (req: Request, res: Response) => {
   const body: IServiceCleaningDocument = req.body
   const userId = (req as IRequest).user
 
-  if (
-    !isBoolean(body.carpetClean) ||
-    !isBoolean(body.deepClean) ||
-    !isBoolean(body.general) ||
-    !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.hasOwnProducts) ||
-    !isBoolean(body.ovenClean) ||
-    !isDecimal(body.hourlyRate) ||
-    id !== body._id ||
-    body.userId !== userId
-  ) {
+  if (!CleaningDocument.is(body)) {
     res.status(400).end()
-    return
+    return logPut(400, PathReporter.report(CleaningDocument.decode(body)))
+  }
+
+  if (id !== body._id) {
+    res.status(400).end()
+    return logPut(
+      400,
+      `Resource id: ${id} does not match body._id: ${body._id}`,
+    )
+  }
+
+  if (userId !== body.userId) {
+    res.status(400).end()
+    return logPut(
+      400,
+      `userId: ${userId} does not match body.userId: ${body.userId}`,
+    )
   }
 
   try {
@@ -168,20 +199,22 @@ export const put = async (req: Request, res: Response) => {
 
     if (!document) {
       res.status(404).end()
-      pino.info('PUT services/cleaning 404', id)
-      return
+      return logPut(404, `id: ${id}`)
     }
 
     if (!(document.userId as any).equals(userId)) {
       res.status(403).end()
-      return
+      return logPut(
+        403,
+        `userId: ${userId} does not match document.userId: ${document.userId}`,
+      )
     }
 
     await updateCleaningService(body)
 
     res.status(200).send(body)
   } catch (e) {
-    pino.error('PUT services/cleaning', e)
     res.status(500).end()
+    logPut(500, e)
   }
 }

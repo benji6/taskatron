@@ -102,7 +102,7 @@ export const post = async (req: Request, res: Response) => {
 
   try {
     if (await getIroningService(userId)) {
-      res.status(400).end()
+      res.status(409).end()
       return
     }
 
