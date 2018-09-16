@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { PathReporter } from 'io-ts/lib/PathReporter'
+import log from '../../log'
 import {
   countCleaningServices,
   deleteCleaningService,
@@ -9,7 +10,6 @@ import {
   updateCleaningService,
 } from '../../model/cleaningServices'
 import { getUser } from '../../model/user'
-import pino from '../../pino'
 import {
   CleaningDocument,
   CleaningPostBody,
@@ -25,14 +25,6 @@ import { parseBooleanQuery } from '../utils'
 
 interface IRequest extends Request {
   user: string
-}
-
-const log = (resource: string) => (
-  method: 'GET' | 'DELETE' | 'PATCH' | 'POST' | 'PUT',
-) => (...args: Array<unknown>): void => {
-  const [status, msg] = args as [string, unknown]
-  if (args.length === 1) pino.error(`${method} ${resource} ${status}`)
-  else pino.error(`${method} ${resource} ${status}`, msg)
 }
 
 const logCleaning = log('services/cleaning')
@@ -157,8 +149,8 @@ export const post = async (req: Request, res: Response) => {
 
     res.status(201).send(serviceDocument)
   } catch (e) {
-    pino.error('POST services/cleaning 500', e)
     logPost(500, e)
+    res.status(500).end()
   }
 }
 

@@ -1,4 +1,6 @@
 import { Request, Response } from 'express'
+import { PathReporter } from 'io-ts/lib/PathReporter'
+import log from '../../log'
 import {
   countGardeningServices,
   deleteGardeningService,
@@ -8,18 +10,24 @@ import {
   updateGardeningService,
 } from '../../model/gardeningServices'
 import { getUser } from '../../model/user'
-import pino from '../../pino'
 import {
+  GardeningDocument,
+  GardeningPostBody,
+  IGardeningPostBody,
   IGardeningServiceSearchResponse,
   IServiceGardeningDocument,
-  IServiceGardeningPostBody,
   IUserDocument,
 } from '../../shared/types'
-import { isBoolean, isDecimal } from '../../shared/validation'
 
 interface IRequest extends Request {
   user: string
 }
+
+const logGardening = log('services/gardening')
+const logGet = logGardening('GET')
+const logDelete = logGardening('DELETE')
+const logPost = logGardening('POST')
+const logPut = logGardening('PUT')
 
 export const del = async (req: Request, res: Response) => {
   const { user: userId } = req as IRequest
@@ -29,25 +37,29 @@ export const del = async (req: Request, res: Response) => {
     const document = await getGardeningService(id)
 
     if (!document) {
-      res.status(400).end()
-      return
+      res.status(404).end()
+      return logDelete(404, `id: ${id}`)
     }
 
     if (!(document.userId as any).equals(userId)) {
       res.status(403).end()
-      return
+      return logDelete(
+        403,
+        `userId: ${userId} does not match document.userId: ${document.userId}`,
+      )
     }
 
     await deleteGardeningService(id)
+
     res.status(204).end()
   } catch (e) {
-    pino.error('DELETE /services/gardening', e)
     res.status(500).end()
+    logDelete(500, e)
   }
 }
 
 export const get = async (req: Request, res: Response) => {
-  const { limit = 0, skip = 0 } = req.query
+  const { limit, skip } = req.query
 
   try {
     const serviceDocuments = await searchGardeningServices({
@@ -77,30 +89,24 @@ export const get = async (req: Request, res: Response) => {
 
     res.status(200).send(responseBody)
   } catch (e) {
-    pino.error('GET /services/gardening', e)
     res.status(500).end()
+    logGet(500, e)
   }
 }
 
 export const post = async (req: Request, res: Response) => {
-  const body: IServiceGardeningPostBody = req.body
+  const body: IGardeningPostBody = req.body
   const userId = (req as IRequest).user
 
-  if (
-    !isBoolean(body.general) ||
-    !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.hasOwnProducts) ||
-    !isBoolean(body.specialist) ||
-    !isDecimal(body.hourlyRate)
-  ) {
+  if (!GardeningPostBody.is(body)) {
     res.status(400).end()
-    return
+    return logPost(400, PathReporter.report(GardeningPostBody.decode(body)))
   }
 
   try {
     if (await getGardeningService(userId)) {
       res.status(409).end()
-      return
+      return logPost(409, `record for userId: ${userId} already exists`)
     }
 
     const serviceDocument = await setGardeningService({
@@ -110,7 +116,7 @@ export const post = async (req: Request, res: Response) => {
 
     res.status(201).send(serviceDocument)
   } catch (e) {
-    pino.error('POST services/gardening', e)
+    logPost(500, e)
     res.status(500).end()
   }
 }
@@ -120,17 +126,25 @@ export const put = async (req: Request, res: Response) => {
   const body: IServiceGardeningDocument = req.body
   const userId = (req as IRequest).user
 
-  if (
-    !isBoolean(body.general) ||
-    !isBoolean(body.hasOwnEquipment) ||
-    !isBoolean(body.hasOwnProducts) ||
-    !isBoolean(body.specialist) ||
-    !isDecimal(body.hourlyRate) ||
-    id !== body._id ||
-    body.userId !== userId
-  ) {
+  if (!GardeningDocument.is(body)) {
     res.status(400).end()
-    return
+    return logPut(400, PathReporter.report(GardeningDocument.decode(body)))
+  }
+
+  if (id !== body._id) {
+    res.status(400).end()
+    return logPut(
+      400,
+      `Resource id: ${id} does not match body._id: ${body._id}`,
+    )
+  }
+
+  if (userId !== body.userId) {
+    res.status(400).end()
+    return logPut(
+      400,
+      `userId: ${userId} does not match body.userId: ${body.userId}`,
+    )
   }
 
   try {
@@ -138,20 +152,22 @@ export const put = async (req: Request, res: Response) => {
 
     if (!document) {
       res.status(404).end()
-      pino.info('PUT services/gardening 404', id)
-      return
+      return logPut(404, `id: ${id}`)
     }
 
     if (!(document.userId as any).equals(userId)) {
       res.status(403).end()
-      return
+      return logPut(
+        403,
+        `userId: ${userId} does not match document.userId: ${document.userId}`,
+      )
     }
 
     await updateGardeningService(body)
 
     res.status(200).send(body)
   } catch (e) {
-    pino.error('PUT services/gardening', e)
     res.status(500).end()
+    logPut(500, e)
   }
 }

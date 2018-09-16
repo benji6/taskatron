@@ -24,13 +24,52 @@ const cleaningPostBodyObj = {
   ovenClean: t.boolean,
 }
 
+const gardeningPostBodyObj = {
+  general: t.boolean,
+  hasOwnEquipment: t.boolean,
+  hasOwnProducts: t.boolean,
+  hourlyRate: decimal,
+  specialist: t.boolean,
+}
+
+const ironingPostBodyObj = {
+  bedLinen: t.boolean,
+  collectAndReturn: t.boolean,
+  hasOwnEquipment: t.boolean,
+  hourlyRate: t.number,
+  other: t.boolean,
+  shirts: t.boolean,
+  specialist: t.boolean,
+  trousers: t.boolean,
+}
+
 export const CleaningPostBody = t.exact(t.type(cleaningPostBodyObj))
+export const GardeningPostBody = t.exact(t.type(gardeningPostBodyObj))
+export const IroningPostBody = t.exact(t.type(ironingPostBodyObj))
 
 export type ICleaningPostBody = t.TypeOf<typeof CleaningPostBody>
+export type IGardeningPostBody = t.TypeOf<typeof GardeningPostBody>
+export type IIroningPostBody = t.TypeOf<typeof IroningPostBody>
 
 export const CleaningDocument = t.exact(
   t.type({
     ...cleaningPostBodyObj,
+    _id: t.string,
+    userId: t.string,
+  }),
+)
+
+export const GardeningDocument = t.exact(
+  t.type({
+    ...gardeningPostBodyObj,
+    _id: t.string,
+    userId: t.string,
+  }),
+)
+
+export const IroningDocument = t.exact(
+  t.type({
+    ...ironingPostBodyObj,
     _id: t.string,
     userId: t.string,
   }),
@@ -62,35 +101,15 @@ export const CleaningSearchParams = t.exact(
 
 export type ICleaningSearchParams = t.TypeOf<typeof CleaningSearchParams>
 
-export interface IServiceGardeningPostBody {
-  general: boolean
-  hasOwnEquipment: boolean
-  hasOwnProducts: boolean
-  hourlyRate: number
-  specialist: boolean
-}
-
-export interface IServiceIroningPostBody {
-  bedLinen: boolean
-  collectAndReturn: boolean
-  hasOwnEquipment: boolean
-  hourlyRate: number
-  other: boolean
-  shirts: boolean
-  specialist: boolean
-  trousers: boolean
-}
-
 export interface IServiceCleaningModelParams extends ICleaningPostBody {
   userId: string
 }
 
-export interface IServiceGardeningModelParams
-  extends IServiceGardeningPostBody {
+export interface IServiceGardeningModelParams extends IGardeningPostBody {
   userId: string
 }
 
-export interface IServiceIroningModelParams extends IServiceIroningPostBody {
+export interface IServiceIroningModelParams extends IIroningPostBody {
   userId: string
 }
 

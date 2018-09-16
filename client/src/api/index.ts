@@ -4,14 +4,14 @@ import {
   ICleaningPostBody,
   ICleaningSearchParams,
   ICleaningServiceSearchResponse,
+  IGardeningPostBody,
   IGardeningServiceSearchResponse,
+  IIroningPostBody,
   IIroningServiceSearchResponse,
   IServiceCleaningDocument,
   IServiceDocument,
   IServiceGardeningDocument,
-  IServiceGardeningPostBody,
   IServiceIroningDocument,
-  IServiceIroningPostBody,
   IUserDocument,
   IUserPatchBody,
   IUserPostBody,
@@ -151,9 +151,14 @@ export const getGardeningService = async (): Promise<
 > => {
   const services = await getUserServices()
 
-  return services.find(({ serviceType }) => serviceType === GARDENING) as
-    | IServiceGardeningDocument
-    | undefined
+  const service = services.find(({ serviceType }) => serviceType === GARDENING)
+
+  if (service) {
+    const { serviceType, ...actualService } = service
+    return actualService as IServiceGardeningDocument
+  }
+
+  return service
 }
 
 export const getIroningService = async (): Promise<
@@ -161,9 +166,14 @@ export const getIroningService = async (): Promise<
 > => {
   const services = await getUserServices()
 
-  return services.find(({ serviceType }) => serviceType === IRONING) as
-    | IServiceIroningDocument
-    | undefined
+  const service = services.find(({ serviceType }) => serviceType === IRONING)
+
+  if (service) {
+    const { serviceType, ...actualService } = service
+    return actualService as IServiceIroningDocument
+  }
+
+  return service
 }
 
 export const getSignOut = (
@@ -206,7 +216,7 @@ export const postCleaningService = async (
 }
 
 export const postGardeningService = async (
-  service: IServiceGardeningPostBody,
+  service: IGardeningPostBody,
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
@@ -219,7 +229,7 @@ export const postGardeningService = async (
 }
 
 export const postIroningService = async (
-  service: IServiceIroningPostBody,
+  service: IIroningPostBody,
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
