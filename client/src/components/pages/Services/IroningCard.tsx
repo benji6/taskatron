@@ -65,7 +65,7 @@ class IroningCard extends React.PureComponent<IProps> {
           <li>Shirts: {renderTrueFalse(shirts)}</li>
           <li>Trousers: {renderTrueFalse(trousers)}</li>
           <li>Other standard garments: {renderTrueFalse(other)}</li>
-          <li>Specialist ironing - MOA: {renderTrueFalse(specialist)}</li>
+          <li>Specialist ironing: {renderTrueFalse(specialist)}</li>
           <li>
             I have my own ironing equipment: {renderTrueFalse(hasOwnEquipment)}
           </li>

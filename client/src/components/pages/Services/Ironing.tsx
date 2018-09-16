@@ -151,7 +151,7 @@ class IroningService extends React.PureComponent {
                       {...field}
                       checked={field.value}
                       error={getFieldError(form, 'specialist')}
-                      label="Specialist ironing - MOA"
+                      label="Specialist ironing"
                     />
                   )}
                 />

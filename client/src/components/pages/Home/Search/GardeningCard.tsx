@@ -28,10 +28,7 @@ export default class GardeningCard extends React.PureComponent<IProps> {
         <ul>
           <li>Hourly rate: £{String(hourlyRate)}</li>
           <li>General gardening services: {renderTrueFalse(general)}</li>
-          <li>
-            Specialist gardening services - MOA (what actually is MOA?):{' '}
-            {renderTrueFalse(specialist)}
-          </li>
+          <li>Specialist gardening services: {renderTrueFalse(specialist)}</li>
           <li>Has own gardening products: {renderTrueFalse(hasOwnProducts)}</li>
           <li>
             Has own gardening equipment: {renderTrueFalse(hasOwnEquipment)}
