@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom'
 import { deleteGardeningService } from '../../../api'
 import { GARDENING } from '../../../shared/services'
 import { IServiceGardeningDocument } from '../../../shared/types'
-import capitalizeFirst from '../../../utils/capitalizeFirst'
-import renderCurrency from '../../../utils/renderCurrency'
+import { capitalizeFirst, renderCurrency } from '../../../utils'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {

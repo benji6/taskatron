@@ -11,7 +11,7 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { sendToken } from '../../../api'
 import { isValidEmail } from '../../../shared/validation'
-import getFieldError from '../../../utils/getFieldError'
+import { getFieldError } from '../../../utils'
 
 interface IFormValues {
   email: string

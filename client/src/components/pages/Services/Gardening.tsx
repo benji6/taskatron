@@ -16,7 +16,7 @@ import {
 } from '../../../api'
 import { IServiceGardeningDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
-import getFieldError from '../../../utils/getFieldError'
+import { getFieldError } from '../../../utils'
 
 interface IFormValues {
   general: boolean

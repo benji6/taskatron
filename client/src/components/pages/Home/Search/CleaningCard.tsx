@@ -1,8 +1,7 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
 import { IServiceCleaningResponseObject } from '../../../../shared/types'
-import capitalizeFirst from '../../../../utils/capitalizeFirst'
-import renderCurrency from '../../../../utils/renderCurrency'
+import { capitalizeFirst, renderCurrency } from '../../../../utils'
 
 interface IProps {
   children: IServiceCleaningResponseObject

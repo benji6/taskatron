@@ -25,7 +25,7 @@ import {
   isValidPostcode,
 } from '../../../shared/validation'
 import IStore from '../../../types/IStore'
-import getFieldError from '../../../utils/getFieldError'
+import { getFieldError } from '../../../utils'
 
 interface IFormValues {
   firstName: string

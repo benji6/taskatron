@@ -17,7 +17,7 @@ import {
   IUserPostBody,
 } from '../shared/types'
 import ICredentials from '../types/ICredentials'
-import createSearchString from '../utils/createSearchString'
+import { createSearchString } from '../utils'
 import {
   credentialsQueryString,
   deleteConfig,

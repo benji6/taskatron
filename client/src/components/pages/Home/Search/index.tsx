@@ -26,8 +26,7 @@ import {
   IServiceIroningResponseObject,
   TService,
 } from '../../../../shared/types'
-import capitalizeFirst from '../../../../utils/capitalizeFirst'
-import createSearchString from '../../../../utils/createSearchString'
+import { capitalizeFirst, createSearchString } from '../../../../utils'
 import CleaningCard from './CleaningCard'
 import CleaningFilters from './CleaningFilters'
 import GardeningCard from './GardeningCard'
