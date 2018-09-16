@@ -5,6 +5,7 @@ import { deleteCleaningService } from '../../../api'
 import { CLEANING } from '../../../shared/services'
 import { IServiceCleaningDocument } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
+import renderCurrency from '../../../utils/renderCurrency'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {
@@ -59,7 +60,7 @@ class CleaningCard extends React.PureComponent<IProps> {
       <Card>
         <h3>{capitalizeFirst(CLEANING)}</h3>
         <ul>
-          <li>Hourly rate: £{String(hourlyRate)}</li>
+          <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>
           <li>One-off deep clean: {renderTrueFalse(deepClean)}</li>
           <li>Specialist clean - carpets: {renderTrueFalse(carpetClean)}</li>

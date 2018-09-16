@@ -5,6 +5,7 @@ import { deleteIroningService } from '../../../api'
 import { IRONING } from '../../../shared/services'
 import { IServiceIroningDocument } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
+import renderCurrency from '../../../utils/renderCurrency'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {
@@ -60,7 +61,7 @@ class IroningCard extends React.PureComponent<IProps> {
       <Card>
         <h3>{capitalizeFirst(IRONING)}</h3>
         <ul>
-          <li>Hourly rate: £{String(hourlyRate)}</li>
+          <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>Bed linen: {renderTrueFalse(bedLinen)}</li>
           <li>Shirts: {renderTrueFalse(shirts)}</li>
           <li>Trousers: {renderTrueFalse(trousers)}</li>

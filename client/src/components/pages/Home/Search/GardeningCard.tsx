@@ -2,6 +2,7 @@ import { Card, Icon } from 'eri'
 import * as React from 'react'
 import { IServiceGardeningResponseObject } from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
+import renderCurrency from '../../../../utils/renderCurrency'
 
 interface IProps {
   children: IServiceGardeningResponseObject
@@ -26,7 +27,7 @@ export default class GardeningCard extends React.PureComponent<IProps> {
       <Card>
         <h3>{capitalizeFirst(providerName)}</h3>
         <ul>
-          <li>Hourly rate: £{String(hourlyRate)}</li>
+          <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General gardening services: {renderTrueFalse(general)}</li>
           <li>Specialist gardening services: {renderTrueFalse(specialist)}</li>
           <li>Has own gardening products: {renderTrueFalse(hasOwnProducts)}</li>

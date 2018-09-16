@@ -5,6 +5,7 @@ import { deleteGardeningService } from '../../../api'
 import { GARDENING } from '../../../shared/services'
 import { IServiceGardeningDocument } from '../../../shared/types'
 import capitalizeFirst from '../../../utils/capitalizeFirst'
+import renderCurrency from '../../../utils/renderCurrency'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {
@@ -57,7 +58,7 @@ class GardeningCard extends React.PureComponent<IProps> {
       <Card>
         <h3>{capitalizeFirst(GARDENING)}</h3>
         <ul>
-          <li>Hourly rate: £{String(hourlyRate)}</li>
+          <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General gardening services: {renderTrueFalse(general)}</li>
           <li>Specialist gardening services: {renderTrueFalse(specialist)}</li>
           <li>

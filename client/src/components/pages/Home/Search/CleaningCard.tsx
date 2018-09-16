@@ -2,6 +2,7 @@ import { Card, Icon } from 'eri'
 import * as React from 'react'
 import { IServiceCleaningResponseObject } from '../../../../shared/types'
 import capitalizeFirst from '../../../../utils/capitalizeFirst'
+import renderCurrency from '../../../../utils/renderCurrency'
 
 interface IProps {
   children: IServiceCleaningResponseObject
@@ -28,7 +29,7 @@ export default class CleaningCard extends React.PureComponent<IProps> {
       <Card>
         <h3>{capitalizeFirst(providerName)}</h3>
         <ul>
-          <li>Hourly rate: £{String(hourlyRate)}</li>
+          <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>
           <li>One-off deep clean: {renderTrueFalse(deepClean)}</li>
           <li>Specialist clean - carpets: {renderTrueFalse(carpetClean)}</li>
