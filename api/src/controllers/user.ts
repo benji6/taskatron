@@ -42,7 +42,6 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
 
     passwordless.requestToken(
       (email: string, delivery: any, callback: any) => {
-        pino.info(`user post success, user id: ${userDocument._id}`)
         callback(null, userDocument._id)
         res.status(201).send(userDocument)
       },
