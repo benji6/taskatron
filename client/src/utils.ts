@@ -25,4 +25,6 @@ export const getFieldError = <IFormValues>(
     ? String(form.errors[prop])
     : undefined
 
-export const renderCurrency = (n: number): string => `£${n.toFixed(2)}`
+export const renderDecimal = (n: number): string => n.toFixed(2)
+
+export const renderCurrency = (n: number): string => `£${renderDecimal(n)}`

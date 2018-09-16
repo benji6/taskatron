@@ -16,7 +16,7 @@ import {
 } from '../../../api'
 import { IServiceCleaningDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
-import { getFieldError } from '../../../utils'
+import { getFieldError, renderDecimal } from '../../../utils'
 
 interface IFormValues {
   carpetClean: boolean
@@ -67,7 +67,7 @@ class CleaningService extends React.PureComponent {
       general: service ? service.general : false,
       hasOwnEquipment: service ? service.hasOwnEquipment : false,
       hasOwnProducts: service ? service.hasOwnProducts : false,
-      hourlyRate: service ? String(service.hourlyRate) : '',
+      hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
       ovenClean: service ? service.ovenClean : false,
     }
 

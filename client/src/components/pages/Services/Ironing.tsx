@@ -16,7 +16,7 @@ import {
 } from '../../../api'
 import { IServiceIroningDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
-import { getFieldError } from '../../../utils'
+import { getFieldError, renderDecimal } from '../../../utils'
 
 interface IFormValues {
   bedLinen: boolean
@@ -66,7 +66,7 @@ class IroningService extends React.PureComponent {
       bedLinen: service ? service.bedLinen : false,
       collectAndReturn: service ? service.collectAndReturn : false,
       hasOwnEquipment: service ? service.hasOwnEquipment : false,
-      hourlyRate: service ? String(service.hourlyRate) : '',
+      hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
       other: service ? service.other : false,
       shirts: service ? service.shirts : false,
       specialist: service ? service.specialist : false,
