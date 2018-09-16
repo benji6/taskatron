@@ -21,7 +21,6 @@ import {
   IUserDocument,
 } from '../../shared/types'
 import { removeUndefinedValues } from '../../shared/utils'
-import { isDecimal } from '../../shared/validation'
 import { parseBooleanQuery } from '../utils'
 
 interface IRequest extends Request {
@@ -143,11 +142,6 @@ export const post = async (req: Request, res: Response) => {
   if (!CleaningPostBody.is(body)) {
     res.status(400).end()
     return logPost(400, PathReporter.report(CleaningPostBody.decode(body)))
-  }
-
-  if (!isDecimal(body.hourlyRate)) {
-    res.status(400).end()
-    return logPost(400, `hourlyRate is not decimal: ${body.hourlyRate}`)
   }
 
   try {

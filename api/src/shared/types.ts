@@ -4,13 +4,23 @@ type TCleaning = 'cleaning'
 type TGardening = 'gardening'
 type TIroning = 'ironing'
 
+const isDecimal = (m: any): m is number =>
+  typeof m === 'number' && String(m).length <= m.toFixed(2).length
+
+const decimal = new t.Type<number, number>(
+  'decimal',
+  isDecimal,
+  (m: any, c) => (isDecimal(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
 const cleaningPostBodyObj = {
   carpetClean: t.boolean,
   deepClean: t.boolean,
   general: t.boolean,
   hasOwnEquipment: t.boolean,
   hasOwnProducts: t.boolean,
-  hourlyRate: t.number,
+  hourlyRate: decimal,
   ovenClean: t.boolean,
 }
 
@@ -32,7 +42,7 @@ const cleaningFiltersObj = {
   general: t.boolean,
   hasOwnEquipment: t.boolean,
   hasOwnProducts: t.boolean,
-  hourlyRate: t.number,
+  hourlyRate: decimal,
   ovenClean: t.boolean,
 }
 
