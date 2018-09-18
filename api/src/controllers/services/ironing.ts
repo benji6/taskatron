@@ -11,13 +11,17 @@ import {
 } from '../../model/ironingServices'
 import { getUser } from '../../model/user'
 import {
+  IIroningFilters,
   IIroningPostBody,
   IIroningServiceSearchResponse,
   IroningDocument,
   IroningPostBody,
+  IroningSearchParams,
   IServiceIroningDocument,
   IUserDocument,
 } from '../../shared/types'
+import { removeUndefinedValues } from '../../shared/utils'
+import { parseBooleanQuery } from '../utils'
 
 interface IRequest extends Request {
   user: string
@@ -59,13 +63,44 @@ export const del = async (req: Request, res: Response) => {
 }
 
 export const get = async (req: Request, res: Response) => {
-  const { limit, skip } = req.query
+  const {
+    bedLinen,
+    collectAndReturn,
+    hasOwnEquipment,
+    limit,
+    other,
+    shirts,
+    skip,
+    specialist,
+    trousers,
+  } = req.query
+
+  const filters: IIroningFilters = removeUndefinedValues({
+    bedLinen: parseBooleanQuery(bedLinen),
+    collectAndReturn: parseBooleanQuery(collectAndReturn),
+    hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
+    other: parseBooleanQuery(other),
+    shirts: parseBooleanQuery(shirts),
+    specialist: parseBooleanQuery(specialist),
+    trousers: parseBooleanQuery(trousers),
+  })
+
+  const searchParams = {
+    ...filters,
+    limit: Number(limit),
+    skip: Number(skip),
+  }
+
+  if (!IroningSearchParams.is(searchParams)) {
+    res.status(400).end()
+    return logGet(
+      400,
+      PathReporter.report(IroningSearchParams.decode(searchParams)),
+    )
+  }
 
   try {
-    const serviceDocuments = await searchIroningServices({
-      limit: Number(limit),
-      skip: Number(skip),
-    })
+    const serviceDocuments = await searchIroningServices(searchParams)
 
     const results = await Promise.all(
       serviceDocuments.map(async serviceDocument => {
@@ -80,7 +115,7 @@ export const get = async (req: Request, res: Response) => {
       }),
     )
 
-    const total = await countIroningServices()
+    const total = await countIroningServices(filters)
 
     const responseBody: IIroningServiceSearchResponse = {
       results,

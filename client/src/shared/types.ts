@@ -85,9 +85,31 @@ const cleaningFiltersObj = {
   ovenClean: t.boolean,
 }
 
+const gardeningFiltersObj = {
+  general: t.boolean,
+  hasOwnEquipment: t.boolean,
+  hasOwnProducts: t.boolean,
+  hourlyRate: decimal,
+  specialist: t.boolean,
+}
+
+const ironingFiltersObj = {
+  bedLinen: t.boolean,
+  collectAndReturn: t.boolean,
+  hasOwnEquipment: t.boolean,
+  other: t.boolean,
+  shirts: t.boolean,
+  specialist: t.boolean,
+  trousers: t.boolean,
+}
+
 export const CleaningFilters = t.partial(cleaningFiltersObj)
+export const GardeningFilters = t.partial(gardeningFiltersObj)
+export const IroningFilters = t.partial(ironingFiltersObj)
 
 export type ICleaningFilters = t.TypeOf<typeof CleaningFilters>
+export type IGardeningFilters = t.TypeOf<typeof GardeningFilters>
+export type IIroningFilters = t.TypeOf<typeof IroningFilters>
 
 export const CleaningSearchParams = t.exact(
   t.intersection([
@@ -99,7 +121,29 @@ export const CleaningSearchParams = t.exact(
   ]),
 )
 
+export const GardeningSearchParams = t.exact(
+  t.intersection([
+    GardeningFilters,
+    t.type({
+      limit: t.number,
+      skip: t.number,
+    }),
+  ]),
+)
+
+export const IroningSearchParams = t.exact(
+  t.intersection([
+    IroningFilters,
+    t.type({
+      limit: t.number,
+      skip: t.number,
+    }),
+  ]),
+)
+
 export type ICleaningSearchParams = t.TypeOf<typeof CleaningSearchParams>
+export type IGardeningSearchParams = t.TypeOf<typeof GardeningSearchParams>
+export type IIroningSearchParams = t.TypeOf<typeof IroningSearchParams>
 
 export interface IServiceCleaningModelParams extends ICleaningPostBody {
   userId: string

@@ -1,31 +1,33 @@
 import { Checkbox } from 'eri'
 import * as React from 'react'
-import { ICleaningFilters } from '../../../../shared/types'
+import { IIroningFilters } from '../../../../shared/types'
 import { filterObj } from '../../../../shared/utils'
 
 interface IProps {
-  setFilters(filters: ICleaningFilters): void
+  setFilters(filters: IIroningFilters): void
 }
 
 interface IState {
-  carpetClean: boolean
-  deepClean: boolean
-  general: boolean
+  bedLinen: boolean
+  collectAndReturn: boolean
   hasOwnEquipment: boolean
-  hasOwnProducts: boolean
-  ovenClean: boolean
+  other: boolean
+  shirts: boolean
   showFilters: boolean
+  specialist: boolean
+  trousers: boolean
 }
 
-export default class CleaningFilters extends React.PureComponent<IProps> {
+export default class IroningFilters extends React.PureComponent<IProps> {
   public state: IState = {
-    carpetClean: false,
-    deepClean: false,
-    general: false,
+    bedLinen: false,
+    collectAndReturn: false,
     hasOwnEquipment: false,
-    hasOwnProducts: false,
-    ovenClean: false,
+    other: false,
+    shirts: false,
     showFilters: false,
+    specialist: false,
+    trousers: false,
   }
 
   public handleShowFiltersChange = ({
@@ -35,7 +37,7 @@ export default class CleaningFilters extends React.PureComponent<IProps> {
     this.setState({ showFilters })
   }
 
-  public handleChange = (key: keyof ICleaningFilters) => ({
+  public handleChange = (key: keyof IIroningFilters) => ({
     target: { checked },
   }: React.ChangeEvent<any>) => {
     this.setState(state => {
@@ -49,13 +51,14 @@ export default class CleaningFilters extends React.PureComponent<IProps> {
 
   public render() {
     const {
-      carpetClean,
-      deepClean,
-      general,
+      bedLinen,
+      collectAndReturn,
       hasOwnEquipment,
-      hasOwnProducts,
-      ovenClean,
+      other,
+      shirts,
       showFilters,
+      specialist,
+      trousers,
     } = this.state
 
     return (
@@ -68,34 +71,39 @@ export default class CleaningFilters extends React.PureComponent<IProps> {
         {showFilters && (
           <>
             <Checkbox
-              checked={general}
-              onChange={this.handleChange('general')}
-              label="General clean"
+              checked={bedLinen}
+              onChange={this.handleChange('bedLinen')}
+              label="Bed linen"
             />
             <Checkbox
-              checked={deepClean}
-              onChange={this.handleChange('deepClean')}
-              label="One-off deep clean"
+              checked={shirts}
+              onChange={this.handleChange('shirts')}
+              label="Shirts"
             />
             <Checkbox
-              checked={carpetClean}
-              onChange={this.handleChange('carpetClean')}
-              label="Specialist clean - carpets"
+              checked={trousers}
+              onChange={this.handleChange('trousers')}
+              label="Trousers"
             />
             <Checkbox
-              checked={ovenClean}
-              onChange={this.handleChange('ovenClean')}
-              label="Specialist clean - oven"
+              checked={other}
+              onChange={this.handleChange('other')}
+              label="Other standard garments"
             />
             <Checkbox
-              checked={hasOwnProducts}
-              onChange={this.handleChange('hasOwnProducts')}
-              label="Has own products"
+              checked={specialist}
+              onChange={this.handleChange('specialist')}
+              label="Specialist ironing"
             />
             <Checkbox
               checked={hasOwnEquipment}
               onChange={this.handleChange('hasOwnEquipment')}
               label="Has own equipment"
+            />
+            <Checkbox
+              checked={collectAndReturn}
+              onChange={this.handleChange('collectAndReturn')}
+              label="Collect &amp; return"
             />
           </>
         )}

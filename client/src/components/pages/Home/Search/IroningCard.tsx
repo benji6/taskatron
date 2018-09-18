@@ -35,10 +35,8 @@ export default class IroningCard extends React.PureComponent<IProps> {
           <li>Trousers: {renderTrueFalse(trousers)}</li>
           <li>Other standard garments: {renderTrueFalse(other)}</li>
           <li>Specialist ironing: {renderTrueFalse(specialist)}</li>
-          <li>Has own ironing equipment: {renderTrueFalse(hasOwnEquipment)}</li>
-          <li>
-            Will collect, iron &amp; return: {renderTrueFalse(collectAndReturn)}
-          </li>
+          <li>Has own equipment: {renderTrueFalse(hasOwnEquipment)}</li>
+          <li>Collect &amp; return: {renderTrueFalse(collectAndReturn)}</li>
         </ul>
       </Card>
     )

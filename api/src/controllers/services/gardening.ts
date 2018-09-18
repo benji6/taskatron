@@ -13,11 +13,15 @@ import { getUser } from '../../model/user'
 import {
   GardeningDocument,
   GardeningPostBody,
+  GardeningSearchParams,
+  IGardeningFilters,
   IGardeningPostBody,
   IGardeningServiceSearchResponse,
   IServiceGardeningDocument,
   IUserDocument,
 } from '../../shared/types'
+import { removeUndefinedValues } from '../../shared/utils'
+import { parseBooleanQuery } from '../utils'
 
 interface IRequest extends Request {
   user: string
@@ -59,13 +63,38 @@ export const del = async (req: Request, res: Response) => {
 }
 
 export const get = async (req: Request, res: Response) => {
-  const { limit, skip } = req.query
+  const {
+    general,
+    hasOwnEquipment,
+    hasOwnProducts,
+    limit,
+    skip,
+    specialist,
+  } = req.query
+
+  const filters: IGardeningFilters = removeUndefinedValues({
+    general: parseBooleanQuery(general),
+    hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
+    hasOwnProducts: parseBooleanQuery(hasOwnProducts),
+    specialist: parseBooleanQuery(specialist),
+  })
+
+  const searchParams = {
+    ...filters,
+    limit: Number(limit),
+    skip: Number(skip),
+  }
+
+  if (!GardeningSearchParams.is(searchParams)) {
+    res.status(400).end()
+    return logGet(
+      400,
+      PathReporter.report(GardeningSearchParams.decode(searchParams)),
+    )
+  }
 
   try {
-    const serviceDocuments = await searchGardeningServices({
-      limit: Number(limit),
-      skip: Number(skip),
-    })
+    const serviceDocuments = await searchGardeningServices(searchParams)
 
     const results = await Promise.all(
       serviceDocuments.map(async serviceDocument => {
@@ -80,7 +109,7 @@ export const get = async (req: Request, res: Response) => {
       }),
     )
 
-    const total = await countGardeningServices()
+    const total = await countGardeningServices(filters)
 
     const responseBody: IGardeningServiceSearchResponse = {
       results,

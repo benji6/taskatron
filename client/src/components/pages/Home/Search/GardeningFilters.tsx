@@ -1,31 +1,27 @@
 import { Checkbox } from 'eri'
 import * as React from 'react'
-import { ICleaningFilters } from '../../../../shared/types'
+import { IGardeningFilters } from '../../../../shared/types'
 import { filterObj } from '../../../../shared/utils'
 
 interface IProps {
-  setFilters(filters: ICleaningFilters): void
+  setFilters(filters: IGardeningFilters): void
 }
 
 interface IState {
-  carpetClean: boolean
-  deepClean: boolean
   general: boolean
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
-  ovenClean: boolean
   showFilters: boolean
+  specialist: boolean
 }
 
-export default class CleaningFilters extends React.PureComponent<IProps> {
+export default class GardeningFilters extends React.PureComponent<IProps> {
   public state: IState = {
-    carpetClean: false,
-    deepClean: false,
     general: false,
     hasOwnEquipment: false,
     hasOwnProducts: false,
-    ovenClean: false,
     showFilters: false,
+    specialist: false,
   }
 
   public handleShowFiltersChange = ({
@@ -35,7 +31,7 @@ export default class CleaningFilters extends React.PureComponent<IProps> {
     this.setState({ showFilters })
   }
 
-  public handleChange = (key: keyof ICleaningFilters) => ({
+  public handleChange = (key: keyof IGardeningFilters) => ({
     target: { checked },
   }: React.ChangeEvent<any>) => {
     this.setState(state => {
@@ -49,13 +45,11 @@ export default class CleaningFilters extends React.PureComponent<IProps> {
 
   public render() {
     const {
-      carpetClean,
-      deepClean,
       general,
       hasOwnEquipment,
       hasOwnProducts,
-      ovenClean,
       showFilters,
+      specialist,
     } = this.state
 
     return (
@@ -70,22 +64,12 @@ export default class CleaningFilters extends React.PureComponent<IProps> {
             <Checkbox
               checked={general}
               onChange={this.handleChange('general')}
-              label="General clean"
+              label="General gardening"
             />
             <Checkbox
-              checked={deepClean}
-              onChange={this.handleChange('deepClean')}
-              label="One-off deep clean"
-            />
-            <Checkbox
-              checked={carpetClean}
-              onChange={this.handleChange('carpetClean')}
-              label="Specialist clean - carpets"
-            />
-            <Checkbox
-              checked={ovenClean}
-              onChange={this.handleChange('ovenClean')}
-              label="Specialist clean - oven"
+              checked={specialist}
+              onChange={this.handleChange('specialist')}
+              label="Specialist gardening"
             />
             <Checkbox
               checked={hasOwnProducts}

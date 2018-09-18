@@ -1,16 +1,20 @@
 import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
 import {
+  IGardeningFilters,
+  IGardeningSearchParams,
   IServiceGardeningDocument,
   IServiceGardeningModelParams,
 } from '../shared/types'
 import { GARDENING_SERVICES } from './collections'
 import withDb from './withDb'
 
-export const countGardeningServices = async (): Promise<number> =>
+export const countGardeningServices = async (
+  findParams: IGardeningFilters,
+): Promise<number> =>
   withDb(db =>
     db
       .collection(GARDENING_SERVICES)
-      .find()
+      .find(findParams)
       .count(),
   )
 
@@ -36,14 +40,12 @@ export const getGardeningService = async (
 export const searchGardeningServices = async ({
   limit,
   skip,
-}: {
-  limit: number
-  skip: number
-}): Promise<IServiceGardeningDocument[]> =>
+  ...findParams
+}: IGardeningSearchParams): Promise<IServiceGardeningDocument[]> =>
   withDb(db =>
     db
       .collection(GARDENING_SERVICES)
-      .find()
+      .find(findParams)
       .skip(skip)
       .limit(limit)
       .toArray(),

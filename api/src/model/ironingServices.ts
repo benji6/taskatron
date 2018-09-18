@@ -1,16 +1,20 @@
 import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
 import {
+  IIroningFilters,
+  IIroningSearchParams,
   IServiceIroningDocument,
   IServiceIroningModelParams,
 } from '../shared/types'
 import { IRONING_SERVICES } from './collections'
 import withDb from './withDb'
 
-export const countIroningServices = async (): Promise<number> =>
+export const countIroningServices = async (
+  findParams: IIroningFilters,
+): Promise<number> =>
   withDb(db =>
     db
       .collection(IRONING_SERVICES)
-      .find()
+      .find(findParams)
       .count(),
   )
 
@@ -36,14 +40,12 @@ export const getIroningService = async (
 export const searchIroningServices = async ({
   limit,
   skip,
-}: {
-  limit: number
-  skip: number
-}): Promise<IServiceIroningDocument[]> =>
+  ...findParams
+}: IIroningSearchParams): Promise<IServiceIroningDocument[]> =>
   withDb(db =>
     db
       .collection(IRONING_SERVICES)
-      .find()
+      .find(findParams)
       .skip(skip)
       .limit(limit)
       .toArray(),

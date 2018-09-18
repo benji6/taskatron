@@ -5,8 +5,10 @@ import {
   ICleaningSearchParams,
   ICleaningServiceSearchResponse,
   IGardeningPostBody,
+  IGardeningSearchParams,
   IGardeningServiceSearchResponse,
   IIroningPostBody,
+  IIroningSearchParams,
   IIroningServiceSearchResponse,
   IServiceCleaningDocument,
   IServiceDocument,
@@ -91,29 +93,21 @@ export const getCleaningServices = async (
   return response.json()
 }
 
-export const getGardeningServices = async ({
-  limit,
-  skip,
-}: {
-  limit: number
-  skip: number
-}): Promise<IGardeningServiceSearchResponse> => {
+export const getGardeningServices = async (
+  searchParams: IGardeningSearchParams,
+): Promise<IGardeningServiceSearchResponse> => {
   const response = await fetch(
-    `${origin}/services/${GARDENING}?limit=${limit}&skip=${skip}`,
+    `${origin}/services/${GARDENING}${createSearchString(searchParams)}`,
   )
   if (!response.ok) throw Error(String(response.status))
   return response.json()
 }
 
-export const getIroningServices = async ({
-  limit,
-  skip,
-}: {
-  limit: number
-  skip: number
-}): Promise<IIroningServiceSearchResponse> => {
+export const getIroningServices = async (
+  searchParams: IIroningSearchParams,
+): Promise<IIroningServiceSearchResponse> => {
   const response = await fetch(
-    `${origin}/services/${IRONING}?limit=${limit}&skip=${skip}`,
+    `${origin}/services/${IRONING}${createSearchString(searchParams)}`,
   )
   if (!response.ok) throw Error(String(response.status))
   return response.json()

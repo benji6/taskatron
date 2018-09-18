@@ -27,12 +27,10 @@ export default class GardeningCard extends React.PureComponent<IProps> {
         <h3>{capitalizeFirst(providerName)}</h3>
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
-          <li>General gardening services: {renderTrueFalse(general)}</li>
-          <li>Specialist gardening services: {renderTrueFalse(specialist)}</li>
-          <li>Has own gardening products: {renderTrueFalse(hasOwnProducts)}</li>
-          <li>
-            Has own gardening equipment: {renderTrueFalse(hasOwnEquipment)}
-          </li>
+          <li>General gardening: {renderTrueFalse(general)}</li>
+          <li>Specialist gardening: {renderTrueFalse(specialist)}</li>
+          <li>Has own products: {renderTrueFalse(hasOwnProducts)}</li>
+          <li>Has own equipment: {renderTrueFalse(hasOwnEquipment)}</li>
         </ul>
       </Card>
     )
