@@ -19,11 +19,7 @@ import {
   userRadiusSelector,
 } from '../../../selectors'
 import { radii } from '../../../shared/constants'
-import {
-  isValidFirstName,
-  isValidLastName,
-  isValidPostcode,
-} from '../../../shared/validation'
+import { isFirstName, isLastName, isPostcode } from '../../../shared/types'
 import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'
 
@@ -169,11 +165,11 @@ class Profile extends React.PureComponent<IProps> {
 
   private validate = ({ firstName, lastName, postcode }: IFormValues) => {
     const errors: any = {}
-    if (!isValidFirstName(firstName)) {
+    if (!isFirstName(firstName)) {
       errors.firstName = 'Please enter a first name'
     }
-    if (!isValidLastName(lastName)) errors.lastName = 'Please enter a last name'
-    if (!isValidPostcode(postcode)) {
+    if (!isLastName(lastName)) errors.lastName = 'Please enter a last name'
+    if (!isPostcode(postcode)) {
       errors.postcode = 'Please enter a valid postcode'
     }
     return errors

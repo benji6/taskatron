@@ -1,16 +1,64 @@
 import * as t from 'io-ts'
+import { radii } from './constants'
+
+const postCodeRegex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})/
 
 type TCleaning = 'cleaning'
 type TGardening = 'gardening'
 type TIroning = 'ironing'
 
-const isDecimal = (m: any): m is number =>
-  typeof m === 'number' && String(m).length <= m.toFixed(2).length
+const isDecimal = (a: any): a is number =>
+  typeof a === 'number' && String(a).length <= a.toFixed(2).length
+export const isEmail = (a: any): a is string =>
+  typeof a === 'string' && /.+@.+/.test(a)
+export const isFirstName = (a: any): a is string =>
+  typeof a === 'string' && Boolean(a.length)
+export const isLastName = (a: any): a is string =>
+  typeof a === 'string' && Boolean(a.length)
+export const isPostcode = (a: any): a is string =>
+  typeof a === 'string' && postCodeRegex.test(a)
+export const isRadius = (a: any): a is number =>
+  typeof a === 'number' && radii.includes(a)
 
 const decimal = new t.Type<number, number>(
   'decimal',
   isDecimal,
   (m: any, c) => (isDecimal(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const email = new t.Type<string, string>(
+  'email',
+  isEmail,
+  (m: any, c) => (isEmail(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const firstName = new t.Type<string, string>(
+  'firstName',
+  isFirstName,
+  (m: any, c) => (isFirstName(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const lastName = new t.Type<string, string>(
+  'lastName',
+  isLastName,
+  (m: any, c) => (isLastName(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const postcode = new t.Type<string, string>(
+  'postcode',
+  isPostcode,
+  (m: any, c) => (isPostcode(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const radius = new t.Type<number, number>(
+  'radius',
+  isRadius,
+  (m: any, c) => (isRadius(m) ? t.success(m) : t.failure(m, c)),
   t.identity,
 )
 
@@ -226,13 +274,17 @@ export interface IUserPatchBody {
   radius: number
 }
 
-export interface IUserPostBody {
-  email: string
-  firstName: string
-  lastName: string
-  postcode: string
-  radius: number
-}
+export const UserPostBody = t.exact(
+  t.type({
+    email,
+    firstName,
+    lastName,
+    postcode,
+    radius,
+  }),
+)
+
+export type IUserPostBody = t.TypeOf<typeof UserPostBody>
 
 export interface IUserDocument extends IUserPostBody {
   _id: string

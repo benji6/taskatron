@@ -10,7 +10,7 @@ import {
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { sendToken } from '../../../api'
-import { isValidEmail } from '../../../shared/validation'
+import { isEmail } from '../../../shared/types'
 import { getFieldError } from '../../../utils'
 
 interface IFormValues {
@@ -107,9 +107,7 @@ class SignIn extends React.PureComponent<{}, IState> {
   }
 
   private validate = ({ email }: IFormValues) =>
-    isValidEmail(email)
-      ? undefined
-      : { email: 'Please enter a valid email address' }
+    isEmail(email) ? undefined : { email: 'Please enter a valid email address' }
 }
 
 export default SignIn

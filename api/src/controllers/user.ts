@@ -1,14 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
+import { PathReporter } from 'io-ts/lib/PathReporter'
+import log from '../log'
 import { getUserByEmail, getUserServices, setUser } from '../model/user'
 import passwordless from '../passwordless/index'
-import pino from '../pino'
-import { IUserPostBody } from '../shared/types'
-import {
-  isValidEmail,
-  isValidFirstName,
-  isValidLastName,
-  isValidPostcode,
-} from '../shared/validation'
+import { UserPostBody } from '../shared/types'
+
+const logUserPost = log('user')('POST')
+const logUserServicesGet = log('user/:id/services')('GET')
 
 export const getServices = async (req: Request, res: Response) => {
   const { id } = req.params
@@ -17,26 +15,29 @@ export const getServices = async (req: Request, res: Response) => {
     const serviceDocuments = await getUserServices(id)
     res.status(200).send(serviceDocuments)
   } catch (e) {
-    pino.error('GET /user/:id/services', e)
     res.status(500).end()
+    logUserServicesGet(500, e)
   }
 }
 
 export const post = async (req: Request, res: Response, next: NextFunction) => {
-  const body: IUserPostBody = req.body
+  const { body } = req
 
-  if (
-    !isValidEmail(body.email) ||
-    !isValidFirstName(body.firstName) ||
-    !isValidLastName(body.lastName) ||
-    !isValidPostcode(body.postcode)
-  ) {
-    res.status(400).send('invalid request body')
-    return next()
+  if (!UserPostBody.is(body)) {
+    res.status(400).end()
+    return logUserPost(400, PathReporter.report(UserPostBody.decode(body)))
   }
 
   try {
-    if (await getUserByEmail(body.email)) return res.status(400).end()
+    const existingUserDocument = await getUserByEmail(body.email)
+
+    if (existingUserDocument) {
+      res.status(409).end()
+      return logUserPost(
+        409,
+        `record for _id: ${existingUserDocument._id} already exists`,
+      )
+    }
 
     const userDocument = await setUser(body)
 
@@ -48,7 +49,7 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
       { userField: 'email' },
     )(req, res, next)
   } catch (e) {
-    pino.error('user post fail', e)
     res.status(500).end()
+    logUserPost(500, e)
   }
 }

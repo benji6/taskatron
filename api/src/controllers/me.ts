@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import { getUser, updateUser } from '../model/user'
 import pino from '../pino'
-import { IUserPatchBody } from '../shared/types'
 import {
+  isFirstName,
+  isLastName,
+  isPostcode,
   isRadius,
-  isValidFirstName,
-  isValidLastName,
-  isValidPostcode,
-} from '../shared/validation'
+  IUserPatchBody,
+} from '../shared/types'
 
 interface IRequest extends Request {
   user: string
@@ -33,9 +33,9 @@ export const patch = async (req: Request, res: Response): Promise<void> => {
 
   if (
     !isRadius(radius) ||
-    !isValidFirstName(firstName) ||
-    !isValidLastName(lastName) ||
-    !isValidPostcode(postcode) ||
+    !isFirstName(firstName) ||
+    !isLastName(lastName) ||
+    !isPostcode(postcode) ||
     Object.keys(body).length !== 4
   ) {
     return res.status(400).end()

@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom'
 import { postUser } from '../../../api'
 import { radii } from '../../../shared/constants'
 import {
-  isValidEmail,
-  isValidFirstName,
-  isValidLastName,
-  isValidPostcode,
-} from '../../../shared/validation'
+  isEmail,
+  isFirstName,
+  isLastName,
+  isPostcode,
+} from '../../../shared/types'
 import { getFieldError } from '../../../utils'
 
 interface IFormValues {
@@ -168,14 +168,14 @@ class SignUp extends React.PureComponent<{}, IState> {
     radius,
   }: IFormValues) => {
     const errors: any = {}
-    if (!isValidEmail(email)) {
+    if (!isEmail(email)) {
       errors.email = 'Please enter a valid email address'
     }
-    if (!isValidFirstName(firstName)) {
+    if (!isFirstName(firstName)) {
       errors.firstName = 'Please enter a first name'
     }
-    if (!isValidLastName(lastName)) errors.lastName = 'Please enter a last name'
-    if (!isValidPostcode(postcode)) {
+    if (!isLastName(lastName)) errors.lastName = 'Please enter a last name'
+    if (!isPostcode(postcode)) {
       errors.postcode = 'Please enter a valid postcode'
     }
     if (radius === '_initial') {
