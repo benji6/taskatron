@@ -248,8 +248,8 @@ class Search extends React.PureComponent<IProps> {
           <>
             {total === 0 ? (
               <p e-util="center">
-                We can't find any results for your search, try searching again
-                with some different filters.
+                We can't find any results for your search, try again with a
+                different search.
               </p>
             ) : (
               <p e-util="center">
