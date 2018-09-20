@@ -30,15 +30,15 @@ import {
 import { getUserByEmail } from './model/user'
 import passwordless from './passwordless/index'
 import { CLEANING, GARDENING, IRONING } from './shared/services'
-import { IUserDocument } from './shared/types'
+import { IUserResponse } from './shared/types'
 
 const router = express.Router()
 
 const sendTokenMiddleware = passwordless.requestToken(
   (email: string, delivery: any, callback: any) => {
     getUserByEmail(email)
-      .then((userDocument?: IUserDocument) => {
-        if (userDocument) return callback(null, userDocument._id)
+      .then((userResponse?: IUserResponse) => {
+        if (userResponse) return callback(null, userResponse._id)
         callback(Error(`Email address not recognised: ${email}`))
       })
       .catch((err: Error) => callback(err))

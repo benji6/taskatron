@@ -1,9 +1,11 @@
 import { ObjectId } from 'mongodb'
+import pino from '../pino'
 import {
   IServiceDocument,
   IUserDocument,
   IUserModelParams,
   IUserPatchBody,
+  IUserResponse,
 } from '../shared/types'
 import {
   collectionNameToServiceType,
@@ -12,26 +14,44 @@ import {
 } from './collections'
 import withDb from './withDb'
 
-export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
+withDb(db =>
+  db
+    .collection(USERS)
+    .createIndex({ location: '2dsphere' })
+    .then(str => pino.info(`${USERS} "2dsphere" index creation success:`, str))
+    .catch(e => pino.error(`${USERS} "2dsphere" index creation failure:`, e)),
+)
+
+const documentToResponse = ({
+  location: {
+    coordinates: [longitude, latitude],
+  },
+  ...rest
+}: IUserDocument): IUserResponse => ({
+  ...rest,
+  coords: { latitude, longitude },
+})
+
+export const getUser = async (id: string): Promise<IUserResponse | undefined> =>
   withDb(async db => {
-    const results = await db
+    const [result] = await db
       .collection(USERS)
       .find(new ObjectId(id))
       .toArray()
 
-    return results[0]
+    return result ? documentToResponse(result) : result
   })
 
 export const getUserByEmail = async (
   email: string,
-): Promise<IUserDocument | undefined> =>
+): Promise<IUserResponse | undefined> =>
   withDb(async db => {
-    const results = await db
+    const [result] = await db
       .collection(USERS)
       .find({ email: email.toLowerCase() })
       .toArray()
 
-    return results[0]
+    return result ? documentToResponse(result) : result
   })
 
 export const getUserServices = async (
@@ -56,18 +76,26 @@ export const getUserServices = async (
     return services.filter(Boolean)
   })
 
-export const setUser = async (user: IUserModelParams): Promise<IUserDocument> =>
+export const setUser = async ({
+  coords,
+  ...user
+}: IUserModelParams): Promise<IUserResponse> =>
   withDb(async db => {
     const document = {
       ...user,
       email: user.email.toLowerCase(),
+      location: {
+        coordinates: [coords.longitude, coords.latitude],
+        type: 'Point',
+      },
     }
 
     await db.collection(USERS).insertOne(document)
 
-    return document as IUserDocument
+    return documentToResponse(document as IUserDocument)
   })
 
+// TODO: updating location
 export const updateUser = async (
   id: string,
   updateObj: IUserPatchBody,

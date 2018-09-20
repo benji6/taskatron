@@ -290,7 +290,15 @@ export interface IUserModelParams extends IUserPostBody {
   coords: ICoord
 }
 
-export interface IUserDocument extends IUserModelParams {
+export interface IUserDocument extends IUserPostBody {
+  location: {
+    coordinates: [number, number]
+    type: 'Point'
+  }
+  _id: string
+}
+
+export interface IUserResponse extends IUserModelParams {
   _id: string
 }
 

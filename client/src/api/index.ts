@@ -14,9 +14,9 @@ import {
   IServiceDocument,
   IServiceGardeningDocument,
   IServiceIroningDocument,
-  IUserDocument,
   IUserPatchBody,
   IUserPostBody,
+  IUserResponse,
 } from '../shared/types'
 import ICredentials from '../types/ICredentials'
 import { createSearchString } from '../utils'
@@ -70,7 +70,7 @@ export const deleteIroningService = async (id: string): Promise<Response> => {
 
 export const getMe = (
   credentialsPromise: Promise<ICredentials>,
-): Promise<IUserDocument> =>
+): Promise<IUserResponse> =>
   credentialsPromise
     .then(credentials =>
       fetch(`${origin}/me?${credentialsQueryString(credentials)}`),

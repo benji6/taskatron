@@ -18,7 +18,7 @@ import {
   ICleaningPostBody,
   ICleaningServiceSearchResponse,
   IServiceCleaningDocument,
-  IUserDocument,
+  IUserResponse,
 } from '../../shared/types'
 import { removeUndefinedValues } from '../../shared/utils'
 import { parseBooleanQuery } from '../utils'
@@ -104,7 +104,7 @@ export const get = async (req: Request, res: Response) => {
       serviceDocuments.map(async serviceDocument => {
         const { firstName, lastName } = (await getUser(
           serviceDocument.userId,
-        )) as IUserDocument
+        )) as IUserResponse
 
         return {
           ...serviceDocument,
