@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb'
 import {
   IServiceDocument,
   IUserDocument,
+  IUserModelParams,
   IUserPatchBody,
-  IUserPostBody,
 } from '../shared/types'
 import {
   collectionNameToServiceType,
@@ -56,7 +56,7 @@ export const getUserServices = async (
     return services.filter(Boolean)
   })
 
-export const setUser = async (user: IUserPostBody): Promise<IUserDocument> =>
+export const setUser = async (user: IUserModelParams): Promise<IUserDocument> =>
   withDb(async db => {
     const document = {
       ...user,

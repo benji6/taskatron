@@ -3,6 +3,7 @@ import { PathReporter } from 'io-ts/lib/PathReporter'
 import log from '../log'
 import { getUserByEmail, getUserServices, setUser } from '../model/user'
 import passwordless from '../passwordless/index'
+import geocode from '../services/geocode'
 import { UserPostBody } from '../shared/types'
 
 const logUserPost = log('user')('POST')
@@ -39,7 +40,9 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
       )
     }
 
-    const userDocument = await setUser(body)
+    const coords = await geocode(body.postcode)
+
+    const userDocument = await setUser({ ...body, coords })
 
     passwordless.requestToken(
       (email: string, delivery: any, callback: any) => {

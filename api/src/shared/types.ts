@@ -286,8 +286,17 @@ export const UserPostBody = t.exact(
 
 export type IUserPostBody = t.TypeOf<typeof UserPostBody>
 
-export interface IUserDocument extends IUserPostBody {
+export interface IUserModelParams extends IUserPostBody {
+  coords: ICoord
+}
+
+export interface IUserDocument extends IUserModelParams {
   _id: string
 }
 
 export type TService = TCleaning | TGardening | TIroning
+
+export default interface ICoord {
+  latitude: number
+  longitude: number
+}
