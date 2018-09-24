@@ -21,6 +21,7 @@ import serviceNames, {
 } from '../../../../shared/services'
 import {
   ICleaningFilters,
+  ICoord,
   IGardeningFilters,
   IIroningFilters,
   IServiceCleaningResponseObject,
@@ -28,7 +29,11 @@ import {
   IServiceIroningResponseObject,
   TService,
 } from '../../../../shared/types'
-import { capitalizeFirst, createSearchString } from '../../../../utils'
+import {
+  capitalizeFirst,
+  createSearchString,
+  position,
+} from '../../../../utils'
 import CleaningCard from './CleaningCard'
 import CleaningFilters from './CleaningFilters'
 import GardeningCard from './GardeningCard'
@@ -46,6 +51,7 @@ interface IProps {
 }
 
 interface IState {
+  coords?: ICoord
   currentPage?: number
   filters?: Filters
   isLoading: boolean
@@ -93,7 +99,7 @@ class Search extends React.PureComponent<IProps> {
 
   public setFilters = (filters: Filters) => this.setState({ filters })
 
-  public componentDidMount() {
+  public async componentDidMount() {
     if (!this.page && !this.serviceType) {
       return
     }
@@ -103,6 +109,26 @@ class Search extends React.PureComponent<IProps> {
     }
 
     this.search(Number(this.page))
+
+    this.setState((state: IState) => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        latitude: 51.5214891,
+        longitude: -0.0922047,
+      },
+    })) // DELETEME
+
+    try {
+      const { latitude, longitude } = await position
+      this.setState((state: IState) => ({
+        ...state,
+        filters: { ...state.filters, latitude, longitude },
+      }))
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.error(e) // TODO
+    }
   }
 
   public componentWillReceiveProps(nextProps: IProps) {

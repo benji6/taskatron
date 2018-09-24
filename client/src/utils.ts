@@ -1,4 +1,5 @@
 import { FormikProps } from 'formik'
+import { ICoord } from './shared/types'
 
 export const capitalizeFirst = (s: string): string =>
   s[0].toLocaleUpperCase() + s.slice(1)
@@ -24,6 +25,22 @@ export const getFieldError = <IFormValues>(
   form.touched[prop] && form.errors[prop]
     ? String(form.errors[prop])
     : undefined
+
+export const position: Promise<ICoord> = new Promise((resolve, reject) => {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => resolve({ latitude, longitude }),
+      reject,
+      {
+        maximumAge: 6e5,
+        // timeout: 1e4,
+        timeout: 1e3,
+      },
+    )
+  } else {
+    reject(new Error('geolocation not available'))
+  }
+})
 
 export const renderDecimal = (n: number): string => n.toFixed(2)
 

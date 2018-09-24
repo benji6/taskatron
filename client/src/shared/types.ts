@@ -15,6 +15,10 @@ export const isFirstName = (a: any): a is string =>
   typeof a === 'string' && Boolean(a.length)
 export const isLastName = (a: any): a is string =>
   typeof a === 'string' && Boolean(a.length)
+export const isLatitude = (a: any): a is number =>
+  typeof a === 'number' && a >= -90 && a <= 90
+export const isLongitude = (a: any): a is number =>
+  typeof a === 'number' && a >= -180 && a <= 180
 export const isPostcode = (a: any): a is string =>
   typeof a === 'string' && postCodeRegex.test(a)
 export const isRadius = (a: any): a is number =>
@@ -45,6 +49,20 @@ const lastName = new t.Type<string, string>(
   'lastName',
   isLastName,
   (m: any, c) => (isLastName(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const latitude = new t.Type<number, number>(
+  'latitude',
+  isLatitude,
+  (m: any, c) => (isLatitude(m) ? t.success(m) : t.failure(m, c)),
+  t.identity,
+)
+
+const longitude = new t.Type<number, number>(
+  'longitude',
+  isLongitude,
+  (m: any, c) => (isLongitude(m) ? t.success(m) : t.failure(m, c)),
   t.identity,
 )
 
@@ -123,25 +141,25 @@ export const IroningDocument = t.exact(
   }),
 )
 
-const cleaningFiltersObj = {
+export const CleaningFilters = t.partial({
   carpetClean: t.boolean,
   deepClean: t.boolean,
   general: t.boolean,
   hasOwnEquipment: t.boolean,
   hasOwnProducts: t.boolean,
   hourlyRate: decimal,
+  latitude,
+  longitude,
   ovenClean: t.boolean,
-}
-
-const gardeningFiltersObj = {
+})
+export const GardeningFilters = t.partial({
   general: t.boolean,
   hasOwnEquipment: t.boolean,
   hasOwnProducts: t.boolean,
   hourlyRate: decimal,
   specialist: t.boolean,
-}
-
-const ironingFiltersObj = {
+})
+export const IroningFilters = t.partial({
   bedLinen: t.boolean,
   collectAndReturn: t.boolean,
   hasOwnEquipment: t.boolean,
@@ -149,11 +167,7 @@ const ironingFiltersObj = {
   shirts: t.boolean,
   specialist: t.boolean,
   trousers: t.boolean,
-}
-
-export const CleaningFilters = t.partial(cleaningFiltersObj)
-export const GardeningFilters = t.partial(gardeningFiltersObj)
-export const IroningFilters = t.partial(ironingFiltersObj)
+})
 
 export type ICleaningFilters = t.TypeOf<typeof CleaningFilters>
 export type IGardeningFilters = t.TypeOf<typeof GardeningFilters>
@@ -304,7 +318,7 @@ export interface IUserResponse extends IUserModelParams {
 
 export type TService = TCleaning | TGardening | TIroning
 
-export default interface ICoord {
+export interface ICoord {
   latitude: number
   longitude: number
 }
