@@ -17,7 +17,6 @@ const main = async () => {
     isTestData: true,
     lastName: 'Ketchum',
     postcode: 'SW1A 1AA',
-    radius: 10,
   } as any)
 
   const cleaningServices: IServiceModelParams[] = [
@@ -31,6 +30,7 @@ const main = async () => {
     hourlyRate: randomHourlyRate(),
     isTestData: true,
     ovenClean: randomBoolean(),
+    radius: 10,
     userId: user._id,
   }))
 

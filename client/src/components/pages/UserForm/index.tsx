@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Select, TextField } from 'eri'
+import { Button, ButtonGroup, TextField } from 'eri'
 import {
   Field,
   FieldProps,
@@ -16,9 +16,7 @@ import {
   userFirstNameSelector,
   userLastNameSelector,
   userPostcodeSelector,
-  userRadiusSelector,
 } from '../../../selectors'
-import { radii } from '../../../shared/constants'
 import { isFirstName, isLastName, isPostcode } from '../../../shared/types'
 import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'
@@ -43,7 +41,7 @@ interface IState {
   submittedSuccessfully: boolean
 }
 
-class Profile extends React.PureComponent<IProps> {
+class UserForm extends React.PureComponent<IProps> {
   public hasUnmounted = false
 
   public state: IState = {
@@ -114,23 +112,6 @@ class Profile extends React.PureComponent<IProps> {
                     />
                   )}
                 />
-                <Field
-                  name="radius"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Select
-                      {...field}
-                      error={getFieldError(form, 'radius')}
-                      label="Working radius"
-                    >
-                      {radii.map(r => (
-                        <option key={r} value={r}>
-                          {r} mile
-                          {r === 1 ? '' : 's'}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                />
                 <ButtonGroup>
                   <Button disabled={isSubmitting}>Save</Button>
                   <Link to="/profile">Cancel</Link>
@@ -180,7 +161,6 @@ const mapStateToProps = (state: IStore) => ({
   firstName: userFirstNameSelector(state) as string,
   lastName: userLastNameSelector(state) as string,
   postcode: userPostcodeSelector(state) as string,
-  radius: userRadiusSelector(state) as number,
 })
 
 const mapDispatchToProps = {
@@ -190,4 +170,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Profile)
+)(UserForm)

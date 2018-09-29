@@ -5,7 +5,6 @@ import {
   isFirstName,
   isLastName,
   isPostcode,
-  isRadius,
   IUserPatchBody,
 } from '../shared/types'
 
@@ -29,10 +28,9 @@ export const get = async (req: Request, res: Response): Promise<void> => {
 export const patch = async (req: Request, res: Response): Promise<void> => {
   const userId = (req as IRequest).user
   const body: IUserPatchBody = req.body
-  const { firstName, lastName, postcode, radius } = body
+  const { firstName, lastName, postcode } = body
 
   if (
-    !isRadius(radius) ||
     !isFirstName(firstName) ||
     !isLastName(lastName) ||
     !isPostcode(postcode) ||

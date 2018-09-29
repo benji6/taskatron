@@ -17,7 +17,7 @@ export const isLongitude = (a: any): a is number =>
   typeof a === 'number' && a >= -180 && a <= 180
 export const isPostcode = (a: any): a is string =>
   typeof a === 'string' && postCodeRegex.test(a)
-export const isRadius = (a: any): a is number =>
+const isRadius = (a: any): a is number =>
   typeof a === 'number' && radii.includes(a)
 
 const decimal = new t.Type<number, number>(
@@ -84,6 +84,7 @@ const servicePostBodyObj = {
   hasOwnProducts: t.boolean,
   hourlyRate: decimal,
   ovenClean: t.boolean,
+  radius,
 }
 
 export const ServicePostBody = t.exact(t.type(servicePostBodyObj))
@@ -145,7 +146,6 @@ export interface IUserPatchBody {
   firstName: string
   lastName: string
   postcode: string
-  radius: number
 }
 
 export const UserPostBody = t.exact(
@@ -154,7 +154,6 @@ export const UserPostBody = t.exact(
     firstName,
     lastName,
     postcode,
-    radius,
   }),
 )
 

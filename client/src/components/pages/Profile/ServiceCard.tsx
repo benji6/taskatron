@@ -49,6 +49,7 @@ class ServiceForm extends React.PureComponent<IProps> {
         hasOwnProducts,
         hourlyRate,
         ovenClean,
+        radius,
       },
     } = this.props
 
@@ -60,6 +61,7 @@ class ServiceForm extends React.PureComponent<IProps> {
         <p>This is the cleaning service you are offering:</p>
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
+          <li>Radius: {radius} miles</li>
           <li>General clean: {renderTrueFalse(general)}</li>
           <li>One-off deep clean: {renderTrueFalse(deepClean)}</li>
           <li>Specialist clean - carpets: {renderTrueFalse(carpetClean)}</li>

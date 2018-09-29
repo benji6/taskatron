@@ -1,4 +1,11 @@
-import { Button, ButtonGroup, Checkbox, CurrencyField, Spinner } from 'eri'
+import {
+  Button,
+  ButtonGroup,
+  Checkbox,
+  CurrencyField,
+  Select,
+  Spinner,
+} from 'eri'
 import {
   Field,
   FieldProps,
@@ -9,11 +16,8 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import {
-  getCleaningService,
-  postCleaningService,
-  putServiceCleaning,
-} from '../../../api'
+import { getService, postService, putService } from '../../../api'
+import { radii } from '../../../shared/constants'
 import { IServiceDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
 import { getFieldError, renderDecimal } from '../../../utils'
@@ -26,6 +30,7 @@ interface IFormValues {
   hasOwnProducts: boolean
   hourlyRate: string
   ovenClean: boolean
+  radius: string
 }
 
 interface IState {
@@ -35,7 +40,7 @@ interface IState {
   submittedSuccessfully: boolean
 }
 
-class CleaningService extends React.PureComponent {
+export default class ServiceForm extends React.PureComponent {
   public hasUnmounted = false
 
   public state: IState = {
@@ -47,7 +52,7 @@ class CleaningService extends React.PureComponent {
 
   public async componentDidMount() {
     try {
-      const service = await getCleaningService()
+      const service = await getService()
       this.setState({ isLoading: false, service })
     } catch (e) {
       if (e.message === '404') return this.setState({ isLoading: false })
@@ -70,6 +75,7 @@ class CleaningService extends React.PureComponent {
       hasOwnProducts: service ? service.hasOwnProducts : false,
       hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
       ovenClean: service ? service.ovenClean : false,
+      radius: service ? String(service.radius) : '__initial',
     }
 
     return (
@@ -97,6 +103,26 @@ class CleaningService extends React.PureComponent {
                       error={getFieldError(form, 'hourlyRate')}
                       label="Hourly rate"
                     />
+                  )}
+                />
+                <Field
+                  name="radius"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <Select
+                      {...field}
+                      error={getFieldError(form, 'radius')}
+                      label="Working radius"
+                    >
+                      <option hidden value="_initial">
+                        Select
+                      </option>
+                      {radii.map(r => (
+                        <option key={r} value={r}>
+                          {r} mile
+                          {r === 1 ? '' : 's'}
+                        </option>
+                      ))}
+                    </Select>
                   )}
                 />
                 <Field
@@ -167,7 +193,6 @@ class CleaningService extends React.PureComponent {
                 />
                 <ButtonGroup>
                   <Button disabled={isSubmitting}>Save</Button>
-
                   <Link to="/services">Cancel</Link>
                 </ButtonGroup>
               </Form>
@@ -184,15 +209,17 @@ class CleaningService extends React.PureComponent {
   ) => {
     try {
       if (this.state.service) {
-        await putServiceCleaning({
+        await putService({
           ...this.state.service,
           ...values,
           hourlyRate: Number(values.hourlyRate),
+          radius: Number(values.radius),
         })
       } else {
-        await postCleaningService({
+        await postService({
           ...values,
           hourlyRate: Number(values.hourlyRate),
+          radius: Number(values.radius),
         })
       }
 
@@ -210,10 +237,17 @@ class CleaningService extends React.PureComponent {
     }
   }
 
-  private validate = ({ hourlyRate }: IFormValues) =>
-    isValidNumber(hourlyRate)
-      ? undefined
-      : { hourlyRate: 'Please enter a valid hourly rate' }
-}
+  private validate = ({ hourlyRate, radius }: IFormValues) => {
+    const errors: any = {}
 
-export default CleaningService
+    if (!isValidNumber(hourlyRate)) {
+      errors.hourlyRate = 'Please enter a valid hourly rate'
+    }
+
+    if (radius === '__initial') {
+      errors.radius = 'Please select a radius'
+    }
+
+    return errors
+  }
+}

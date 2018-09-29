@@ -14,5 +14,3 @@ export const userLogInFailSelector = (state: IStore): boolean =>
   state.user.logInFail
 export const userPostcodeSelector = (state: IStore): string | undefined =>
   state.user.postcode
-export const userRadiusSelector = (state: IStore): number | undefined =>
-  state.user.radius

@@ -8,7 +8,6 @@ import {
   userFirstNameSelector,
   userLastNameSelector,
   userPostcodeSelector,
-  userRadiusSelector,
 } from '../../../selectors'
 import { IServiceDocument } from '../../../shared/types'
 import IStore from '../../../types/IStore'
@@ -28,7 +27,7 @@ interface IState {
   service?: IServiceDocument
 }
 
-class Services extends React.PureComponent<IProps> {
+class Service extends React.PureComponent<IProps> {
   public state: IState = {
     error: false,
     noService: false,
@@ -60,7 +59,7 @@ class Services extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { email, firstName, lastName, postcode, radius } = this.props
+    const { email, firstName, lastName, postcode } = this.props
     const { error, noService, service } = this.state as IState
 
     return (
@@ -73,7 +72,6 @@ class Services extends React.PureComponent<IProps> {
             <li>Last name: {lastName}</li>
             <li>Email: {email}</li>
             <li>Postcode: {postcode}</li>
-            <li>Radius: {radius} miles</li>
           </ul>
           <ButtonGroup>
             <Link className="e-button e-button--primary" to="/profile/user">
@@ -107,7 +105,6 @@ const mapStateToProps = (state: IStore) => ({
   firstName: userFirstNameSelector(state) as string,
   lastName: userLastNameSelector(state) as string,
   postcode: userPostcodeSelector(state) as string,
-  radius: userRadiusSelector(state) as number,
 })
 
-export default connect(mapStateToProps)(Services)
+export default connect(mapStateToProps)(Service)

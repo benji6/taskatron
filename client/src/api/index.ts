@@ -69,7 +69,7 @@ export const getUserService = async (): Promise<
   return response.json()
 }
 
-export const getCleaningService = (): Promise<IServiceDocument | undefined> =>
+export const getService = (): Promise<IServiceDocument | undefined> =>
   getUserService()
 
 export const getSignOut = (
@@ -98,7 +98,7 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
   return response
 }
 
-export const postCleaningService = async (
+export const postService = async (
   service: IServicePostBody,
 ): Promise<Response> => {
   const credentials = await getCredentials()
@@ -117,7 +117,7 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
     return response
   })
 
-export const putServiceCleaning = async (
+export const putService = async (
   service: IServiceDocument,
 ): Promise<Response> => {
   const credentials = await getCredentials()

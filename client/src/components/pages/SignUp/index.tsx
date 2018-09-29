@@ -1,9 +1,8 @@
-import { Button, ButtonGroup, Select, TextField } from 'eri'
+import { Button, ButtonGroup, TextField } from 'eri'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { postUser } from '../../../api'
-import { radii } from '../../../shared/constants'
 import {
   isEmail,
   isFirstName,
@@ -17,7 +16,6 @@ interface IFormValues {
   firstName: string
   lastName: string
   postcode: string
-  radius: string
 }
 
 interface IState {
@@ -44,7 +42,7 @@ class SignUp extends React.PureComponent<{}, IState> {
 
     return (
       <main>
-        {errorCode === 400 ? (
+        {errorCode === 409 ? (
           <>
             <h2>Sign up Failed</h2>
             <p>Looks like we already have an account for {email}.</p>
@@ -73,7 +71,6 @@ class SignUp extends React.PureComponent<{}, IState> {
               firstName: '',
               lastName: '',
               postcode: '',
-              radius: '_initial',
             }}
             onSubmit={this.handleSubmit}
             validate={this.validate}
@@ -126,26 +123,6 @@ class SignUp extends React.PureComponent<{}, IState> {
                     />
                   )}
                 />
-                <Field
-                  name="radius"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Select
-                      {...field}
-                      error={getFieldError(form, 'radius')}
-                      label="Working radius"
-                    >
-                      <option hidden value="_initial">
-                        Select
-                      </option>
-                      {radii.map(r => (
-                        <option key={r} value={r}>
-                          {r} mile
-                          {r === 1 ? '' : 's'}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                />
                 <ButtonGroup>
                   <Button disabled={isSubmitting}>Send link</Button>
                 </ButtonGroup>
@@ -165,7 +142,6 @@ class SignUp extends React.PureComponent<{}, IState> {
     firstName,
     lastName,
     postcode,
-    radius,
   }: IFormValues) => {
     const errors: any = {}
     if (!isEmail(email)) {
@@ -178,9 +154,6 @@ class SignUp extends React.PureComponent<{}, IState> {
     if (!isPostcode(postcode)) {
       errors.postcode = 'Please enter a valid postcode'
     }
-    if (radius === '_initial') {
-      errors.radius = 'Please select a radius'
-    }
     return errors
   }
 
@@ -188,7 +161,7 @@ class SignUp extends React.PureComponent<{}, IState> {
     this.setState({ email: values.email })
 
     try {
-      await postUser({ ...values, radius: Number(values.radius) })
+      await postUser(values)
       if (this.hasUnmounted) return
       this.setState({ submittedSuccessfully: true })
     } catch (e) {

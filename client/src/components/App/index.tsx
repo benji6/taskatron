@@ -8,11 +8,11 @@ import Auth from '../Auth'
 import Header from '../Header'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
-import Services from '../pages/Service'
-import Profile from '../pages/Service/Profile'
+import Profile from '../pages/Profile'
 import ServiceForm from '../pages/ServiceForm'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
+import UserForm from '../pages/UserForm'
 import PrivateRoute from '../PrivateRoute'
 
 interface IProps {
@@ -41,13 +41,13 @@ class App extends React.PureComponent<IProps> {
                 <PrivateRoute
                   exact
                   path="/profile"
-                  component={Services}
+                  component={Profile}
                   isSignedIn={isSignedIn}
                 />
                 <PrivateRoute
                   exact
                   path="/profile/user"
-                  component={Profile}
+                  component={UserForm}
                   isSignedIn={isSignedIn}
                 />
                 <PrivateRoute
