@@ -8,11 +8,9 @@ import Auth from '../Auth'
 import Header from '../Header'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
-import Services from '../pages/Services'
-import Cleaning from '../pages/Services/Cleaning'
-import Gardening from '../pages/Services/Gardening'
-import Ironing from '../pages/Services/Ironing'
-import Profile from '../pages/Services/Profile'
+import Services from '../pages/Service'
+import Profile from '../pages/Service/Profile'
+import ServiceForm from '../pages/ServiceForm'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import PrivateRoute from '../PrivateRoute'
@@ -42,29 +40,19 @@ class App extends React.PureComponent<IProps> {
                 <Route path="/sign-up" component={SignUp} />
                 <PrivateRoute
                   exact
-                  path="/services"
+                  path="/profile"
                   component={Services}
                   isSignedIn={isSignedIn}
                 />
                 <PrivateRoute
                   exact
-                  path="/services/profile"
+                  path="/profile/user"
                   component={Profile}
                   isSignedIn={isSignedIn}
                 />
                 <PrivateRoute
-                  path="/services/cleaning"
-                  component={Cleaning}
-                  isSignedIn={isSignedIn}
-                />
-                <PrivateRoute
-                  path="/services/gardening"
-                  component={Gardening}
-                  isSignedIn={isSignedIn}
-                />
-                <PrivateRoute
-                  path="/services/ironing"
-                  component={Ironing}
+                  path="/profile/service"
+                  component={ServiceForm}
                   isSignedIn={isSignedIn}
                 />
                 <Redirect to="/" />

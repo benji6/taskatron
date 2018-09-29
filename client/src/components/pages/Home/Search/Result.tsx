@@ -1,15 +1,15 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { IServiceCleaningResponseObject } from '../../../../shared/types'
+import { IServiceResponseObject } from '../../../../shared/types'
 import { capitalizeFirst, renderCurrency } from '../../../../utils'
 
 interface IProps {
-  children: IServiceCleaningResponseObject
+  children: IServiceResponseObject
 }
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
-export default class CleaningCard extends React.PureComponent<IProps> {
+export default class Result extends React.PureComponent<IProps> {
   public render() {
     const {
       children: {

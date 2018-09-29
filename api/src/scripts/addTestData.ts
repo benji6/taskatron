@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb'
-import { CLEANING_SERVICES } from '../model/collections'
+import { SERVICES } from '../model/collectionNames'
 import { setUser } from '../model/user'
 import withDb from '../model/withDb'
-import { IServiceCleaningModelParams } from '../shared/types'
+import { IServiceModelParams } from '../shared/types'
 
 const numberOfServices = 1024
 
@@ -20,7 +20,7 @@ const main = async () => {
     radius: 10,
   } as any)
 
-  const cleaningServices: IServiceCleaningModelParams[] = [
+  const cleaningServices: IServiceModelParams[] = [
     ...Array(numberOfServices).keys(),
   ].map(() => ({
     carpetClean: randomBoolean(),
@@ -35,7 +35,7 @@ const main = async () => {
   }))
 
   withDb(db =>
-    db.collection(CLEANING_SERVICES).insertMany(
+    db.collection(SERVICES).insertMany(
       cleaningServices.map(service => ({
         ...service,
         userId: new ObjectId(service.userId),

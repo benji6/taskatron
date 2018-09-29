@@ -3,10 +3,6 @@ import { radii } from './constants'
 
 const postCodeRegex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})/
 
-type TCleaning = 'cleaning'
-type TGardening = 'gardening'
-type TIroning = 'ironing'
-
 const isDecimal = (a: any): a is number =>
   typeof a === 'number' && String(a).length <= a.toFixed(2).length
 export const isEmail = (a: any): a is string =>
@@ -80,7 +76,7 @@ const radius = new t.Type<number, number>(
   t.identity,
 )
 
-const cleaningPostBodyObj = {
+const servicePostBodyObj = {
   carpetClean: t.boolean,
   deepClean: t.boolean,
   general: t.boolean,
@@ -90,58 +86,19 @@ const cleaningPostBodyObj = {
   ovenClean: t.boolean,
 }
 
-const gardeningPostBodyObj = {
-  general: t.boolean,
-  hasOwnEquipment: t.boolean,
-  hasOwnProducts: t.boolean,
-  hourlyRate: decimal,
-  specialist: t.boolean,
-}
+export const ServicePostBody = t.exact(t.type(servicePostBodyObj))
 
-const ironingPostBodyObj = {
-  bedLinen: t.boolean,
-  collectAndReturn: t.boolean,
-  hasOwnEquipment: t.boolean,
-  hourlyRate: t.number,
-  other: t.boolean,
-  shirts: t.boolean,
-  specialist: t.boolean,
-  trousers: t.boolean,
-}
+export type IServicePostBody = t.TypeOf<typeof ServicePostBody>
 
-export const CleaningPostBody = t.exact(t.type(cleaningPostBodyObj))
-export const GardeningPostBody = t.exact(t.type(gardeningPostBodyObj))
-export const IroningPostBody = t.exact(t.type(ironingPostBodyObj))
-
-export type ICleaningPostBody = t.TypeOf<typeof CleaningPostBody>
-export type IGardeningPostBody = t.TypeOf<typeof GardeningPostBody>
-export type IIroningPostBody = t.TypeOf<typeof IroningPostBody>
-
-export const CleaningDocument = t.exact(
+export const ServiceDocument = t.exact(
   t.type({
-    ...cleaningPostBodyObj,
+    ...servicePostBodyObj,
     _id: t.string,
     userId: t.string,
   }),
 )
 
-export const GardeningDocument = t.exact(
-  t.type({
-    ...gardeningPostBodyObj,
-    _id: t.string,
-    userId: t.string,
-  }),
-)
-
-export const IroningDocument = t.exact(
-  t.type({
-    ...ironingPostBodyObj,
-    _id: t.string,
-    userId: t.string,
-  }),
-)
-
-export const CleaningFilters = t.partial({
+export const ServiceFilters = t.partial({
   carpetClean: t.boolean,
   deepClean: t.boolean,
   general: t.boolean,
@@ -152,30 +109,12 @@ export const CleaningFilters = t.partial({
   longitude,
   ovenClean: t.boolean,
 })
-export const GardeningFilters = t.partial({
-  general: t.boolean,
-  hasOwnEquipment: t.boolean,
-  hasOwnProducts: t.boolean,
-  hourlyRate: decimal,
-  specialist: t.boolean,
-})
-export const IroningFilters = t.partial({
-  bedLinen: t.boolean,
-  collectAndReturn: t.boolean,
-  hasOwnEquipment: t.boolean,
-  other: t.boolean,
-  shirts: t.boolean,
-  specialist: t.boolean,
-  trousers: t.boolean,
-})
 
-export type ICleaningFilters = t.TypeOf<typeof CleaningFilters>
-export type IGardeningFilters = t.TypeOf<typeof GardeningFilters>
-export type IIroningFilters = t.TypeOf<typeof IroningFilters>
+export type IServiceFilters = t.TypeOf<typeof ServiceFilters>
 
-export const CleaningSearchParams = t.exact(
+export const ServiceSearchParams = t.exact(
   t.intersection([
-    CleaningFilters,
+    ServiceFilters,
     t.type({
       limit: t.number,
       skip: t.number,
@@ -183,101 +122,22 @@ export const CleaningSearchParams = t.exact(
   ]),
 )
 
-export const GardeningSearchParams = t.exact(
-  t.intersection([
-    GardeningFilters,
-    t.type({
-      limit: t.number,
-      skip: t.number,
-    }),
-  ]),
-)
+export type IServiceSearchParams = t.TypeOf<typeof ServiceSearchParams>
 
-export const IroningSearchParams = t.exact(
-  t.intersection([
-    IroningFilters,
-    t.type({
-      limit: t.number,
-      skip: t.number,
-    }),
-  ]),
-)
-
-export type ICleaningSearchParams = t.TypeOf<typeof CleaningSearchParams>
-export type IGardeningSearchParams = t.TypeOf<typeof GardeningSearchParams>
-export type IIroningSearchParams = t.TypeOf<typeof IroningSearchParams>
-
-export interface IServiceCleaningModelParams extends ICleaningPostBody {
+export interface IServiceModelParams extends IServicePostBody {
   userId: string
 }
 
-export interface IServiceGardeningModelParams extends IGardeningPostBody {
-  userId: string
-}
-
-export interface IServiceIroningModelParams extends IIroningPostBody {
-  userId: string
-}
-
-export interface IServiceCleaningDocument extends IServiceCleaningModelParams {
+export interface IServiceDocument extends IServiceModelParams {
   _id: string
 }
 
-export interface IServiceGardeningDocument
-  extends IServiceGardeningModelParams {
-  _id: string
-}
-
-export interface IServiceIroningDocument extends IServiceIroningModelParams {
-  _id: string
-}
-
-interface IServiceCleaningDocumentWithServiceType
-  extends IServiceCleaningDocument {
-  serviceType: TService
-}
-
-interface IServiceGardeningDocumentWithServiceType
-  extends IServiceGardeningDocument {
-  serviceType: TService
-}
-
-interface IServiceIroningDocumentWithServiceType
-  extends IServiceIroningDocument {
-  serviceType: TService
-}
-
-export type IServiceDocument =
-  | IServiceCleaningDocumentWithServiceType
-  | IServiceGardeningDocumentWithServiceType
-  | IServiceIroningDocumentWithServiceType
-
-export interface IServiceCleaningResponseObject
-  extends IServiceCleaningDocument {
+export interface IServiceResponseObject extends IServiceDocument {
   providerName: string
 }
 
-export interface IServiceGardeningResponseObject
-  extends IServiceGardeningDocument {
-  providerName: string
-}
-
-export interface IServiceIroningResponseObject extends IServiceIroningDocument {
-  providerName: string
-}
-
-export interface ICleaningServiceSearchResponse {
-  results: IServiceCleaningResponseObject[]
-  total: number
-}
-
-export interface IGardeningServiceSearchResponse {
-  results: IServiceGardeningResponseObject[]
-  total: number
-}
-
-export interface IIroningServiceSearchResponse {
-  results: IServiceIroningResponseObject[]
+export interface IServiceSearchResponse {
+  results: IServiceResponseObject[]
   total: number
 }
 
@@ -315,8 +175,6 @@ export interface IUserDocument extends IUserPostBody {
 export interface IUserResponse extends IUserModelParams {
   _id: string
 }
-
-export type TService = TCleaning | TGardening | TIroning
 
 export interface ICoord {
   latitude: number

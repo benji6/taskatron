@@ -10,30 +10,32 @@ import {
 import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import {
-  getGardeningService,
-  postGardeningService,
-  putServiceGardening,
+  getCleaningService,
+  postCleaningService,
+  putServiceCleaning,
 } from '../../../api'
-import { IServiceGardeningDocument } from '../../../shared/types'
+import { IServiceDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
 import { getFieldError, renderDecimal } from '../../../utils'
 
 interface IFormValues {
+  carpetClean: boolean
+  deepClean: boolean
   general: boolean
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
   hourlyRate: string
-  specialist: boolean
+  ovenClean: boolean
 }
 
 interface IState {
   error: boolean
   isLoading: boolean
-  service?: IServiceGardeningDocument
+  service?: IServiceDocument
   submittedSuccessfully: boolean
 }
 
-class GardeningService extends React.PureComponent {
+class CleaningService extends React.PureComponent {
   public hasUnmounted = false
 
   public state: IState = {
@@ -45,9 +47,10 @@ class GardeningService extends React.PureComponent {
 
   public async componentDidMount() {
     try {
-      const service = await getGardeningService()
+      const service = await getCleaningService()
       this.setState({ isLoading: false, service })
-    } catch {
+    } catch (e) {
+      if (e.message === '404') return this.setState({ isLoading: false })
       this.setState({ error: true, isLoading: false })
     }
   }
@@ -60,11 +63,13 @@ class GardeningService extends React.PureComponent {
     const { error, isLoading, service, submittedSuccessfully } = this.state
 
     const initialValues = {
+      carpetClean: service ? service.carpetClean : false,
+      deepClean: service ? service.deepClean : false,
       general: service ? service.general : false,
       hasOwnEquipment: service ? service.hasOwnEquipment : false,
       hasOwnProducts: service ? service.hasOwnProducts : false,
       hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
-      specialist: service ? service.specialist : false,
+      ovenClean: service ? service.ovenClean : false,
     }
 
     return (
@@ -82,8 +87,8 @@ class GardeningService extends React.PureComponent {
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
               <Form noValidate>
-                <h2>{service ? 'Edit' : 'Add'} gardening service</h2>
-                <p>Tell us about the gardening service you're offering.</p>
+                <h2>{service ? 'Edit' : 'Add'} cleaning service</h2>
+                <p>Tell us about the cleaning service you're offering.</p>
                 <Field
                   name="hourlyRate"
                   render={({ field, form }: FieldProps<IFormValues>) => (
@@ -101,18 +106,40 @@ class GardeningService extends React.PureComponent {
                       {...field}
                       checked={field.value}
                       error={getFieldError(form, 'general')}
-                      label="General gardening services"
+                      label="General clean"
                     />
                   )}
                 />
                 <Field
-                  name="specialist"
+                  name="deepClean"
                   render={({ field, form }: FieldProps<IFormValues>) => (
                     <Checkbox
                       {...field}
                       checked={field.value}
-                      error={getFieldError(form, 'specialist')}
-                      label="Specialist gardening services"
+                      error={getFieldError(form, 'deepClean')}
+                      label="Oneoff deep clean"
+                    />
+                  )}
+                />
+                <Field
+                  name="carpetClean"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <Checkbox
+                      {...field}
+                      checked={field.value}
+                      error={getFieldError(form, 'carpetClean')}
+                      label="Specialist clean  carpets"
+                    />
+                  )}
+                />
+                <Field
+                  name="ovenClean"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <Checkbox
+                      {...field}
+                      checked={field.value}
+                      error={getFieldError(form, 'ovenClean')}
+                      label="Specialist clean  oven"
                     />
                   )}
                 />
@@ -123,7 +150,7 @@ class GardeningService extends React.PureComponent {
                       {...field}
                       checked={field.value}
                       error={getFieldError(form, 'hasOwnProducts')}
-                      label="I have my own gardening products"
+                      label="I have my own cleaning products"
                     />
                   )}
                 />
@@ -134,12 +161,13 @@ class GardeningService extends React.PureComponent {
                       {...field}
                       checked={field.value}
                       error={getFieldError(form, 'hasOwnEquipment')}
-                      label="I have my own gardening equipment"
+                      label="I have my own cleaning equipment"
                     />
                   )}
                 />
                 <ButtonGroup>
                   <Button disabled={isSubmitting}>Save</Button>
+
                   <Link to="/services">Cancel</Link>
                 </ButtonGroup>
               </Form>
@@ -156,13 +184,13 @@ class GardeningService extends React.PureComponent {
   ) => {
     try {
       if (this.state.service) {
-        await putServiceGardening({
+        await putServiceCleaning({
           ...this.state.service,
           ...values,
           hourlyRate: Number(values.hourlyRate),
         })
       } else {
-        await postGardeningService({
+        await postCleaningService({
           ...values,
           hourlyRate: Number(values.hourlyRate),
         })
@@ -171,10 +199,13 @@ class GardeningService extends React.PureComponent {
       if (this.hasUnmounted) return
 
       actions.setSubmitting(false)
+
       this.setState({ submittedSuccessfully: true })
     } catch (e) {
       if (this.hasUnmounted) return
+
       actions.setSubmitting(false)
+
       this.setState({ error: true })
     }
   }
@@ -185,4 +216,4 @@ class GardeningService extends React.PureComponent {
       : { hourlyRate: 'Please enter a valid hourly rate' }
 }
 
-export default GardeningService
+export default CleaningService

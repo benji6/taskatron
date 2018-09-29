@@ -7,11 +7,7 @@ import {
   IUserPatchBody,
   IUserResponse,
 } from '../shared/types'
-import {
-  collectionNameToServiceType,
-  serviceCollectionNames,
-  USERS,
-} from './collections'
+import { SERVICES, USERS } from './collectionNames'
 import withDb from './withDb'
 
 withDb(db =>
@@ -54,26 +50,16 @@ export const getUserByEmail = async (
     return result ? documentToResponse(result) : result
   })
 
-export const getUserServices = async (
+export const getUserService = async (
   userId: string,
-): Promise<IServiceDocument[]> =>
+): Promise<IServiceDocument | undefined> =>
   withDb(async db => {
-    const services = await Promise.all(
-      serviceCollectionNames.map(async collectionName => {
-        const [result] = await db
-          .collection(collectionName)
-          .find({ userId: new ObjectId(userId) })
-          .toArray()
+    const [result] = await db
+      .collection(SERVICES)
+      .find({ userId: new ObjectId(userId) })
+      .toArray()
 
-        return result
-          ? {
-              ...result,
-              serviceType: collectionNameToServiceType[collectionName],
-            }
-          : result
-      }),
-    )
-    return services.filter(Boolean)
+    return result
   })
 
 export const setUser = async ({

@@ -1,49 +1,18 @@
-import {
-  Button,
-  ButtonGroup,
-  Pagination,
-  RadioButton,
-  RadioGroup,
-  Spinner,
-} from 'eri'
+import { Button, ButtonGroup, Pagination, Spinner } from 'eri'
 import { History, Location } from 'history' // tslint:disable-line no-implicit-dependencies
 import * as React from 'react'
 import { withRouter } from 'react-router-dom'
+import { getCleaningServices } from '../../../../api'
 import {
-  getCleaningServices,
-  getGardeningServices,
-  getIroningServices,
-} from '../../../../api'
-import serviceNames, {
-  CLEANING,
-  GARDENING,
-  IRONING,
-} from '../../../../shared/services'
-import {
-  ICleaningFilters,
   ICoord,
-  IGardeningFilters,
-  IIroningFilters,
-  IServiceCleaningResponseObject,
-  IServiceGardeningResponseObject,
-  IServiceIroningResponseObject,
-  TService,
+  IServiceFilters,
+  IServiceResponseObject,
 } from '../../../../shared/types'
-import {
-  capitalizeFirst,
-  createSearchString,
-  position,
-} from '../../../../utils'
-import CleaningCard from './CleaningCard'
-import CleaningFilters from './CleaningFilters'
-import GardeningCard from './GardeningCard'
-import GardeningFilters from './GardeningFilters'
-import IroningCard from './IroningCard'
-import IroningFilters from './IroningFilters'
+import { createSearchString, position } from '../../../../utils'
+import Filters from './Filters'
+import Result from './Result'
 
 const resultsPerPage = 10
-
-type Filters = ICleaningFilters | IGardeningFilters | IIroningFilters
 
 interface IProps {
   location: Location
@@ -53,16 +22,11 @@ interface IProps {
 interface IState {
   coords?: ICoord
   currentPage?: number
-  filters?: Filters
+  filters?: IServiceFilters
   isLoading: boolean
-  loadedServiceType: TService
   pageCount: number
-  services?:
-    | IServiceCleaningResponseObject[]
-    | IServiceGardeningResponseObject[]
-    | IServiceIroningResponseObject[]
+  services?: IServiceResponseObject[]
   servicesError: boolean
-  serviceType: TService
   total: number
 }
 
@@ -71,42 +35,20 @@ class Search extends React.PureComponent<IProps> {
     currentPage: undefined,
     filters: undefined,
     isLoading: false,
-    loadedServiceType: CLEANING,
     pageCount: 0,
-    serviceType: this.initialServiceType,
     services: undefined,
     servicesError: false,
     total: 0,
-  }
-
-  get initialServiceType(): TService {
-    const serviceTypeSearchParam = new URLSearchParams(
-      this.props.location.search,
-    ).get('serviceType')
-    return serviceTypeSearchParam &&
-      serviceNames.includes(serviceTypeSearchParam)
-      ? (serviceTypeSearchParam as TService)
-      : CLEANING
   }
 
   get page() {
     return new URLSearchParams(this.props.location.search).get('page')
   }
 
-  get serviceType() {
-    return new URLSearchParams(this.props.location.search).get('serviceType')
-  }
-
-  public setFilters = (filters: Filters) => this.setState({ filters })
+  public setFilters = (filters: IServiceFilters) => this.setState({ filters })
 
   public async componentDidMount() {
-    if (!this.page && !this.serviceType) {
-      return
-    }
-
-    if (!this.page || !this.serviceType) {
-      return this.props.history.replace('/')
-    }
+    if (!this.page) return
 
     this.search(Number(this.page))
 
@@ -135,19 +77,8 @@ class Search extends React.PureComponent<IProps> {
     const nextSearchParams = new URLSearchParams(nextProps.location.search)
 
     const page = nextSearchParams.get('page')
-    const serviceType = nextSearchParams.get('serviceType')
 
-    if (!page && !serviceType) {
-      return this.setState({
-        currentPage: 0,
-        pageCount: 0,
-        services: undefined,
-      })
-    }
-
-    if (!page || !serviceType) {
-      this.props.history.replace('/')
-
+    if (!page) {
       return this.setState({
         currentPage: 0,
         pageCount: 0,
@@ -158,44 +89,20 @@ class Search extends React.PureComponent<IProps> {
     this.search(Number(page))
   }
 
-  public handleServiceChange = ({
-    target: { value },
-  }: React.ChangeEvent<any>) => {
-    this.setState({
-      currentPage: 0,
-      pageCount: 0,
-      serviceType: value,
-      services: undefined,
-    })
-  }
-
   public search = async (page = 0) => {
-    const { filters, serviceType } = this.state
+    const { filters } = this.state
 
     this.setState({ isLoading: true, servicesError: false })
 
     try {
-      const { results, total } = await (serviceType === GARDENING
-        ? getGardeningServices({
-            ...filters,
-            limit: resultsPerPage,
-            skip: page * resultsPerPage,
-          } as any)
-        : serviceType === IRONING
-          ? getIroningServices({
-              ...filters,
-              limit: resultsPerPage,
-              skip: page * resultsPerPage,
-            } as any)
-          : getCleaningServices({
-              ...filters,
-              limit: resultsPerPage,
-              skip: page * resultsPerPage,
-            } as any))
+      const { results, total } = await getCleaningServices({
+        ...filters,
+        limit: resultsPerPage,
+        skip: page * resultsPerPage,
+      } as any)
 
       this.setState({
         currentPage: page,
-        loadedServiceType: serviceType,
         pageCount: Math.ceil(total / resultsPerPage),
         services: results,
         total,
@@ -209,9 +116,8 @@ class Search extends React.PureComponent<IProps> {
 
   public handlePaginationChange = (page: number) => {
     const { history } = this.props
-    const { serviceType } = this.state
 
-    history.push(createSearchString({ page, serviceType }))
+    history.push(createSearchString({ page }))
   }
 
   public render(): React.ReactNode {
@@ -219,9 +125,7 @@ class Search extends React.PureComponent<IProps> {
       currentPage,
       filters,
       isLoading,
-      loadedServiceType,
       pageCount,
-      serviceType,
       services,
       servicesError,
       total,
@@ -229,33 +133,13 @@ class Search extends React.PureComponent<IProps> {
 
     const search = createSearchString({
       page: Number(currentPage) || 0,
-      serviceType,
       ...filters,
     })
 
     return (
       <>
-        <h2>Services</h2>
-        <RadioGroup label="What type of service are you looking for?">
-          {serviceNames.map(serviceName => (
-            <RadioButton
-              checked={serviceName === serviceType}
-              key={serviceName}
-              name="service"
-              onChange={this.handleServiceChange}
-              value={serviceName}
-            >
-              {capitalizeFirst(serviceName)}
-            </RadioButton>
-          ))}
-        </RadioGroup>
-        {serviceType === GARDENING ? (
-          <GardeningFilters setFilters={this.setFilters} />
-        ) : serviceType === IRONING ? (
-          <IroningFilters setFilters={this.setFilters} />
-        ) : (
-          <CleaningFilters setFilters={this.setFilters} />
-        )}
+        <h2>Find a cleaner</h2>
+        <Filters setFilters={this.setFilters} />
         <ButtonGroup>
           <Button
             to={{
@@ -283,16 +167,9 @@ class Search extends React.PureComponent<IProps> {
                 {total > 1 && 's'} found
               </p>
             )}
-            {(services as any).map(
-              (service: any) =>
-                loadedServiceType === CLEANING ? (
-                  <CleaningCard key={service._id}>{service}</CleaningCard>
-                ) : loadedServiceType === GARDENING ? (
-                  <GardeningCard key={service._id}>{service}</GardeningCard>
-                ) : (
-                  <IroningCard key={service._id}>{service}</IroningCard>
-                ),
-            )}
+            {(services as any).map((service: any) => (
+              <Result key={service._id}>{service}</Result>
+            ))}
             <Pagination
               onChange={this.handlePaginationChange}
               page={Number(currentPage)}

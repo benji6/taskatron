@@ -71,7 +71,7 @@ class Profile extends React.PureComponent<IProps> {
         {error ? (
           <p e-util="negative">Oops, there was an error, please try again.</p>
         ) : submittedSuccessfully ? (
-          <Redirect to="/services" />
+          <Redirect to="/profile" />
         ) : (
           <Formik
             initialValues={initialValues}
@@ -133,7 +133,7 @@ class Profile extends React.PureComponent<IProps> {
                 />
                 <ButtonGroup>
                   <Button disabled={isSubmitting}>Save</Button>
-                  <Link to="/services">Cancel</Link>
+                  <Link to="/profile">Cancel</Link>
                 </ButtonGroup>
               </Form>
             )}

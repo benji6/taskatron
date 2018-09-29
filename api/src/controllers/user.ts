@@ -1,20 +1,23 @@
 import { NextFunction, Request, Response } from 'express'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import log from '../log'
-import { getUserByEmail, getUserServices, setUser } from '../model/user'
+import { getUserByEmail, getUserService, setUser } from '../model/user'
 import passwordless from '../passwordless/index'
 import geocode from '../services/geocode'
 import { UserPostBody } from '../shared/types'
 
 const logUserPost = log('user')('POST')
-const logUserServicesGet = log('user/:id/services')('GET')
+const logUserServicesGet = log('user/:id/service')('GET')
 
-export const getServices = async (req: Request, res: Response) => {
+export const getService = async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const serviceDocuments = await getUserServices(id)
-    res.status(200).send(serviceDocuments)
+    const serviceDocument = await getUserService(id)
+
+    if (!serviceDocument) return res.status(404).end()
+
+    res.status(200).send(serviceDocument)
   } catch (e) {
     res.status(500).end()
     logUserServicesGet(500, e)

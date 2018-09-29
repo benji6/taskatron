@@ -1,19 +1,9 @@
 import { getCredentials } from '../localStorage'
-import { CLEANING, GARDENING, IRONING } from '../shared/services'
 import {
-  ICleaningPostBody,
-  ICleaningSearchParams,
-  ICleaningServiceSearchResponse,
-  IGardeningPostBody,
-  IGardeningSearchParams,
-  IGardeningServiceSearchResponse,
-  IIroningPostBody,
-  IIroningSearchParams,
-  IIroningServiceSearchResponse,
-  IServiceCleaningDocument,
   IServiceDocument,
-  IServiceGardeningDocument,
-  IServiceIroningDocument,
+  IServicePostBody,
+  IServiceSearchParams,
+  IServiceSearchResponse,
   IUserPatchBody,
   IUserPostBody,
   IUserResponse,
@@ -32,35 +22,7 @@ import {
 export const deleteCleaningService = async (id: string): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/${CLEANING}/${id}?${credentialsQueryString(
-      credentials,
-    )}`,
-    deleteConfig(),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
-
-export const deleteGardeningService = async (id: string): Promise<Response> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/services/${GARDENING}/${id}?${credentialsQueryString(
-      credentials,
-    )}`,
-    deleteConfig(),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
-
-export const deleteIroningService = async (id: string): Promise<Response> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/services/${IRONING}/${id}?${credentialsQueryString(
-      credentials,
-    )}`,
+    `${origin}/service/${id}?${credentialsQueryString(credentials)}`,
     deleteConfig(),
   )
 
@@ -84,39 +46,21 @@ export const getMe = (
     .then(response => response.json())
 
 export const getCleaningServices = async (
-  searchParams: ICleaningSearchParams,
-): Promise<ICleaningServiceSearchResponse> => {
+  searchParams: IServiceSearchParams,
+): Promise<IServiceSearchResponse> => {
   const response = await fetch(
-    `${origin}/services/${CLEANING}${createSearchString(searchParams)}`,
+    `${origin}/service${createSearchString(searchParams)}`,
   )
   if (!response.ok) throw Error(String(response.status))
   return response.json()
 }
 
-export const getGardeningServices = async (
-  searchParams: IGardeningSearchParams,
-): Promise<IGardeningServiceSearchResponse> => {
-  const response = await fetch(
-    `${origin}/services/${GARDENING}${createSearchString(searchParams)}`,
-  )
-  if (!response.ok) throw Error(String(response.status))
-  return response.json()
-}
-
-export const getIroningServices = async (
-  searchParams: IIroningSearchParams,
-): Promise<IIroningServiceSearchResponse> => {
-  const response = await fetch(
-    `${origin}/services/${IRONING}${createSearchString(searchParams)}`,
-  )
-  if (!response.ok) throw Error(String(response.status))
-  return response.json()
-}
-
-export const getUserServices = async (): Promise<IServiceDocument[]> => {
+export const getUserService = async (): Promise<
+  IServiceDocument | undefined
+> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/user/${credentials.uid}/services?${credentialsQueryString(
+    `${origin}/user/${credentials.uid}/service?${credentialsQueryString(
       credentials,
     )}`,
   )
@@ -125,50 +69,8 @@ export const getUserServices = async (): Promise<IServiceDocument[]> => {
   return response.json()
 }
 
-export const getCleaningService = async (): Promise<
-  IServiceCleaningDocument | undefined
-> => {
-  const services = await getUserServices()
-
-  const service = services.find(({ serviceType }) => serviceType === CLEANING)
-
-  if (service) {
-    const { serviceType, ...actualService } = service
-    return actualService as IServiceCleaningDocument
-  }
-
-  return service
-}
-
-export const getGardeningService = async (): Promise<
-  IServiceGardeningDocument | undefined
-> => {
-  const services = await getUserServices()
-
-  const service = services.find(({ serviceType }) => serviceType === GARDENING)
-
-  if (service) {
-    const { serviceType, ...actualService } = service
-    return actualService as IServiceGardeningDocument
-  }
-
-  return service
-}
-
-export const getIroningService = async (): Promise<
-  IServiceIroningDocument | undefined
-> => {
-  const services = await getUserServices()
-
-  const service = services.find(({ serviceType }) => serviceType === IRONING)
-
-  if (service) {
-    const { serviceType, ...actualService } = service
-    return actualService as IServiceIroningDocument
-  }
-
-  return service
-}
+export const getCleaningService = (): Promise<IServiceDocument | undefined> =>
+  getUserService()
 
 export const getSignOut = (
   credentialsPromise: Promise<ICredentials>,
@@ -197,37 +99,11 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
 }
 
 export const postCleaningService = async (
-  service: ICleaningPostBody,
+  service: IServicePostBody,
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/${CLEANING}?${credentialsQueryString(credentials)}`,
-    postConfig(service),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
-
-export const postGardeningService = async (
-  service: IGardeningPostBody,
-): Promise<Response> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/services/${GARDENING}?${credentialsQueryString(credentials)}`,
-    postConfig(service),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
-
-export const postIroningService = async (
-  service: IIroningPostBody,
-): Promise<Response> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/services/${IRONING}?${credentialsQueryString(credentials)}`,
+    `${origin}/service?${credentialsQueryString(credentials)}`,
     postConfig(service),
   )
 
@@ -242,43 +118,11 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
   })
 
 export const putServiceCleaning = async (
-  service: IServiceCleaningDocument,
+  service: IServiceDocument,
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/services/${CLEANING}/${service._id}?${credentialsQueryString(
-      credentials,
-    )}`,
-    putConfig(service),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
-
-export const putServiceGardening = async (
-  service: IServiceGardeningDocument,
-): Promise<Response> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/services/${GARDENING}/${service._id}?${credentialsQueryString(
-      credentials,
-    )}`,
-    putConfig(service),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
-
-export const putServiceIroning = async (
-  service: IServiceIroningDocument,
-): Promise<Response> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/services/${IRONING}/${service._id}?${credentialsQueryString(
-      credentials,
-    )}`,
+    `${origin}/service/${service._id}?${credentialsQueryString(credentials)}`,
     putConfig(service),
   )
 

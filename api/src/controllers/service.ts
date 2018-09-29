@@ -1,44 +1,44 @@
 import { Request, Response } from 'express'
 import { PathReporter } from 'io-ts/lib/PathReporter'
-import log from '../../log'
+import log from '../log'
 import {
-  countGardeningServices,
-  deleteGardeningService,
-  getGardeningService,
-  searchGardeningServices,
-  setGardeningService,
-  updateGardeningService,
-} from '../../model/gardeningServices'
-import { getUser } from '../../model/user'
+  countServices,
+  deleteService,
+  getService,
+  searchServices,
+  setService,
+  updateService,
+} from '../model/service'
+import { getUser } from '../model/user'
 import {
-  GardeningDocument,
-  GardeningPostBody,
-  GardeningSearchParams,
-  IGardeningFilters,
-  IGardeningPostBody,
-  IGardeningServiceSearchResponse,
-  IServiceGardeningDocument,
+  IServiceDocument,
+  IServiceFilters,
+  IServicePostBody,
+  IServiceSearchResponse,
   IUserResponse,
-} from '../../shared/types'
-import { removeUndefinedValues } from '../../shared/utils'
-import { parseBooleanQuery } from '../utils'
+  ServiceDocument,
+  ServicePostBody,
+  ServiceSearchParams,
+} from '../shared/types'
+import { removeUndefinedValues } from '../shared/utils'
+import { parseBooleanQuery } from './utils'
 
 interface IRequest extends Request {
   user: string
 }
 
-const logGardening = log('services/gardening')
-const logGet = logGardening('GET')
-const logDelete = logGardening('DELETE')
-const logPost = logGardening('POST')
-const logPut = logGardening('PUT')
+const logCleaning = log('service')
+const logGet = logCleaning('GET')
+const logDelete = logCleaning('DELETE')
+const logPost = logCleaning('POST')
+const logPut = logCleaning('PUT')
 
 export const del = async (req: Request, res: Response) => {
   const { user: userId } = req as IRequest
   const { id } = req.params
 
   try {
-    const document = await getGardeningService(id)
+    const document = await getService(id)
 
     if (!document) {
       res.status(404).end()
@@ -53,7 +53,7 @@ export const del = async (req: Request, res: Response) => {
       )
     }
 
-    await deleteGardeningService(id)
+    await deleteService(id)
 
     res.status(204).end()
   } catch (e) {
@@ -64,19 +64,23 @@ export const del = async (req: Request, res: Response) => {
 
 export const get = async (req: Request, res: Response) => {
   const {
+    carpetClean,
+    deepClean,
     general,
     hasOwnEquipment,
     hasOwnProducts,
     limit,
+    ovenClean,
     skip,
-    specialist,
   } = req.query
 
-  const filters: IGardeningFilters = removeUndefinedValues({
+  const filters: IServiceFilters = removeUndefinedValues({
+    carpetClean: parseBooleanQuery(carpetClean),
+    deepClean: parseBooleanQuery(deepClean),
     general: parseBooleanQuery(general),
     hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
     hasOwnProducts: parseBooleanQuery(hasOwnProducts),
-    specialist: parseBooleanQuery(specialist),
+    ovenClean: parseBooleanQuery(ovenClean),
   })
 
   const searchParams = {
@@ -85,16 +89,16 @@ export const get = async (req: Request, res: Response) => {
     skip: Number(skip),
   }
 
-  if (!GardeningSearchParams.is(searchParams)) {
+  if (!ServiceSearchParams.is(searchParams)) {
     res.status(400).end()
     return logGet(
       400,
-      PathReporter.report(GardeningSearchParams.decode(searchParams)),
+      PathReporter.report(ServiceSearchParams.decode(searchParams)),
     )
   }
 
   try {
-    const serviceDocuments = await searchGardeningServices(searchParams)
+    const serviceDocuments = await searchServices(searchParams)
 
     const results = await Promise.all(
       serviceDocuments.map(async serviceDocument => {
@@ -109,9 +113,9 @@ export const get = async (req: Request, res: Response) => {
       }),
     )
 
-    const total = await countGardeningServices(filters)
+    const total = await countServices(filters)
 
-    const responseBody: IGardeningServiceSearchResponse = {
+    const responseBody: IServiceSearchResponse = {
       results,
       total,
     }
@@ -124,21 +128,21 @@ export const get = async (req: Request, res: Response) => {
 }
 
 export const post = async (req: Request, res: Response) => {
-  const body: IGardeningPostBody = req.body
+  const body: IServicePostBody = req.body
   const userId = (req as IRequest).user
 
-  if (!GardeningPostBody.is(body)) {
+  if (!ServicePostBody.is(body)) {
     res.status(400).end()
-    return logPost(400, PathReporter.report(GardeningPostBody.decode(body)))
+    return logPost(400, PathReporter.report(ServicePostBody.decode(body)))
   }
 
   try {
-    if (await getGardeningService(userId)) {
+    if (await getService(userId)) {
       res.status(409).end()
       return logPost(409, `record for userId: ${userId} already exists`)
     }
 
-    const serviceDocument = await setGardeningService({
+    const serviceDocument = await setService({
       ...body,
       userId,
     })
@@ -152,12 +156,12 @@ export const post = async (req: Request, res: Response) => {
 
 export const put = async (req: Request, res: Response) => {
   const { id } = req.params
-  const body: IServiceGardeningDocument = req.body
+  const body: IServiceDocument = req.body
   const userId = (req as IRequest).user
 
-  if (!GardeningDocument.is(body)) {
+  if (!ServiceDocument.is(body)) {
     res.status(400).end()
-    return logPut(400, PathReporter.report(GardeningDocument.decode(body)))
+    return logPut(400, PathReporter.report(ServiceDocument.decode(body)))
   }
 
   if (id !== body._id) {
@@ -177,7 +181,7 @@ export const put = async (req: Request, res: Response) => {
   }
 
   try {
-    const document = await getGardeningService(id)
+    const document = await getService(id)
 
     if (!document) {
       res.status(404).end()
@@ -192,7 +196,7 @@ export const put = async (req: Request, res: Response) => {
       )
     }
 
-    await updateGardeningService(body)
+    await updateService(body)
 
     res.status(200).send(body)
   } catch (e) {
