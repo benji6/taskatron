@@ -14,35 +14,42 @@ interface IState {
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
   ovenClean: boolean
-  showFilters: boolean
+  enableFilters: boolean
+}
+
+const initialState: IState = {
+  carpetClean: false,
+  deepClean: false,
+  enableFilters: false,
+  general: false,
+  hasOwnEquipment: false,
+  hasOwnProducts: false,
+  ovenClean: false,
 }
 
 export default class Filters extends React.PureComponent<IProps> {
-  public state: IState = {
-    carpetClean: false,
-    deepClean: false,
-    general: false,
-    hasOwnEquipment: false,
-    hasOwnProducts: false,
-    ovenClean: false,
-    showFilters: false,
-  }
+  public state: IState = initialState
 
-  public handleShowFiltersChange = ({
+  public handleEnableFiltersChange = ({
     target: { checked },
   }: React.ChangeEvent<any>) => {
-    const showFilters = checked
-    this.setState({ showFilters })
+    if (checked) return this.setState({ enableFilters: checked })
+    this.setState(initialState)
+    this.setFilters(initialState)
+  }
+
+  public setFilters(state: IState) {
+    const filteredNewState = filterObj(Boolean, state)
+    delete filteredNewState.enableFilters
+    this.props.setFilters(filteredNewState)
   }
 
   public handleChange = (key: keyof IServiceFilters) => ({
     target: { checked },
   }: React.ChangeEvent<any>) => {
-    this.setState(state => {
+    this.setState((state: IState) => {
       const newState = { ...state, [key]: checked }
-      const filteredNewState = filterObj(Boolean, newState)
-      delete filteredNewState.showFilters
-      this.props.setFilters(filteredNewState)
+      this.setFilters(newState)
       return newState
     })
   }
@@ -55,17 +62,17 @@ export default class Filters extends React.PureComponent<IProps> {
       hasOwnEquipment,
       hasOwnProducts,
       ovenClean,
-      showFilters,
+      enableFilters,
     } = this.state
 
     return (
       <>
         <Checkbox
-          checked={showFilters}
-          onChange={this.handleShowFiltersChange}
-          label="Show filters"
+          checked={enableFilters}
+          onChange={this.handleEnableFiltersChange}
+          label="Enable filters"
         />
-        {showFilters && (
+        {enableFilters && (
           <>
             <Checkbox
               checked={general}
