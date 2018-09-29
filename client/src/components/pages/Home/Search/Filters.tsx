@@ -1,4 +1,4 @@
-import { Checkbox } from 'eri'
+import { Checkbox, Toggle } from 'eri'
 import * as React from 'react'
 import { IServiceFilters } from '../../../../shared/types'
 import { filterObj } from '../../../../shared/utils'
@@ -67,7 +67,7 @@ export default class Filters extends React.PureComponent<IProps> {
 
     return (
       <>
-        <Checkbox
+        <Toggle
           checked={enableFilters}
           onChange={this.handleEnableFiltersChange}
           label="Enable filters"
