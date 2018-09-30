@@ -1,46 +1,85 @@
 import { Checkbox, Toggle } from 'eri'
 import * as React from 'react'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { IServiceFilters } from '../../../../shared/types'
 import { filterObj } from '../../../../shared/utils'
 
-interface IProps {
+interface IProps extends RouteComponentProps {
   setFilters(filters: IServiceFilters): void
 }
 
 interface IState {
   carpetClean: boolean
   deepClean: boolean
+  enableFilters: boolean
   general: boolean
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
+  lastQueryString: string
   ovenClean: boolean
-  enableFilters: boolean
 }
 
-const initialState: IState = {
-  carpetClean: false,
-  deepClean: false,
-  enableFilters: false,
-  general: false,
-  hasOwnEquipment: false,
-  hasOwnProducts: false,
-  ovenClean: false,
-}
+class Filters extends React.PureComponent<IProps> {
+  public static getDerivedStateFromProps(props: IProps, state: IState) {
+    if (props.location.search === '' && state.lastQueryString !== '') {
+      const filteredNewState = filterObj(Boolean, state)
+      delete filteredNewState.enableFilters
+      delete filteredNewState.lastQueryString
+      props.setFilters(filteredNewState)
+      return {
+        carpetClean: false,
+        deepClean: false,
+        enableFilters: false,
+        general: false,
+        hasOwnEquipment: false,
+        hasOwnProducts: false,
+        lastQueryString: '',
+        ovenClean: false,
+      }
+    }
+    return { lastQueryString: props.location.search }
+  }
 
-export default class Filters extends React.PureComponent<IProps> {
-  public state: IState = initialState
+  public state: IState = {
+    carpetClean: false,
+    deepClean: false,
+    enableFilters: false,
+    general: false,
+    hasOwnEquipment: false,
+    hasOwnProducts: false,
+    lastQueryString: '',
+    ovenClean: false,
+  }
 
   public handleEnableFiltersChange = ({
     target: { checked },
   }: React.ChangeEvent<any>) => {
     if (checked) return this.setState({ enableFilters: checked })
-    this.setState(initialState)
-    this.setFilters(initialState)
+    this.setState({
+      carpetClean: false,
+      deepClean: false,
+      enableFilters: false,
+      general: false,
+      hasOwnEquipment: false,
+      hasOwnProducts: false,
+      ovenClean: false,
+    })
+    this.setFilters({
+      carpetClean: false,
+      deepClean: false,
+      enableFilters: false,
+      general: false,
+      hasOwnEquipment: false,
+      hasOwnProducts: false,
+      lastQueryString: '',
+      ovenClean: false,
+    })
   }
 
   public setFilters(state: IState) {
     const filteredNewState = filterObj(Boolean, state)
     delete filteredNewState.enableFilters
+    delete filteredNewState.lastQueryString
     this.props.setFilters(filteredNewState)
   }
 
@@ -110,3 +149,5 @@ export default class Filters extends React.PureComponent<IProps> {
     )
   }
 }
+
+export default withRouter(Filters)
