@@ -111,6 +111,11 @@ export const ServiceFilters = t.partial({
   ovenClean: t.boolean,
 })
 
+export interface ILocation {
+  coordinates: [number, number]
+  type: 'Point'
+}
+
 export type IServiceFilters = t.TypeOf<typeof ServiceFilters>
 
 export const ServiceSearchParams = t.exact(
@@ -126,6 +131,7 @@ export const ServiceSearchParams = t.exact(
 export type IServiceSearchParams = t.TypeOf<typeof ServiceSearchParams>
 
 export interface IServiceModelParams extends IServicePostBody {
+  location: ILocation
   userId: string
 }
 
@@ -164,11 +170,8 @@ export interface IUserModelParams extends IUserPostBody {
 }
 
 export interface IUserDocument extends IUserPostBody {
-  location: {
-    coordinates: [number, number]
-    type: 'Point'
-  }
   _id: string
+  location: ILocation
 }
 
 export interface IUserResponse extends IUserModelParams {

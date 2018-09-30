@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import { SERVICES } from '../model/collectionNames'
 import { setUser } from '../model/user'
 import withDb from '../model/withDb'
-import { IServiceModelParams } from '../shared/types'
+import { ILocation, IServiceModelParams } from '../shared/types'
 
 const numberOfServices = 1024
 
@@ -19,6 +19,11 @@ const main = async () => {
     postcode: 'SW1A 1AA',
   } as any)
 
+  const location: ILocation = {
+    coordinates: [0, 50],
+    type: 'Point',
+  }
+
   const cleaningServices: IServiceModelParams[] = [
     ...Array(numberOfServices).keys(),
   ].map(() => ({
@@ -29,6 +34,7 @@ const main = async () => {
     hasOwnProducts: randomBoolean(),
     hourlyRate: randomHourlyRate(),
     isTestData: true,
+    location,
     ovenClean: randomBoolean(),
     radius: 10,
     userId: user._id,

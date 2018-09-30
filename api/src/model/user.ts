@@ -19,14 +19,14 @@ const documentToResponse = ({
   coords: { latitude, longitude },
 })
 
-export const getUser = async (id: string): Promise<IUserResponse | undefined> =>
+export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
   withDb(async db => {
     const [result] = await db
       .collection(USERS)
       .find(new ObjectId(id))
       .toArray()
 
-    return result ? documentToResponse(result) : result
+    return result
   })
 
 export const getUserByEmail = async (

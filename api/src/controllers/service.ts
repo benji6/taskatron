@@ -15,7 +15,7 @@ import {
   IServiceFilters,
   IServicePostBody,
   IServiceSearchResponse,
-  IUserResponse,
+  IUserDocument,
   ServiceDocument,
   ServicePostBody,
   ServiceSearchParams,
@@ -104,7 +104,7 @@ export const get = async (req: Request, res: Response) => {
       serviceDocuments.map(async serviceDocument => {
         const { firstName, lastName } = (await getUser(
           serviceDocument.userId,
-        )) as IUserResponse
+        )) as IUserDocument
 
         return {
           ...serviceDocument,
@@ -142,8 +142,11 @@ export const post = async (req: Request, res: Response) => {
       return logPost(409, `record for userId: ${userId} already exists`)
     }
 
+    const { location } = (await getUser(userId)) as IUserDocument
+
     const serviceDocument = await setService({
       ...body,
+      location,
       userId,
     })
 
