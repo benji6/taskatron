@@ -1,4 +1,5 @@
 import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
+import pino from '../pino'
 import {
   IServiceDocument,
   IServiceFilters,
@@ -7,6 +8,18 @@ import {
 } from '../shared/types'
 import { SERVICES } from './collectionNames'
 import withDb from './withDb'
+
+withDb(db =>
+  db
+    .collection(SERVICES)
+    .createIndex({ location: '2dsphere' })
+    .then(str =>
+      pino.info(`${SERVICES} "2dsphere" index creation success:`, str),
+    )
+    .catch(e =>
+      pino.error(`${SERVICES} "2dsphere" index creation failure:`, e),
+    ),
+)
 
 export const countServices = async (
   findParams: IServiceFilters,

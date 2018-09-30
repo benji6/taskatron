@@ -1,5 +1,4 @@
 import { ObjectId } from 'mongodb'
-import pino from '../pino'
 import {
   IServiceDocument,
   IUserDocument,
@@ -9,14 +8,6 @@ import {
 } from '../shared/types'
 import { SERVICES, USERS } from './collectionNames'
 import withDb from './withDb'
-
-withDb(db =>
-  db
-    .collection(USERS)
-    .createIndex({ location: '2dsphere' })
-    .then(str => pino.info(`${USERS} "2dsphere" index creation success:`, str))
-    .catch(e => pino.error(`${USERS} "2dsphere" index creation failure:`, e)),
-)
 
 const documentToResponse = ({
   location: {

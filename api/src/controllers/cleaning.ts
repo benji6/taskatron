@@ -8,7 +8,7 @@ import {
   searchServices,
   setService,
   updateService,
-} from '../model/service'
+} from '../model/services'
 import { getUser } from '../model/user'
 import {
   IServiceDocument,
