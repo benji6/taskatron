@@ -23,7 +23,7 @@ class Menu extends React.PureComponent<IProps> {
         <hr />
         <p>
           <Link onClick={onClose} to="/">
-            Find a cleaner
+            Home
           </Link>
         </p>
         <p>
