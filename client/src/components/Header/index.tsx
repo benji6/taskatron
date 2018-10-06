@@ -1,18 +1,34 @@
+import { Header as EriHeader, MenuButton } from 'eri'
 import * as React from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { userFirstNameSelector } from '../../selectors'
+import IStore from '../../types/IStore'
 
-class Header extends React.PureComponent {
+interface IProps {
+  firstName?: string
+  onMenuOpen(): void
+}
+
+class Header extends React.PureComponent<IProps> {
   public render(): React.ReactNode {
+    const { firstName, onMenuOpen } = this.props
+
     return (
-      <header>
+      <EriHeader>
         <h1>
           <Link className="header__heading-link" to="/">
             Taskatron
           </Link>
         </h1>
-      </header>
+        {Boolean(firstName) && <MenuButton onClick={onMenuOpen} />}
+      </EriHeader>
     )
   }
 }
 
-export default Header
+const mapStateToProps = (state: IStore) => ({
+  firstName: userFirstNameSelector(state),
+})
+
+export default connect(mapStateToProps)(Header)

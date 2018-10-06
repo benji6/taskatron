@@ -6,6 +6,7 @@ import { userIsLoadingSelector, userIsSignedInSelector } from '../../selectors'
 import IStore from '../../types/IStore'
 import Auth from '../Auth'
 import Header from '../Header'
+import Menu from '../Menu'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
@@ -21,8 +22,13 @@ interface IProps {
 }
 
 class App extends React.PureComponent<IProps> {
+  public state = {
+    isMenuOpen: false,
+  }
+
   public render() {
     const { isLoading, isSignedIn } = this.props
+    const { isMenuOpen } = this.state
 
     return (
       <>
@@ -32,7 +38,8 @@ class App extends React.PureComponent<IProps> {
             <Spinner variation="page" />
           ) : (
             <>
-              <Header />
+              <Header onMenuOpen={this.handleMenuOpen} />
+              <Menu isOpen={isMenuOpen} onClose={this.handleMenuClose} />
               <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/login" component={Login} />
@@ -63,6 +70,9 @@ class App extends React.PureComponent<IProps> {
       </>
     )
   }
+
+  private handleMenuClose = () => this.setState({ isMenuOpen: false })
+  private handleMenuOpen = () => this.setState({ isMenuOpen: true })
 }
 
 const mapStateToProps = (state: IStore) => ({
