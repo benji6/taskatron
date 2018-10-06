@@ -1966,9 +1966,9 @@ entities@^1.1.1, entities@~1.1.1:
   integrity sha1-blwtClYhtdra7O+AuQ7ftc13cvA=
 
 eri@^4.16.0:
-  version "4.24.4"
-  resolved "https://registry.yarnpkg.com/eri/-/eri-4.24.4.tgz#4df65ed6fb72dce102d938b088dca992c2bcbfc8"
-  integrity sha512-fQyVrvTiEpR88w3P4BELp/iy6pjLCey6uI+rAtKTVECdnApU8bax0PtypGIIOw260IdtKy+yqkg7oDTTC+t/6g==
+  version "4.25.0"
+  resolved "https://registry.yarnpkg.com/eri/-/eri-4.25.0.tgz#e849720a3fd64b52e0680573793bcf5f1d9e892a"
+  integrity sha512-OC2OoKR7qf7HMK6M1vQxKilSNYI9J36S284Sz17jFR+Ap3hGNzUxWR47HuxPA/wcxu3fi0gVPlZ36VJEW6Z4Eg==
   dependencies:
     classnames "^2.2.6"
 

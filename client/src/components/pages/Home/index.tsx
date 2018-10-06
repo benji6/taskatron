@@ -15,19 +15,15 @@ class Home extends React.PureComponent<IProps> {
 
     return (
       <main>
-        <h2>Welcome</h2>
-        {firstName ? (
+        {!firstName && (
           <>
-            <p>Hi {firstName}!</p>
-            <ButtonGroup />
+            <ButtonGroup>
+              <Button to="sign-up">Join us!</Button>
+              <Button to="sign-in" variant="secondary">
+                Sign in
+              </Button>
+            </ButtonGroup>
           </>
-        ) : (
-          <ButtonGroup>
-            <Button to="sign-up">Join us!</Button>
-            <Button to="sign-in" variant="secondary">
-              Sign in
-            </Button>
-          </ButtonGroup>
         )}
         <Search />
       </main>

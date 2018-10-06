@@ -3,8 +3,11 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { userSignOut } from '../../actions'
+import { userFirstNameSelector } from '../../selectors'
+import IStore from '../../types/IStore'
 
 interface IProps {
+  firstName: string
   isOpen: boolean
   onSignOut: typeof userSignOut
   onClose(): void
@@ -12,10 +15,17 @@ interface IProps {
 
 class Menu extends React.PureComponent<IProps> {
   public render() {
-    const { isOpen, onClose, onSignOut } = this.props
+    const { firstName, isOpen, onClose, onSignOut } = this.props
 
     return (
       <EriMenu onClose={onClose} open={isOpen}>
+        <p>Hi {firstName}!</p>
+        <hr />
+        <p>
+          <Link onClick={onClose} to="/">
+            Find a cleaner
+          </Link>
+        </p>
         <p>
           <Link onClick={onClose} to="/profile">
             Manage profile
@@ -37,11 +47,15 @@ class Menu extends React.PureComponent<IProps> {
   }
 }
 
+const mapStateToProps = (state: IStore) => ({
+  firstName: userFirstNameSelector(state) as string,
+})
+
 const mapDispatchToProps = {
   onSignOut: userSignOut,
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Menu)
