@@ -10,7 +10,7 @@ interface IProps {
 }
 
 class Home extends React.PureComponent<IProps> {
-  public render(): React.ReactNode {
+  public render() {
     const { firstName } = this.props
 
     return (

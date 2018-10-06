@@ -120,7 +120,7 @@ class Search extends React.PureComponent<IProps> {
     history.push(createSearchString({ page }))
   }
 
-  public render(): React.ReactNode {
+  public render() {
     const {
       currentPage,
       filters,

@@ -37,7 +37,7 @@ class SignUp extends React.PureComponent<{}, IState> {
     this.hasUnmounted = true
   }
 
-  public render(): React.ReactNode {
+  public render() {
     const { email, errorCode, submittedSuccessfully } = this.state
 
     return (

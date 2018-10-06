@@ -11,7 +11,7 @@ interface IProps {
 }
 
 class Header extends React.PureComponent<IProps> {
-  public render(): React.ReactNode {
+  public render() {
     const { firstName, onMenuOpen } = this.props
 
     return (

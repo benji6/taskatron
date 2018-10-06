@@ -7,6 +7,7 @@ import IStore from '../../types/IStore'
 import Auth from '../Auth'
 import Header from '../Header'
 import Menu from '../Menu'
+import About from '../pages/About'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
@@ -42,6 +43,7 @@ class App extends React.PureComponent<IProps> {
               <Menu isOpen={isMenuOpen} onClose={this.handleMenuClose} />
               <Switch>
                 <Route path="/" exact component={Home} />
+                <Route path="/about" component={About} />
                 <Route path="/login" component={Login} />
                 <Route path="/sign-in" component={SignIn} />
                 <Route path="/sign-up" component={SignUp} />

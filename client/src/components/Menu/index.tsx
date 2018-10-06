@@ -32,6 +32,11 @@ class Menu extends React.PureComponent<IProps> {
           </Link>
         </p>
         <p>
+          <Link onClick={onClose} to="/about">
+            About
+          </Link>
+        </p>
+        <p>
           <Link
             onClick={() => {
               onClose()

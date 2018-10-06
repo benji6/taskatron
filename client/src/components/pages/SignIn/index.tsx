@@ -32,7 +32,7 @@ class SignIn extends React.PureComponent<{}, IState> {
     this.hasUnmounted = true
   }
 
-  public render(): React.ReactNode {
+  public render() {
     const { submittedSuccessfully } = this.state
 
     return (
