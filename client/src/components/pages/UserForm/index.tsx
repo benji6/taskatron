@@ -77,7 +77,7 @@ class UserForm extends React.PureComponent<IProps> {
             validate={this.validate}
             render={({ isSubmitting }: FormikProps<IFormValues>) => (
               <Form noValidate>
-                <h2>About me</h2>
+                <h2>Edit my details</h2>
                 <p>Tell us about yourself.</p>
                 <Field
                   autocomplete="given-name"

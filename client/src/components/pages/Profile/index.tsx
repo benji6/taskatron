@@ -65,7 +65,7 @@ class Service extends React.PureComponent<IProps> {
     return (
       <main>
         <Card>
-          <h3>About me</h3>
+          <h3>My details</h3>
           <p>These are your personal details (only you can see these):</p>
           <ul>
             <li>First name: {firstName}</li>
