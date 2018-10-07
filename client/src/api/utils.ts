@@ -2,10 +2,13 @@ import ICredentials from '../types/ICredentials'
 
 export const origin = process.env.API_URL
 
-const jsonHeaders = (credentials?: ICredentials): Headers => {
+const jsonHeaders = (
+  credentials?: ICredentials,
+  withContentType?: boolean,
+): Headers => {
   const headers = new Headers()
 
-  headers.append('Content-Type', 'application/json')
+  if (withContentType) headers.append('Content-Type', 'application/json')
 
   if (credentials) {
     headers.append(
@@ -28,18 +31,18 @@ export const getConfig = (credentials?: ICredentials) => ({
 
 export const patchConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders(credentials),
+  headers: jsonHeaders(credentials, true),
   method: 'PATCH',
 })
 
 export const postConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders(credentials),
+  headers: jsonHeaders(credentials, true),
   method: 'POST',
 })
 
 export const putConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders(credentials),
+  headers: jsonHeaders(credentials, true),
   method: 'PUT',
 })
