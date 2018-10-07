@@ -69,9 +69,6 @@ export const getUserService = async (): Promise<
   return response.json()
 }
 
-export const getService = (): Promise<IServiceDocument | undefined> =>
-  getUserService()
-
 export const getSignOut = (
   credentialsPromise: Promise<ICredentials>,
 ): Promise<Response> =>

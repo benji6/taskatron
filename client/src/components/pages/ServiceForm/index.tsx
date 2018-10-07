@@ -16,7 +16,7 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { getService, postService, putService } from '../../../api'
+import { getUserService, postService, putService } from '../../../api'
 import { radii } from '../../../shared/constants'
 import { IServiceDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
@@ -52,7 +52,7 @@ export default class ServiceForm extends React.PureComponent {
 
   public async componentDidMount() {
     try {
-      const service = await getService()
+      const service = await getUserService()
       this.setState({ isLoading: false, service })
     } catch (e) {
       if (e.message === '404') return this.setState({ isLoading: false })
