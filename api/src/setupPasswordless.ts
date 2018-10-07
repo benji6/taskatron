@@ -14,9 +14,6 @@ const mailgun = Mailgun({
 
 passwordless.init(
   new MongoStore('mongodb://localhost/passwordless-simple-mail'),
-  {
-    allowTokenReuse: true,
-  },
 )
 
 passwordless.addDelivery(

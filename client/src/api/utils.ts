@@ -2,32 +2,44 @@ import ICredentials from '../types/ICredentials'
 
 export const origin = process.env.API_URL
 
-export const credentialsQueryString = ({ token, uid }: ICredentials): string =>
-  `token=${token}&uid=${encodeURIComponent(uid)}`
+const jsonHeaders = (credentials?: ICredentials): Headers => {
+  const headers = new Headers()
 
-export const jsonHeaders = {
-  'Content-Type': 'application/json',
+  headers.append('Content-Type', 'application/json')
+
+  if (credentials) {
+    headers.append(
+      'authorization',
+      `Passwordless ${credentials.token} ${credentials.uid}`,
+    )
+  }
+
+  return headers
 }
 
-export const deleteConfig = () => ({
-  headers: jsonHeaders,
+export const deleteConfig = (credentials: ICredentials) => ({
+  headers: jsonHeaders(credentials),
   method: 'DELETE',
 })
 
-export const patchConfig = (body: any) => ({
+export const getConfig = (credentials?: ICredentials) => ({
+  headers: jsonHeaders(credentials),
+})
+
+export const patchConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders,
+  headers: jsonHeaders(credentials),
   method: 'PATCH',
 })
 
-export const postConfig = (body: any) => ({
+export const postConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders,
+  headers: jsonHeaders(credentials),
   method: 'POST',
 })
 
-export const putConfig = (body: any) => ({
+export const putConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders,
+  headers: jsonHeaders(credentials),
   method: 'PUT',
 })

@@ -16,7 +16,7 @@ import {
   post as postUser,
 } from './controllers/user'
 import { getUserByEmail } from './model/user'
-import passwordless from './passwordless/index'
+import passwordless, { restricted } from './passwordless/index'
 import { IUserResponse } from './shared/types'
 
 const router = express.Router()
@@ -32,8 +32,8 @@ const sendTokenMiddleware = passwordless.requestToken(
   },
 )
 
-router.get('/me', passwordless.restricted(), getMe)
-router.patch('/me', passwordless.restricted(), patchMe)
+router.get('/me', restricted(), getMe)
+router.patch('/me', restricted(), patchMe)
 
 router.post(
   '/send-token',
@@ -42,10 +42,10 @@ router.post(
   postSendToken,
 )
 
-router.delete(`/service/:id`, passwordless.restricted(), deleteCleaning)
+router.delete(`/service/:id`, restricted(), deleteCleaning)
 router.get('/service', getCleaning)
-router.post('/service', passwordless.restricted(), postCleaning)
-router.put('/service/:id', passwordless.restricted(), putCleaning)
+router.post('/service', restricted(), postCleaning)
+router.put('/service/:id', restricted(), putCleaning)
 
 router.get('/sign-out', passwordless.logout(), getSignOut)
 

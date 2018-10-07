@@ -33,14 +33,29 @@ interface IDelivery {
   sendToken: SendToken
 }
 
+const generateToken = (): string => base58.encode(crypto.randomBytes(16))
+
+const send401 = (res: Response, authenticate?: string) => {
+  res.statusCode = 401
+  if (authenticate) res.setHeader('WWW-Authenticate', authenticate)
+  res.end('Unauthorized')
+}
+
+export const restricted = () => (
+  req: IRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.user) return next()
+  send401(res, 'Provide a token')
+}
+
 class Passwordless {
-  private allowTokenReuse: boolean | undefined
   private defaultDelivery?: IDelivery = undefined
   private tokenStore?: TokenStore = undefined
 
-  public init(tokenStore: TokenStore, options: { allowTokenReuse: boolean }) {
+  public init(tokenStore: TokenStore) {
     this.tokenStore = tokenStore
-    this.allowTokenReuse = options.allowTokenReuse
   }
 
   public acceptToken() {
@@ -50,63 +65,28 @@ class Passwordless {
           'Passwordless is missing a TokenStore. Are you sure you called passwordless.init()?',
         )
       }
+      const authorizationHeader = req.header('authorization')
 
-      let { token, uid } = req.query
+      if (!authorizationHeader) return next()
 
-      if (!token && !uid) {
-        if (!req.body) {
-          throw new Error(
-            'req.body does not exist: did you require middleware to accept POST data (such as body-parser) before calling acceptToken?',
-          )
-        } else if (req.body.token && req.body.uid) {
-          token = req.body.token
-          uid = req.body.uid
-        }
-      }
+      const [, token, uid] = authorizationHeader.split(' ')
 
-      if (token && uid) {
-        this.tokenStore.authenticate(
-          token,
-          uid.toString(),
-          (error: Error, valid: boolean, referrer: any) => {
-            if (valid) {
-              const success = () => {
-                req.user = uid
-                next()
-              }
+      if (!token || !uid) return next()
 
-              // Invalidate token, except allowTokenReuse has been set
-              if (!this.allowTokenReuse) {
-                this.tokenStore.invalidateUser(uid, (err: Error) => {
-                  if (err) {
-                    next('TokenStore.invalidateUser() error: ' + error)
-                  } else {
-                    success()
-                  }
-                })
-              } else {
-                success()
-              }
-            } else if (error) {
-              next('TokenStore.authenticate() error: ' + error)
-            } else {
-              next()
-            }
-          },
-        )
-      } else {
-        next()
-      }
-    }
-  }
-
-  public restricted() {
-    return (req: IRequest, res: Response, next: NextFunction) => {
-      if (req.user) {
-        return next()
-      } else {
-        this.send401(res, 'Provide a token')
-      }
+      this.tokenStore.authenticate(
+        token,
+        uid.toString(),
+        (error: Error, valid: boolean, referrer: any) => {
+          if (valid) {
+            req.user = uid
+            next()
+          } else if (error) {
+            next('TokenStore.authenticate() error: ' + error)
+          } else {
+            next()
+          }
+        },
+      )
     }
   }
 
@@ -126,11 +106,8 @@ class Passwordless {
   public requestToken(getUserID: GetUserId, options?: { userField: string }) {
     return (req: IRequest, res: Response, next: NextFunction) => {
       const sendError = (statusCode: number, authenticate?: string) => {
-        if (statusCode === 401) {
-          this.send401(res, authenticate)
-        } else {
-          res.status(statusCode).send()
-        }
+        if (statusCode === 401) send401(res, authenticate)
+        else res.status(statusCode).send()
       }
 
       if (!this.tokenStore) {
@@ -178,7 +155,7 @@ class Passwordless {
             let token: string
 
             try {
-              token = this.generateToken()
+              token = generateToken()
             } catch (err) {
               return next(new Error('Error while generating a token: ' + err))
             }
@@ -207,9 +184,7 @@ class Passwordless {
                           ),
                         )
                       } else {
-                        if (!req.passwordless) {
-                          req.passwordless = {}
-                        }
+                        if (!req.passwordless) req.passwordless = {}
                         req.passwordless.uidToAuth = uid
                         next()
                       }
@@ -241,18 +216,6 @@ class Passwordless {
       options,
       sendToken,
     }
-  }
-
-  private send401(res: Response, authenticate?: string) {
-    res.statusCode = 401
-    if (authenticate) {
-      res.setHeader('WWW-Authenticate', authenticate)
-    }
-    res.end('Unauthorized')
-  }
-
-  private generateToken(): string {
-    return base58.encode(crypto.randomBytes(16))
   }
 }
 

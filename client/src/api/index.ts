@@ -11,8 +11,8 @@ import {
 import ICredentials from '../types/ICredentials'
 import { createSearchString } from '../utils'
 import {
-  credentialsQueryString,
   deleteConfig,
+  getConfig,
   origin,
   patchConfig,
   postConfig,
@@ -22,8 +22,8 @@ import {
 export const deleteCleaningService = async (id: string): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/service/${id}?${credentialsQueryString(credentials)}`,
-    deleteConfig(),
+    `${origin}/service/${id}`,
+    deleteConfig(credentials),
   )
 
   if (!response.ok) throw Error(String(response.status))
@@ -34,9 +34,7 @@ export const getMe = (
   credentialsPromise: Promise<ICredentials>,
 ): Promise<IUserResponse> =>
   credentialsPromise
-    .then(credentials =>
-      fetch(`${origin}/me?${credentialsQueryString(credentials)}`),
-    )
+    .then(credentials => fetch(`${origin}/me`, getConfig(credentials)))
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))
@@ -60,9 +58,8 @@ export const getUserService = async (): Promise<
 > => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/user/${credentials.uid}/service?${credentialsQueryString(
-      credentials,
-    )}`,
+    `${origin}/user/${credentials.uid}/service`,
+    getConfig(credentials),
   )
 
   if (!response.ok) throw Error(String(response.status))
@@ -73,9 +70,7 @@ export const getSignOut = (
   credentialsPromise: Promise<ICredentials>,
 ): Promise<Response> =>
   credentialsPromise
-    .then(credentials =>
-      fetch(`${origin}/sign-out?${credentialsQueryString(credentials)}`),
-    )
+    .then(credentials => fetch(`${origin}/sign-out`, getConfig(credentials)))
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))
@@ -87,10 +82,7 @@ export const getSignOut = (
 export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
   const credentials = await getCredentials()
 
-  const response = await fetch(
-    `${origin}/me?${credentialsQueryString(credentials)}`,
-    patchConfig(body),
-  )
+  const response = await fetch(`${origin}/me`, patchConfig(body, credentials))
   if (!response.ok) throw Error(String(response.status))
   return response
 }
@@ -100,8 +92,8 @@ export const postService = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/service?${credentialsQueryString(credentials)}`,
-    postConfig(service),
+    `${origin}/service`,
+    postConfig(service, credentials),
   )
 
   if (!response.ok) throw Error(String(response.status))
@@ -119,8 +111,8 @@ export const putService = async (
 ): Promise<Response> => {
   const credentials = await getCredentials()
   const response = await fetch(
-    `${origin}/service/${service._id}?${credentialsQueryString(credentials)}`,
-    putConfig(service),
+    `${origin}/service/${service._id}`,
+    putConfig(service, credentials),
   )
 
   if (!response.ok) throw Error(String(response.status))
