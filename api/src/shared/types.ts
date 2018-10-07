@@ -91,13 +91,25 @@ export const ServicePostBody = t.exact(t.type(servicePostBodyObj))
 
 export type IServicePostBody = t.TypeOf<typeof ServicePostBody>
 
+const Location = t.exact(
+  t.type({
+    coordinates: t.tuple([t.number, t.number]),
+    type: t.literal('Point'),
+  }),
+)
+
+export type ILocation = t.TypeOf<typeof Location>
+
 export const ServiceDocument = t.exact(
   t.type({
     ...servicePostBodyObj,
     _id: t.string,
+    location: Location,
     userId: t.string,
   }),
 )
+
+export type IServiceDocument = t.TypeOf<typeof ServiceDocument>
 
 export const ServiceFilters = t.partial({
   carpetClean: t.boolean,
@@ -110,11 +122,6 @@ export const ServiceFilters = t.partial({
   longitude,
   ovenClean: t.boolean,
 })
-
-export interface ILocation {
-  coordinates: [number, number]
-  type: 'Point'
-}
 
 export type IServiceFilters = t.TypeOf<typeof ServiceFilters>
 
@@ -133,10 +140,6 @@ export type IServiceSearchParams = t.TypeOf<typeof ServiceSearchParams>
 export interface IServiceModelParams extends IServicePostBody {
   location: ILocation
   userId: string
-}
-
-export interface IServiceDocument extends IServiceModelParams {
-  _id: string
 }
 
 export interface IServiceResponseObject extends IServiceDocument {
