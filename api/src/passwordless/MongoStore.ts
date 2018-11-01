@@ -1,7 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import { Collection } from 'mongodb'
-import { PASSWORDLESS_TOKENS } from '../model/collectionNames'
-import withDb from '../model/withDb'
+import { withPasswordlessTokensCollection } from '../model/withCollection'
 
 export default class MongoStore {
   public authenticate(token: string, uid: string, callback: any) {
@@ -85,9 +84,7 @@ export default class MongoStore {
   }
 
   private getCollection(callback: (a: Collection) => void) {
-    withDb(async db => {
-      const collection = db.collection(PASSWORDLESS_TOKENS)
-
+    withPasswordlessTokensCollection(async collection => {
       await collection.createIndex({ uid: 1 }, { unique: true })
       await collection.createIndex({ ttl: 1 }, { expireAfterSeconds: 0 })
 

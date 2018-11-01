@@ -6,8 +6,7 @@ import {
   IUserPatchBody,
   IUserResponse,
 } from '../shared/types'
-import { SERVICES, USERS } from './collectionNames'
-import withDb from './withDb'
+import { withServicesCollection, withUsersCollection } from './withCollection'
 
 const documentToResponse = ({
   location: {
@@ -20,11 +19,8 @@ const documentToResponse = ({
 })
 
 export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
-  withDb(async db => {
-    const [result] = await db
-      .collection(USERS)
-      .find(new ObjectId(id))
-      .toArray()
+  withUsersCollection(async collection => {
+    const [result] = await collection.find(new ObjectId(id)).toArray()
 
     return result
   })
@@ -32,9 +28,8 @@ export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
 export const getUserByEmail = async (
   email: string,
 ): Promise<IUserResponse | undefined> =>
-  withDb(async db => {
-    const [result] = await db
-      .collection(USERS)
+  withUsersCollection(async collection => {
+    const [result] = await collection
       .find({ email: email.toLowerCase() })
       .toArray()
 
@@ -44,9 +39,8 @@ export const getUserByEmail = async (
 export const getUserService = async (
   userId: string,
 ): Promise<IServiceDocument | undefined> =>
-  withDb(async db => {
-    const [result] = await db
-      .collection(SERVICES)
+  withServicesCollection(async collection => {
+    const [result] = await collection
       .find({ userId: new ObjectId(userId) })
       .toArray()
 
@@ -57,7 +51,7 @@ export const setUser = async ({
   coords,
   ...user
 }: IUserModelParams): Promise<IUserResponse> =>
-  withDb(async db => {
+  withUsersCollection(async collection => {
     const document = {
       ...user,
       email: user.email.toLowerCase(),
@@ -67,7 +61,7 @@ export const setUser = async ({
       },
     }
 
-    await db.collection(USERS).insertOne(document)
+    await collection.insertOne(document)
 
     return documentToResponse(document as IUserDocument)
   })
@@ -77,8 +71,6 @@ export const updateUser = async (
   id: string,
   updateObj: IUserPatchBody,
 ): Promise<void> =>
-  withDb(async db => {
-    await db
-      .collection(USERS)
-      .updateOne({ _id: new ObjectId(id) }, { $set: updateObj })
+  withUsersCollection(async collection => {
+    await collection.updateOne({ _id: new ObjectId(id) }, { $set: updateObj })
   })

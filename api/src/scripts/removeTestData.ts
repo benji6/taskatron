@@ -1,7 +1,9 @@
-import { SERVICES, USERS } from '../model/collectionNames'
-import withDb from '../model/withDb'
+import {
+  withServicesCollection,
+  withUsersCollection,
+} from '../model/withCollection'
 
-withDb(db => {
-  db.collection(SERVICES).deleteMany({ isTestData: true })
-  db.collection(USERS).deleteMany({ isTestData: true })
-})
+withServicesCollection(collection =>
+  collection.deleteMany({ isTestData: true }),
+)
+withUsersCollection(collection => collection.deleteMany({ isTestData: true }))

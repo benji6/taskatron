@@ -7,11 +7,10 @@ import {
   IServiceSearchParams,
 } from '../shared/types'
 import { SERVICES } from './collectionNames'
-import withDb from './withDb'
+import { withServicesCollection } from './withCollection'
 
-withDb(db =>
-  db
-    .collection(SERVICES)
+withServicesCollection(collection =>
+  collection
     .createIndex({ location: '2dsphere' })
     .then(str =>
       pino.info(`${SERVICES} "2dsphere" index creation success:`, str),
@@ -24,28 +23,20 @@ withDb(db =>
 export const countServices = async (
   findParams: IServiceFilters,
 ): Promise<number> =>
-  withDb(db =>
-    db
-      .collection(SERVICES)
-      .find(findParams)
-      .count(),
-  )
+  withServicesCollection(collection => collection.find(findParams).count())
 
 export const deleteService = async (
   id: string,
 ): Promise<DeleteWriteOpResultObject> =>
-  withDb(async db =>
-    db.collection(SERVICES).deleteOne({ _id: new ObjectId(id) }),
+  withServicesCollection(collection =>
+    collection.deleteOne({ _id: new ObjectId(id) }),
   )
 
 export const getService = async (
   userId: string,
 ): Promise<IServiceDocument | undefined> =>
-  withDb(async db => {
-    const [result] = await db
-      .collection(SERVICES)
-      .find(new ObjectId(userId))
-      .toArray()
+  withServicesCollection(async collection => {
+    const [result] = await collection.find(new ObjectId(userId)).toArray()
 
     return result
   })
@@ -55,9 +46,8 @@ export const searchServices = async ({
   skip,
   ...findParams
 }: IServiceSearchParams): Promise<IServiceDocument[]> =>
-  withDb(db =>
-    db
-      .collection(SERVICES)
+  withServicesCollection(collection =>
+    collection
       .find(findParams)
       .skip(skip)
       .limit(limit)
@@ -67,8 +57,8 @@ export const searchServices = async ({
 export const setService = async (
   service: IServiceModelParams,
 ): Promise<IServiceDocument> =>
-  withDb(async db => {
-    await db.collection(SERVICES).insertOne({
+  withServicesCollection(async collection => {
+    await collection.insertOne({
       ...service,
       userId: new ObjectId(service.userId),
     })
@@ -79,8 +69,8 @@ export const setService = async (
 export const updateService = async (
   document: IServiceDocument,
 ): Promise<WriteOpResult> =>
-  withDb(async db =>
-    db.collection(SERVICES).save({
+  withServicesCollection(async collection =>
+    collection.save({
       ...document,
       _id: new ObjectId((document as any)._id),
       userId: new ObjectId(document.userId),

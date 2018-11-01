@@ -1,7 +1,6 @@
 import { ObjectId } from 'mongodb'
-import { SERVICES } from '../model/collectionNames'
 import { setUser } from '../model/user'
-import withDb from '../model/withDb'
+import { withServicesCollection } from '../model/withCollection'
 import { ILocation, IServiceModelParams } from '../shared/types'
 
 const numberOfServices = 1024
@@ -41,8 +40,8 @@ const main = async () => {
     userId: user._id,
   }))
 
-  withDb(db =>
-    db.collection(SERVICES).insertMany(
+  withServicesCollection(collection =>
+    collection.insertMany(
       cleaningServices.map(service => ({
         ...service,
         userId: new ObjectId(service.userId),
