@@ -83,6 +83,7 @@ const servicePostBodyObj = {
   hasOwnEquipment: t.boolean,
   hasOwnProducts: t.boolean,
   hourlyRate: decimal,
+  name: t.string,
   ovenClean: t.boolean,
   radius,
 }

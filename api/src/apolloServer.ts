@@ -21,6 +21,7 @@ const typeDefs = gql`
     hourlyRate: Float!
     id: ID!
     location: Location!
+    name: String!
     ovenClean: Boolean!
     radius: Int!
     userId: String!

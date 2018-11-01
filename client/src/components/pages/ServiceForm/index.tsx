@@ -5,6 +5,7 @@ import {
   CurrencyField,
   Select,
   Spinner,
+  TextField,
 } from 'eri'
 import {
   Field,
@@ -31,6 +32,7 @@ interface IFormValues {
   hourlyRate: string
   ovenClean: boolean
   radius: string
+  serviceName: string
 }
 
 interface IState {
@@ -76,6 +78,7 @@ export default class ServiceForm extends React.PureComponent {
       hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
       ovenClean: service ? service.ovenClean : false,
       radius: service ? String(service.radius) : '__initial',
+      serviceName: service ? service.name : '',
     }
 
     return (
@@ -95,6 +98,17 @@ export default class ServiceForm extends React.PureComponent {
               <Form noValidate>
                 <h2>{service ? 'Edit' : 'Add'} cleaning service</h2>
                 <p>Tell us about the cleaning service you're offering.</p>
+                <Field
+                  name="serviceName"
+                  render={({ field, form }: FieldProps<IFormValues>) => (
+                    <TextField
+                      {...field}
+                      error={getFieldError(form, 'serviceName')}
+                      label="Name"
+                      supportiveText="This is the name people will see in their search results, put your name or company name."
+                    />
+                  )}
+                />
                 <Field
                   name="hourlyRate"
                   render={({ field, form }: FieldProps<IFormValues>) => (
@@ -207,18 +221,22 @@ export default class ServiceForm extends React.PureComponent {
     values: IFormValues,
     actions: FormikActions<IFormValues>,
   ) => {
+    const { serviceName, ...rest } = values
+
     try {
       if (this.state.service) {
         await putService({
           ...this.state.service,
-          ...values,
+          ...rest,
           hourlyRate: Number(values.hourlyRate),
+          name: values.serviceName,
           radius: Number(values.radius),
         })
       } else {
         await postService({
-          ...values,
+          ...rest,
           hourlyRate: Number(values.hourlyRate),
+          name: values.serviceName,
           radius: Number(values.radius),
         })
       }
@@ -237,7 +255,7 @@ export default class ServiceForm extends React.PureComponent {
     }
   }
 
-  private validate = ({ hourlyRate, radius }: IFormValues) => {
+  private validate = ({ hourlyRate, radius, serviceName }: IFormValues) => {
     const errors: any = {}
 
     if (!isValidNumber(hourlyRate)) {
@@ -246,6 +264,10 @@ export default class ServiceForm extends React.PureComponent {
 
     if (radius === '__initial') {
       errors.radius = 'Please select a radius'
+    }
+
+    if (!serviceName.length) {
+      errors.serviceName = 'Please enter a name'
     }
 
     return errors

@@ -48,6 +48,7 @@ class ServiceForm extends React.PureComponent<IProps> {
         hasOwnEquipment,
         hasOwnProducts,
         hourlyRate,
+        name,
         ovenClean,
         radius,
       },
@@ -57,8 +58,8 @@ class ServiceForm extends React.PureComponent<IProps> {
 
     return (
       <Card>
-        <h3>Cleaning service</h3>
-        <p>This is the cleaning service you are offering:</p>
+        <h3>{name}</h3>
+        <p>These are the details of the service you are offering:</p>
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>Radius: {radius} miles</li>

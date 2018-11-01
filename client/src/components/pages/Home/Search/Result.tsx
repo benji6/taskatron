@@ -19,13 +19,14 @@ export default class Result extends React.PureComponent<IProps> {
         hasOwnEquipment,
         hasOwnProducts,
         hourlyRate,
+        name,
         ovenClean,
       },
     } = this.props
 
     return (
       <Card>
-        <h3>To do: add a service name field that will be displayed here</h3>
+        <h3>{name}</h3>
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>

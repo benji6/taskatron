@@ -43,6 +43,7 @@ const query = gql`
         hasOwnProducts
         hourlyRate
         id
+        name
         ovenClean
         radius
       }

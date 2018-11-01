@@ -3,6 +3,7 @@ import { setUser } from '../model/user'
 import { withServicesCollection } from '../model/withCollection'
 import { ILocation, IServiceModelParams } from '../shared/types'
 
+let i = 0
 const numberOfServices = 1024
 
 const randomBoolean = (): boolean => !Math.round(Math.random())
@@ -35,6 +36,7 @@ const main = async () => {
     hourlyRate: randomHourlyRate(),
     isTestData: true,
     location,
+    name: `Test cleaning service ${i++}`,
     ovenClean: randomBoolean(),
     radius: 10,
     userId: user._id,
