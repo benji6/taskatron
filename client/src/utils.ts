@@ -1,9 +1,6 @@
 import { FormikProps } from 'formik'
 import { ICoord } from './shared/types'
 
-export const capitalizeFirst = (s: string): string =>
-  s[0].toLocaleUpperCase() + s.slice(1)
-
 interface ISearchStringObject {
   [key: string]: unknown
 }

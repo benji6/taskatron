@@ -1,8 +1,9 @@
+import { gql } from 'apollo-boost'
 import { Button, ButtonGroup, Pagination, Spinner } from 'eri'
 import { History, Location } from 'history' // tslint:disable-line no-implicit-dependencies
 import * as React from 'react'
+import { Query } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import { getCleaningServices } from '../../../../api'
 import {
   ICoord,
   IServiceFilters,
@@ -14,6 +15,42 @@ import Result from './Result'
 
 const resultsPerPage = 10
 
+const query = gql`
+  query Services(
+    $carpetClean: Boolean
+    $deepClean: Boolean
+    $general: Boolean
+    $hasOwnEquipment: Boolean
+    $hasOwnProducts: Boolean
+    $ovenClean: Boolean
+    $skip: Int!
+  ) {
+    services(
+      deepClean: $deepClean
+      carpetClean: $carpetClean
+      general: $general
+      hasOwnEquipment: $hasOwnEquipment
+      hasOwnProducts: $hasOwnProducts
+      ovenClean: $ovenClean
+      skip: $skip
+      limit: ${resultsPerPage}
+    ) {
+      nodes {
+        carpetClean
+        deepClean
+        general
+        hasOwnEquipment
+        hasOwnProducts
+        hourlyRate
+        id
+        ovenClean
+        radius
+      }
+      total
+    }
+  }
+`
+
 interface IProps {
   location: Location
   history: History
@@ -21,23 +58,15 @@ interface IProps {
 
 interface IState {
   coords?: ICoord
-  currentPage?: number
   filters?: IServiceFilters
-  isLoading: boolean
-  pageCount: number
   services?: IServiceResponseObject[]
-  servicesError: boolean
   total: number
 }
 
 class Search extends React.PureComponent<IProps> {
   public state: IState = {
-    currentPage: undefined,
-    filters: undefined,
-    isLoading: false,
-    pageCount: 0,
+    filters: this.filters,
     services: undefined,
-    servicesError: false,
     total: 0,
   }
 
@@ -45,22 +74,28 @@ class Search extends React.PureComponent<IProps> {
     return new URLSearchParams(this.props.location.search).get('page')
   }
 
+  get filters() {
+    const searchParams = new URLSearchParams(this.props.location.search)
+    const filters: IServiceFilters = {}
+
+    for (const filter of [
+      'carpetClean',
+      'deepClean',
+      'general',
+      'hasOwnEquipment',
+      'hasOwnProducts',
+    ]) {
+      if (searchParams.get(filter)) {
+        filters[filter as keyof IServiceFilters] = true
+      }
+    }
+
+    return filters
+  }
+
   public setFilters = (filters: IServiceFilters) => this.setState({ filters })
 
   public async componentDidMount() {
-    if (!this.page) return
-
-    this.search(Number(this.page))
-
-    this.setState((state: IState) => ({
-      ...state,
-      filters: {
-        ...state.filters,
-        latitude: 51.5214891,
-        longitude: -0.0922047,
-      },
-    })) // DELETEME
-
     try {
       const { latitude, longitude } = await position
       this.setState((state: IState) => ({
@@ -73,73 +108,27 @@ class Search extends React.PureComponent<IProps> {
     }
   }
 
-  public componentWillReceiveProps(nextProps: IProps) {
-    const nextSearchParams = new URLSearchParams(nextProps.location.search)
-
-    const page = nextSearchParams.get('page')
-
-    if (!page) {
-      return this.setState({
-        currentPage: 0,
-        pageCount: 0,
-        services: undefined,
-      })
-    }
-
-    this.search(Number(page))
-  }
-
-  public search = async (page = 0) => {
-    const { filters } = this.state
-
-    this.setState({ isLoading: true, servicesError: false })
-
-    try {
-      const { results, total } = await getCleaningServices({
-        ...filters,
-        limit: resultsPerPage,
-        skip: page * resultsPerPage,
-      } as any)
-
-      this.setState({
-        currentPage: page,
-        pageCount: Math.ceil(total / resultsPerPage),
-        services: results,
-        total,
-      })
-    } catch {
-      this.setState({ servicesError: true })
-    } finally {
-      this.setState({ isLoading: false })
-    }
-  }
-
   public handlePaginationChange = (page: number) => {
-    const { history } = this.props
-
-    history.push(createSearchString({ page }))
+    this.props.history.push(
+      createSearchString({
+        page,
+        ...this.filters,
+      }),
+    )
   }
 
   public render() {
-    const {
-      currentPage,
-      filters,
-      isLoading,
-      pageCount,
-      services,
-      servicesError,
-      total,
-    } = this.state
+    const { filters } = this.state
 
     const search = createSearchString({
-      page: Number(currentPage) || 0,
+      page: 0,
       ...filters,
     })
 
     return (
       <>
         <h2>Find a cleaner</h2>
-        <Filters setFilters={this.setFilters} />
+        <Filters setFilters={this.setFilters} urlSearchFilters={this.filters} />
         <ButtonGroup>
           <Button
             to={{
@@ -150,33 +139,57 @@ class Search extends React.PureComponent<IProps> {
             Search
           </Button>
         </ButtonGroup>
-        {servicesError ? (
-          <p e-util="center negative" e-sentiment="negative">
-            Oops, there was an error fetching services, please try again.
-          </p>
-        ) : services ? (
-          <>
-            {total === 0 ? (
-              <p e-util="center">
-                We can't find any results, try again with a different search.
-              </p>
-            ) : (
-              <p e-util="center">
-                {total} result
-                {total > 1 && 's'} found
-              </p>
-            )}
-            {(services as any).map((service: any) => (
-              <Result key={service._id}>{service}</Result>
-            ))}
-            <Pagination
-              onChange={this.handlePaginationChange}
-              page={Number(currentPage)}
-              pageCount={pageCount}
-            />
-          </>
-        ) : (
-          isLoading && <Spinner variation="page" />
+        {typeof this.page === 'string' && (
+          <Query
+            query={query}
+            variables={
+              {
+                ...this.filters,
+                skip: Number(this.page) * resultsPerPage,
+              } as any
+            }
+          >
+            {({ loading, error, data }) => {
+              if (loading) return <Spinner variation="page" />
+
+              if (error) {
+                return (
+                  <p e-util="center negative" e-sentiment="negative">
+                    Oops, there was an error searching services, please try
+                    again.
+                  </p>
+                )
+              }
+
+              const {
+                services: { nodes, total },
+              } = data
+
+              return (
+                <>
+                  {total === 0 ? (
+                    <p e-util="center">
+                      We can't find any results, try again with a different
+                      search.
+                    </p>
+                  ) : (
+                    <p e-util="center">
+                      {total} result
+                      {total > 1 && 's'} found
+                    </p>
+                  )}
+                  {nodes.map((service: any) => (
+                    <Result key={service.id}>{service}</Result>
+                  ))}
+                  <Pagination
+                    onChange={this.handlePaginationChange}
+                    page={Number(this.page)}
+                    pageCount={Math.ceil(total / resultsPerPage)}
+                  />
+                </>
+              )
+            }}
+          </Query>
         )}
       </>
     )

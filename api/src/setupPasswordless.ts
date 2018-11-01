@@ -1,8 +1,8 @@
 import * as config from 'config'
 import * as Mailgun from 'mailgun-js'
-import passwordless from './passwordless'
-const MongoStore = require('passwordless-mongostore') // tslint:disable-line no-var-requires
 import { getUser } from './model/user'
+import passwordless from './passwordless'
+import MongoStore from './passwordless/MongoStore'
 import pino from './pino'
 
 const mailgunDomain = 'sandboxe27535c7d6394776b917ab1bf7c49eed.mailgun.org'
@@ -12,9 +12,7 @@ const mailgun = Mailgun({
   domain: mailgunDomain,
 })
 
-passwordless.init(
-  new MongoStore('mongodb://localhost/passwordless-simple-mail'),
-)
+passwordless.init(new MongoStore())
 
 passwordless.addDelivery(
   (

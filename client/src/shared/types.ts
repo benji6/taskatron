@@ -146,11 +146,6 @@ export interface IServiceResponseObject extends IServiceDocument {
   providerName: string
 }
 
-export interface IServiceSearchResponse {
-  results: IServiceResponseObject[]
-  total: number
-}
-
 export interface IUserPatchBody {
   firstName: string
   lastName: string

@@ -166,7 +166,9 @@ class SignUp extends React.PureComponent<{}, IState> {
       this.setState({ submittedSuccessfully: true })
     } catch (e) {
       if (this.hasUnmounted) return
-      this.setState({ errorCode: e.message === '400' ? 400 : 500 })
+      this.setState({
+        errorCode: e.message === '400' ? 400 : e.message === '409' ? 409 : 500,
+      })
     }
   }
 }

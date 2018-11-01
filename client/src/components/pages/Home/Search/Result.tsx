@@ -1,7 +1,7 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
 import { IServiceResponseObject } from '../../../../shared/types'
-import { capitalizeFirst, renderCurrency } from '../../../../utils'
+import { renderCurrency } from '../../../../utils'
 
 interface IProps {
   children: IServiceResponseObject
@@ -20,13 +20,12 @@ export default class Result extends React.PureComponent<IProps> {
         hasOwnProducts,
         hourlyRate,
         ovenClean,
-        providerName,
       },
     } = this.props
 
     return (
       <Card>
-        <h3>{capitalizeFirst(providerName)}</h3>
+        <h3>To do: add a service name field that will be displayed here</h3>
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>

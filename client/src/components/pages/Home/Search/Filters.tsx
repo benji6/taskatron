@@ -5,6 +5,7 @@ import { IServiceFilters } from '../../../../shared/types'
 import { filterObj } from '../../../../shared/utils'
 
 interface IProps extends RouteComponentProps {
+  urlSearchFilters: IServiceFilters
   setFilters(filters: IServiceFilters): void
 }
 
@@ -41,14 +42,14 @@ class Filters extends React.PureComponent<IProps> {
   }
 
   public state: IState = {
-    carpetClean: false,
-    deepClean: false,
-    enableFilters: false,
-    general: false,
-    hasOwnEquipment: false,
-    hasOwnProducts: false,
+    carpetClean: this.props.urlSearchFilters.carpetClean || false,
+    deepClean: this.props.urlSearchFilters.deepClean || false,
+    enableFilters: Boolean(Object.keys(this.props.urlSearchFilters).length),
+    general: this.props.urlSearchFilters.general || false,
+    hasOwnEquipment: this.props.urlSearchFilters.hasOwnEquipment || false,
+    hasOwnProducts: this.props.urlSearchFilters.hasOwnProducts || false,
     lastQueryString: '',
-    ovenClean: false,
+    ovenClean: this.props.urlSearchFilters.ovenClean || false,
   }
 
   public handleEnableFiltersChange = ({

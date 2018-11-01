@@ -9,6 +9,3 @@ export const filterObj = <A>(f: (a: A) => boolean, o: IObject<A>) => {
 
   return p
 }
-
-export const removeUndefinedValues = (o: IObject<unknown>) =>
-  filterObj((a: unknown) => a !== undefined, o)

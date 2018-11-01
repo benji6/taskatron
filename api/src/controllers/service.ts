@@ -2,33 +2,25 @@ import { Request, Response } from 'express'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import log from '../log'
 import {
-  countServices,
   deleteService,
   getService,
-  searchServices,
   setService,
   updateService,
 } from '../model/services'
 import { getUser } from '../model/user'
 import {
   IServiceDocument,
-  IServiceFilters,
   IServicePostBody,
-  IServiceSearchResponse,
   IUserDocument,
   ServiceDocument,
   ServicePostBody,
-  ServiceSearchParams,
 } from '../shared/types'
-import { removeUndefinedValues } from '../shared/utils'
-import { parseBooleanQuery } from './utils'
 
 interface IRequest extends Request {
   user: string
 }
 
 const logCleaning = log('service')
-const logGet = logCleaning('GET')
 const logDelete = logCleaning('DELETE')
 const logPost = logCleaning('POST')
 const logPut = logCleaning('PUT')
@@ -59,71 +51,6 @@ export const del = async (req: Request, res: Response) => {
   } catch (e) {
     res.status(500).end()
     logDelete(500, e)
-  }
-}
-
-export const get = async (req: Request, res: Response) => {
-  const {
-    carpetClean,
-    deepClean,
-    general,
-    hasOwnEquipment,
-    hasOwnProducts,
-    limit,
-    ovenClean,
-    skip,
-  } = req.query
-
-  const filters: IServiceFilters = removeUndefinedValues({
-    carpetClean: parseBooleanQuery(carpetClean),
-    deepClean: parseBooleanQuery(deepClean),
-    general: parseBooleanQuery(general),
-    hasOwnEquipment: parseBooleanQuery(hasOwnEquipment),
-    hasOwnProducts: parseBooleanQuery(hasOwnProducts),
-    ovenClean: parseBooleanQuery(ovenClean),
-  })
-
-  const searchParams = {
-    ...filters,
-    limit: Number(limit),
-    skip: Number(skip),
-  }
-
-  if (!ServiceSearchParams.is(searchParams)) {
-    res.status(400).end()
-    return logGet(
-      400,
-      PathReporter.report(ServiceSearchParams.decode(searchParams)),
-    )
-  }
-
-  try {
-    const serviceDocuments = await searchServices(searchParams)
-
-    const results = await Promise.all(
-      serviceDocuments.map(async serviceDocument => {
-        const { firstName, lastName } = (await getUser(
-          serviceDocument.userId,
-        )) as IUserDocument
-
-        return {
-          ...serviceDocument,
-          providerName: `${firstName} ${lastName}`,
-        }
-      }),
-    )
-
-    const total = await countServices(filters)
-
-    const responseBody: IServiceSearchResponse = {
-      results,
-      total,
-    }
-
-    res.status(200).send(responseBody)
-  } catch (e) {
-    res.status(500).end()
-    logGet(500, e)
   }
 }
 

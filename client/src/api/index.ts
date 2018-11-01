@@ -2,14 +2,11 @@ import { getCredentials } from '../localStorage'
 import {
   IServiceDocument,
   IServicePostBody,
-  IServiceSearchParams,
-  IServiceSearchResponse,
   IUserPatchBody,
   IUserPostBody,
   IUserResponse,
 } from '../shared/types'
 import ICredentials from '../types/ICredentials'
-import { createSearchString } from '../utils'
 import {
   deleteConfig,
   getConfig,
@@ -42,16 +39,6 @@ export const getMe = (
       return response
     })
     .then(response => response.json())
-
-export const getCleaningServices = async (
-  searchParams: IServiceSearchParams,
-): Promise<IServiceSearchResponse> => {
-  const response = await fetch(
-    `${origin}/service${createSearchString(searchParams)}`,
-  )
-  if (!response.ok) throw Error(String(response.status))
-  return response.json()
-}
 
 export const getUserService = async (): Promise<
   IServiceDocument | undefined

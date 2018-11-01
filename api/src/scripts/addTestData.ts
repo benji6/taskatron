@@ -11,18 +11,19 @@ const randomHourlyRate = (): number =>
   Number((5 + Math.random() * 20).toFixed(2))
 
 const main = async () => {
+  const location: ILocation = {
+    coordinates: [0, 50],
+    type: 'Point',
+  }
+
   const user = await setUser({
+    coords: { latitude: 50, longitude: 0 },
     email: 'fake@email.com',
     firstName: 'Ash',
     isTestData: true,
     lastName: 'Ketchum',
     postcode: 'SW1A 1AA',
   } as any)
-
-  const location: ILocation = {
-    coordinates: [0, 50],
-    type: 'Point',
-  }
 
   const cleaningServices: IServiceModelParams[] = [
     ...Array(numberOfServices).keys(),

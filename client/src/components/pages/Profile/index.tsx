@@ -81,9 +81,9 @@ class Service extends React.PureComponent<IProps> {
         </Card>
         <p>
           {noService && (
-            <>
-              <Link to="/profile/service">Add your service here</Link>.
-            </>
+            <p e-util="center">
+              <Link to="/profile/service">Add a service here</Link>
+            </p>
           )}
         </p>
         {error ? (

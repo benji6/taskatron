@@ -6,7 +6,6 @@ import {
 } from './controllers/sendToken'
 import {
   del as deleteCleaning,
-  get as getCleaning,
   post as postCleaning,
   put as putCleaning,
 } from './controllers/service'
@@ -43,7 +42,6 @@ router.post(
 )
 
 router.delete(`/service/:id`, restricted(), deleteCleaning)
-router.get('/service', getCleaning)
 router.post('/service', restricted(), postCleaning)
 router.put('/service/:id', restricted(), putCleaning)
 

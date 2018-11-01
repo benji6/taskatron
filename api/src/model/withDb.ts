@@ -11,6 +11,6 @@ export default async <A>(f: (a: Db) => A) => {
   } catch (e) {
     throw e
   } finally {
-    client.close()
+    setTimeout(() => client.close(), 3000) // HACK
   }
 }
