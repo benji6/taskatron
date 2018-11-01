@@ -76,7 +76,7 @@ class Passwordless {
       this.tokenStore.authenticate(
         token,
         uid.toString(),
-        (error: Error, valid: boolean, referrer: any) => {
+        (error: Error, valid: boolean) => {
           if (valid) {
             req.user = uid
             next()
@@ -166,7 +166,6 @@ class Passwordless {
               token,
               uid.toString(),
               ttl,
-              null,
               (storeError: Error) => {
                 if (storeError) {
                   next(new Error('Error on the storage layer: ' + storeError))

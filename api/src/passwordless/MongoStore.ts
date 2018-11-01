@@ -9,23 +9,23 @@ export default class MongoStore {
         { uid, ttl: { $gt: new Date() } },
         (error: Error | undefined, item) => {
           if (error) {
-            callback(error, false, null)
+            callback(error, false)
           } else if (item) {
             bcrypt.compare(
               token,
               item.hashedToken,
               (err: Error | undefined, res) => {
                 if (err) {
-                  callback(err, false, null)
+                  callback(err, false)
                 } else if (res) {
-                  callback(null, true, item.originUrl || '')
+                  callback(null, true)
                 } else {
-                  callback(null, false, null)
+                  callback(null, false)
                 }
               },
             )
           } else {
-            callback(null, false, null)
+            callback(null, false)
           }
         },
       )
@@ -36,7 +36,6 @@ export default class MongoStore {
     token: string,
     uid: string,
     msToLive: number,
-    originUrl: string,
     callback: any,
   ) {
     this.getCollection((collection: Collection) => {
@@ -48,7 +47,6 @@ export default class MongoStore {
 
           const newRecord = {
             hashedToken,
-            originUrl,
             ttl: new Date(Date.now() + msToLive),
             uid,
           }
