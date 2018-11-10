@@ -85,6 +85,7 @@ class Search extends React.PureComponent<IProps> {
       'general',
       'hasOwnEquipment',
       'hasOwnProducts',
+      'ovenClean',
     ]) {
       if (searchParams.get(filter)) {
         filters[filter as keyof IServiceFilters] = true
