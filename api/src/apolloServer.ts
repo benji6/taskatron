@@ -1,5 +1,9 @@
 import { ApolloServer, gql } from 'apollo-server-express'
-import { countServices, searchServices } from './model/services'
+import {
+  countServices,
+  getServiceByUserId,
+  searchServices,
+} from './model/services'
 import { IServiceSearchParams } from './shared/types'
 
 const typeDefs = gql`
@@ -33,6 +37,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    service(userId: ID): Service
     services(
       carpetClean: Boolean
       deepClean: Boolean
@@ -49,8 +54,21 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
+    service: async (_: unknown, args: any) => {
+      const service = await getServiceByUserId(args.userId)
+
+      if (!service) return null
+
+      const { _id, userId, ...rest } = service
+
+      return {
+        ...rest,
+        id: _id.toString(),
+        userId: userId.toString(),
+      }
+    },
     services: async (_: unknown, args: object) => {
-      const searchParams: IServiceSearchParams = args as IServiceSearchParams
+      const searchParams = args as IServiceSearchParams
 
       const { limit, skip, ...filters } = searchParams
 

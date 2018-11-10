@@ -10,10 +10,7 @@ import {
   put as putCleaning,
 } from './controllers/service'
 import { get as getSignOut } from './controllers/signOut'
-import {
-  getService as getUserService,
-  post as postUser,
-} from './controllers/user'
+import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
 import passwordless, { restricted } from './passwordless/index'
 import { IUserResponse } from './shared/types'
@@ -48,6 +45,5 @@ router.put('/service/:id', restricted(), putCleaning)
 router.get('/sign-out', passwordless.logout(), getSignOut)
 
 router.post('/user', postUser)
-router.get('/user/:id/service', getUserService)
 
 export default router

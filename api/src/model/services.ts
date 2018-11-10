@@ -33,10 +33,21 @@ export const deleteService = async (
   )
 
 export const getService = async (
+  id: string,
+): Promise<IServiceDocument | undefined> =>
+  withServicesCollection(async collection => {
+    const [result] = await collection.find(new ObjectId(id)).toArray()
+
+    return result
+  })
+
+export const getServiceByUserId = async (
   userId: string,
 ): Promise<IServiceDocument | undefined> =>
   withServicesCollection(async collection => {
-    const [result] = await collection.find(new ObjectId(userId)).toArray()
+    const [result] = await collection
+      .find({ userId: new ObjectId(userId) })
+      .toArray()
 
     return result
   })

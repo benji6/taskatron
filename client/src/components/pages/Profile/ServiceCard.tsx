@@ -2,13 +2,11 @@ import { Button, ButtonGroup, Card, Icon } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { deleteCleaningService } from '../../../api'
-import { IServiceDocument } from '../../../shared/types'
 import { renderCurrency } from '../../../utils'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {
-  children: IServiceDocument
-  onDelete(): void
+  children: any
 }
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
@@ -23,8 +21,7 @@ class ServiceForm extends React.PureComponent<IProps> {
     this.setState({ isDeleting: true })
 
     try {
-      await deleteCleaningService(this.props.children._id)
-      this.props.onDelete()
+      await deleteCleaningService(this.props.children.id)
     } catch {
       // TODO
     } finally {

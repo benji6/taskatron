@@ -1,12 +1,11 @@
 import { ObjectId } from 'mongodb'
 import {
-  IServiceDocument,
   IUserDocument,
   IUserModelParams,
   IUserPatchBody,
   IUserResponse,
 } from '../shared/types'
-import { withServicesCollection, withUsersCollection } from './withCollection'
+import { withUsersCollection } from './withCollection'
 
 const documentToResponse = ({
   location: {
@@ -34,17 +33,6 @@ export const getUserByEmail = async (
       .toArray()
 
     return result ? documentToResponse(result) : result
-  })
-
-export const getUserService = async (
-  userId: string,
-): Promise<IServiceDocument | undefined> =>
-  withServicesCollection(async collection => {
-    const [result] = await collection
-      .find({ userId: new ObjectId(userId) })
-      .toArray()
-
-    return result
   })
 
 export const setUser = async ({

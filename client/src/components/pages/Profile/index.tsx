@@ -1,15 +1,16 @@
-import { ButtonGroup, Card } from 'eri'
+import { gql } from 'apollo-boost'
+import { ButtonGroup, Card, Spinner } from 'eri'
 import * as React from 'react'
+import { Query } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { getUserService } from '../../../api'
 import {
   userEmailSelector,
   userFirstNameSelector,
+  userIdSelector,
   userLastNameSelector,
   userPostcodeSelector,
 } from '../../../selectors'
-import { IServiceDocument } from '../../../shared/types'
 import IStore from '../../../types/IStore'
 import ServiceCard from './ServiceCard'
 
@@ -19,48 +20,29 @@ interface IProps {
   lastName: string
   postcode: string
   radius: number
+  userId: string
 }
 
-interface IState {
-  error: boolean
-  noService: boolean
-  service?: IServiceDocument
-}
-
-class Service extends React.PureComponent<IProps> {
-  public state: IState = {
-    error: false,
-    noService: false,
-    service: undefined,
-  }
-
-  public handleDelete = () => {
-    this.setState({
-      error: false,
-      noService: true,
-      service: undefined,
-    })
-  }
-
-  public fetchService = async () => {
-    try {
-      const service = await getUserService()
-      this.setState({
-        service,
-      })
-    } catch (e) {
-      if (e.message === '404') return this.setState({ noService: true })
-      this.setState({ error: true })
+const query = gql`
+  query Service($userId: ID!) {
+    service(userId: $userId) {
+      carpetClean
+      deepClean
+      general
+      hasOwnEquipment
+      hasOwnProducts
+      hourlyRate
+      id
+      name
+      ovenClean
+      radius
     }
   }
+`
 
-  public componentDidMount() {
-    this.fetchService()
-  }
-
+class Service extends React.PureComponent<IProps> {
   public render() {
-    const { email, firstName, lastName, postcode } = this.props
-    const { error, noService, service } = this.state as IState
+    const { email, firstName, userId, lastName, postcode } = this.props
 
     return (
       <main>
@@ -79,22 +61,30 @@ class Service extends React.PureComponent<IProps> {
             </Link>
           </ButtonGroup>
         </Card>
-        <p>
-          {noService && (
-            <p e-util="center">
-              <Link to="/profile/service">Add a service here</Link>
-            </p>
-          )}
-        </p>
-        {error ? (
-          <p e-util="negative">Oops, there was an error, please try again.</p>
-        ) : (
-          service && (
-            <ServiceCard key={service._id} onDelete={this.handleDelete}>
-              {service}
-            </ServiceCard>
-          )
-        )}
+        <Query query={query} variables={{ userId }}>
+          {({ loading, error, data }) => {
+            if (loading) return <Spinner variation="page" />
+            if (error) {
+              return (
+                <p e-util="negative">
+                  Oops, there was an error, please try again.
+                </p>
+              )
+            }
+
+            const { service } = data
+
+            if (service) {
+              return <ServiceCard key={service.id}>{service}</ServiceCard>
+            }
+
+            return (
+              <p e-util="center">
+                <Link to="/profile/service">Add a service here</Link>
+              </p>
+            )
+          }}
+        </Query>
       </main>
     )
   }
@@ -105,6 +95,7 @@ const mapStateToProps = (state: IStore) => ({
   firstName: userFirstNameSelector(state) as string,
   lastName: userLastNameSelector(state) as string,
   postcode: userPostcodeSelector(state) as string,
+  userId: userIdSelector(state) as string,
 })
 
 export default connect(mapStateToProps)(Service)

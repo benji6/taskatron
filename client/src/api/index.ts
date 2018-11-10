@@ -40,19 +40,6 @@ export const getMe = (
     })
     .then(response => response.json())
 
-export const getUserService = async (): Promise<
-  IServiceDocument | undefined
-> => {
-  const credentials = await getCredentials()
-  const response = await fetch(
-    `${origin}/user/${credentials.uid}/service`,
-    getConfig(credentials),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response.json()
-}
-
 export const getSignOut = (
   credentialsPromise: Promise<ICredentials>,
 ): Promise<Response> =>

@@ -1,3 +1,4 @@
+import { gql } from 'apollo-boost'
 import {
   Button,
   ButtonGroup,
@@ -16,11 +17,14 @@ import {
   FormikProps,
 } from 'formik'
 import * as React from 'react'
+import { Query } from 'react-apollo'
+import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
-import { getUserService, postService, putService } from '../../../api'
+import { postService, putService } from '../../../api'
+import { userIdSelector } from '../../../selectors'
 import { radii } from '../../../shared/constants'
-import { IServiceDocument } from '../../../shared/types'
 import { isValidNumber } from '../../../shared/validation'
+import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'
 
 interface IFormValues {
@@ -35,31 +39,41 @@ interface IFormValues {
   serviceName: string
 }
 
+interface IProps {
+  userId: string
+}
+
 interface IState {
-  error: boolean
-  isLoading: boolean
-  service?: IServiceDocument
   submittedSuccessfully: boolean
 }
 
-export default class ServiceForm extends React.PureComponent {
+const query = gql`
+  query Service($userId: ID!) {
+    service(userId: $userId) {
+      carpetClean
+      deepClean
+      general
+      hasOwnEquipment
+      hasOwnProducts
+      hourlyRate
+      id
+      location {
+        coordinates
+        type
+      }
+      name
+      ovenClean
+      radius
+      userId
+    }
+  }
+`
+
+class ServiceForm extends React.PureComponent<IProps> {
   public hasUnmounted = false
 
   public state: IState = {
-    error: false,
-    isLoading: true,
-    service: undefined,
     submittedSuccessfully: false,
-  }
-
-  public async componentDidMount() {
-    try {
-      const service = await getUserService()
-      this.setState({ isLoading: false, service })
-    } catch (e) {
-      if (e.message === '404') return this.setState({ isLoading: false })
-      this.setState({ error: true, isLoading: false })
-    }
   }
 
   public componentWillUnmount() {
@@ -67,168 +81,188 @@ export default class ServiceForm extends React.PureComponent {
   }
 
   public render() {
-    const { error, isLoading, service, submittedSuccessfully } = this.state
-
-    const initialValues = {
-      carpetClean: service ? service.carpetClean : false,
-      deepClean: service ? service.deepClean : false,
-      general: service ? service.general : false,
-      hasOwnEquipment: service ? service.hasOwnEquipment : false,
-      hasOwnProducts: service ? service.hasOwnProducts : false,
-      hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
-      ovenClean: service ? service.ovenClean : false,
-      radius: service ? String(service.radius) : '__initial',
-      serviceName: service ? service.name : '',
-    }
+    const { userId } = this.props
+    const { submittedSuccessfully } = this.state
 
     return (
       <main>
-        {isLoading ? (
-          <Spinner variation="page" />
-        ) : error ? (
-          <p e-util="negative">Oops, there was an error, please try again.</p>
-        ) : submittedSuccessfully ? (
-          <Redirect to="/profile" />
-        ) : (
-          <Formik
-            initialValues={initialValues}
-            onSubmit={this.handleSubmit}
-            validate={this.validate}
-            render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form noValidate>
-                <h2>{service ? 'Edit' : 'Add'} cleaning service</h2>
-                <p>Tell us about the cleaning service you're offering.</p>
-                <Field
-                  name="serviceName"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'serviceName')}
-                      label="Name"
-                      supportiveText="This is the name people will see in their search results, put your name or company name."
+        <Query query={query} variables={{ userId }}>
+          {({ loading, error, data }) => {
+            if (loading) return <Spinner variation="page" />
+            if (error) {
+              return (
+                <p e-util="negative">
+                  Oops, there was an error, please try again.
+                </p>
+              )
+            }
+            if (submittedSuccessfully) return <Redirect to="/profile" />
+
+            const { service } = data
+
+            const initialValues = {
+              carpetClean: service ? service.carpetClean : false,
+              deepClean: service ? service.deepClean : false,
+              general: service ? service.general : false,
+              hasOwnEquipment: service ? service.hasOwnEquipment : false,
+              hasOwnProducts: service ? service.hasOwnProducts : false,
+              hourlyRate: service ? renderDecimal(service.hourlyRate) : '',
+              ovenClean: service ? service.ovenClean : false,
+              radius: service ? String(service.radius) : '__initial',
+              serviceName: service ? service.name : '',
+            }
+
+            return (
+              <Formik
+                initialValues={initialValues}
+                onSubmit={this.handleSubmit(service)}
+                validate={this.validate}
+                render={({ isSubmitting }: FormikProps<IFormValues>) => (
+                  <Form noValidate>
+                    <h2>{service ? 'Edit' : 'Add'} cleaning service</h2>
+                    <p>Tell us about the cleaning service you're offering.</p>
+                    <Field
+                      name="serviceName"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <TextField
+                          {...field}
+                          error={getFieldError(form, 'serviceName')}
+                          label="Name"
+                          supportiveText="This is the name people will see in their search results, put your name or company name."
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="hourlyRate"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <CurrencyField
-                      {...field}
-                      error={getFieldError(form, 'hourlyRate')}
-                      label="Hourly rate"
+                    <Field
+                      name="hourlyRate"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <CurrencyField
+                          {...field}
+                          error={getFieldError(form, 'hourlyRate')}
+                          label="Hourly rate"
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="radius"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Select
-                      {...field}
-                      error={getFieldError(form, 'radius')}
-                      label="Working radius"
-                    >
-                      <option hidden value="_initial">
-                        Select
-                      </option>
-                      {radii.map(r => (
-                        <option key={r} value={r}>
-                          {r} mile
-                          {r === 1 ? '' : 's'}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                />
-                <Field
-                  name="general"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      error={getFieldError(form, 'general')}
-                      label="General clean"
+                    <Field
+                      name="radius"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Select
+                          {...field}
+                          error={getFieldError(form, 'radius')}
+                          label="Working radius"
+                        >
+                          <option hidden value="_initial">
+                            Select
+                          </option>
+                          {radii.map(r => (
+                            <option key={r} value={r}>
+                              {r} mile
+                              {r === 1 ? '' : 's'}
+                            </option>
+                          ))}
+                        </Select>
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="deepClean"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      error={getFieldError(form, 'deepClean')}
-                      label="Oneoff deep clean"
+                    <Field
+                      name="general"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Checkbox
+                          {...field}
+                          checked={field.value}
+                          error={getFieldError(form, 'general')}
+                          label="General clean"
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="carpetClean"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      error={getFieldError(form, 'carpetClean')}
-                      label="Specialist clean  carpets"
+                    <Field
+                      name="deepClean"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Checkbox
+                          {...field}
+                          checked={field.value}
+                          error={getFieldError(form, 'deepClean')}
+                          label="Oneoff deep clean"
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="ovenClean"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      error={getFieldError(form, 'ovenClean')}
-                      label="Specialist clean  oven"
+                    <Field
+                      name="carpetClean"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Checkbox
+                          {...field}
+                          checked={field.value}
+                          error={getFieldError(form, 'carpetClean')}
+                          label="Specialist clean  carpets"
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="hasOwnProducts"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      error={getFieldError(form, 'hasOwnProducts')}
-                      label="I have my own cleaning products"
+                    <Field
+                      name="ovenClean"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Checkbox
+                          {...field}
+                          checked={field.value}
+                          error={getFieldError(form, 'ovenClean')}
+                          label="Specialist clean  oven"
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Field
-                  name="hasOwnEquipment"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      error={getFieldError(form, 'hasOwnEquipment')}
-                      label="I have my own cleaning equipment"
+                    <Field
+                      name="hasOwnProducts"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Checkbox
+                          {...field}
+                          checked={field.value}
+                          error={getFieldError(form, 'hasOwnProducts')}
+                          label="I have my own cleaning products"
+                        />
+                      )}
                     />
-                  )}
-                />
-                <ButtonGroup>
-                  <Button disabled={isSubmitting}>Save</Button>
-                  <Link to="/services">Cancel</Link>
-                </ButtonGroup>
-              </Form>
-            )}
-          />
-        )}
+                    <Field
+                      name="hasOwnEquipment"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <Checkbox
+                          {...field}
+                          checked={field.value}
+                          error={getFieldError(form, 'hasOwnEquipment')}
+                          label="I have my own cleaning equipment"
+                        />
+                      )}
+                    />
+                    <ButtonGroup>
+                      <Button disabled={isSubmitting}>Save</Button>
+                      <Link to="/services">Cancel</Link>
+                    </ButtonGroup>
+                  </Form>
+                )}
+              />
+            )
+          }}
+        </Query>
       </main>
     )
   }
 
-  private handleSubmit = async (
+  private handleSubmit = (service: any) => async (
     values: IFormValues,
     actions: FormikActions<IFormValues>,
   ) => {
     const { serviceName, ...rest } = values
 
     try {
-      if (this.state.service) {
+      if (service) {
+        const {
+          __typename,
+          id,
+          location: { coordinates, type },
+          ...serviceRest
+        } = service
+
         await putService({
-          ...this.state.service,
+          ...serviceRest,
           ...rest,
+          _id: id,
           hourlyRate: Number(values.hourlyRate),
+          location: { coordinates, type },
           name: values.serviceName,
           radius: Number(values.radius),
         })
@@ -251,7 +285,7 @@ export default class ServiceForm extends React.PureComponent {
 
       actions.setSubmitting(false)
 
-      this.setState({ error: true })
+      // TODO - handle error
     }
   }
 
@@ -273,3 +307,9 @@ export default class ServiceForm extends React.PureComponent {
     return errors
   }
 }
+
+const mapStateToProps = (state: IStore) => ({
+  userId: userIdSelector(state) as string,
+})
+
+export default connect(mapStateToProps)(ServiceForm)
