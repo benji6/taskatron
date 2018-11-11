@@ -8,10 +8,16 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { origin } from './api/utils'
 import App from './components/App'
+import { getCredentials } from './localStorage'
 import reducer from './reducers'
 import rootSaga from './sagas'
 
+const credentials = getCredentials()
+
 const client = new ApolloClient({
+  headers: credentials && {
+    authorization: `Passwordless ${credentials.token} ${credentials.uid}`,
+  },
   uri: `${origin}/graphql`,
 })
 

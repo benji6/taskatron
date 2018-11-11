@@ -6,6 +6,14 @@ import {
 } from './model/services'
 import { IServiceSearchParams } from './shared/types'
 
+interface IContext {
+  userId: string
+}
+
+const context = async ({ req }: any): Promise<IContext> => ({
+  userId: req.user,
+})
+
 const typeDefs = gql`
   interface Node {
     id: ID!
@@ -89,4 +97,4 @@ const resolvers = {
   },
 }
 
-export default new ApolloServer({ typeDefs, resolvers })
+export default new ApolloServer({ context, resolvers, typeDefs })
