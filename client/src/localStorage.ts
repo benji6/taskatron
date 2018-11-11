@@ -6,14 +6,15 @@ export const setCredentials = (credentials: ICredentials): void => {
 
 export const deleteCredentials = (): void => localStorage.clear()
 
-export const getCredentials = (): Promise<ICredentials> => {
+export const getCredentials = (): ICredentials | undefined => {
   const storedCredentials = localStorage.getItem('credentials')
   if (typeof storedCredentials === 'string') {
     try {
-      return Promise.resolve(JSON.parse(storedCredentials))
+      return JSON.parse(storedCredentials)
     } catch (e) {
-      // empty
+      deleteCredentials()
+      return undefined
     }
   }
-  return Promise.reject(Error('credentials not found'))
+  return undefined
 }

@@ -17,21 +17,17 @@ import {
 } from './utils'
 
 export const deleteCleaningService = async (id: string): Promise<Response> => {
-  const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/service/${id}`,
-    deleteConfig(credentials),
+    deleteConfig(getCredentials() as ICredentials),
   )
 
   if (!response.ok) throw Error(String(response.status))
   return response
 }
 
-export const getMe = (
-  credentialsPromise: Promise<ICredentials>,
-): Promise<IUserResponse> =>
-  credentialsPromise
-    .then(credentials => fetch(`${origin}/me`, getConfig(credentials)))
+export const getMe = (credentials: ICredentials): Promise<IUserResponse> =>
+  fetch(`${origin}/me`, getConfig(credentials))
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))
@@ -41,10 +37,9 @@ export const getMe = (
     .then(response => response.json())
 
 export const getSignOut = (
-  credentialsPromise: Promise<ICredentials>,
+  credentials: ICredentials | undefined,
 ): Promise<Response> =>
-  credentialsPromise
-    .then(credentials => fetch(`${origin}/sign-out`, getConfig(credentials)))
+  fetch(`${origin}/sign-out`, getConfig(credentials))
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))
@@ -54,9 +49,10 @@ export const getSignOut = (
     .then(response => response.json())
 
 export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
-  const credentials = await getCredentials()
-
-  const response = await fetch(`${origin}/me`, patchConfig(body, credentials))
+  const response = await fetch(
+    `${origin}/me`,
+    patchConfig(body, getCredentials()),
+  )
   if (!response.ok) throw Error(String(response.status))
   return response
 }
@@ -64,10 +60,9 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
 export const postService = async (
   service: IServicePostBody,
 ): Promise<Response> => {
-  const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/service`,
-    postConfig(service, credentials),
+    postConfig(service, getCredentials()),
   )
 
   if (!response.ok) throw Error(String(response.status))
@@ -83,10 +78,9 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
 export const putService = async (
   service: IServiceDocument,
 ): Promise<Response> => {
-  const credentials = await getCredentials()
   const response = await fetch(
     `${origin}/service/${service._id}`,
-    putConfig(service, credentials),
+    putConfig(service, getCredentials()),
   )
 
   if (!response.ok) throw Error(String(response.status))
