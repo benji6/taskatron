@@ -41,7 +41,7 @@ class Menu extends React.PureComponent<IProps> {
             onClick={() => {
               onClose()
               onSignOut()
-              // HACK - to remove will need to remove auth header from
+              // TODO - to remove will need to remove auth header from
               // Apollo Client and clear the Apollo Client cache
               window.location.href = '/'
             }}

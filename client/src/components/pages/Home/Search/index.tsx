@@ -143,6 +143,7 @@ class Search extends React.PureComponent<IProps> {
         </ButtonGroup>
         {typeof this.page === 'string' && (
           <Query
+            fetchPolicy="network-only"
             query={query}
             variables={
               {

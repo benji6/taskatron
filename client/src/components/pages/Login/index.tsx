@@ -17,7 +17,7 @@ class Login extends React.PureComponent<IProps> {
   public render() {
     const { isSignedIn, logInFail } = this.props
 
-    // HACK we are reloading the page to make sure Apollo Client
+    // TODO we are reloading the page to make sure Apollo Client
     // sets the auth header - need to figure out how to do this
     // dynamically
     if (isSignedIn) window.location.replace('/')

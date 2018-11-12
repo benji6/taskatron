@@ -48,23 +48,25 @@ interface IState {
 }
 
 const query = gql`
-  query Service($userId: ID!) {
-    service(userId: $userId) {
-      carpetClean
-      deepClean
-      general
-      hasOwnEquipment
-      hasOwnProducts
-      hourlyRate
-      id
-      location {
-        coordinates
-        type
+  query ServiceForm($userId: ID!) {
+    services(limit: 1, skip: 0, userId: $userId) {
+      nodes {
+        carpetClean
+        deepClean
+        general
+        hasOwnEquipment
+        hasOwnProducts
+        hourlyRate
+        id
+        location {
+          coordinates
+          type
+        }
+        name
+        ovenClean
+        radius
+        userId
       }
-      name
-      ovenClean
-      radius
-      userId
     }
   }
 `
@@ -86,7 +88,7 @@ class ServiceForm extends React.PureComponent<IProps> {
 
     return (
       <main>
-        <Query query={query} variables={{ userId }}>
+        <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
           {({ loading, error, data }) => {
             if (loading) return <Spinner variation="page" />
             if (error) {
@@ -98,7 +100,7 @@ class ServiceForm extends React.PureComponent<IProps> {
             }
             if (submittedSuccessfully) return <Redirect to="/profile" />
 
-            const { service } = data
+            const [service] = data.services.nodes
 
             const initialValues = {
               carpetClean: service ? service.carpetClean : false,

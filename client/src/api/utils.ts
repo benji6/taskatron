@@ -20,11 +20,6 @@ const jsonHeaders = (
   return headers
 }
 
-export const deleteConfig = (credentials: ICredentials) => ({
-  headers: jsonHeaders(credentials),
-  method: 'DELETE',
-})
-
 export const getConfig = (credentials?: ICredentials) => ({
   headers: jsonHeaders(credentials),
 })

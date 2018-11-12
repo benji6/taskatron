@@ -4,11 +4,7 @@ import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
-import {
-  del as deleteCleaning,
-  post as postCleaning,
-  put as putCleaning,
-} from './controllers/service'
+import { post as postService, put as putService } from './controllers/service'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
@@ -38,9 +34,8 @@ router.post(
   postSendToken,
 )
 
-router.delete(`/service/:id`, restricted(), deleteCleaning)
-router.post('/service', restricted(), postCleaning)
-router.put('/service/:id', restricted(), putCleaning)
+router.post('/service', restricted(), postService)
+router.put('/service/:id', restricted(), putService)
 
 router.get('/sign-out', passwordless.logout(), getSignOut)
 

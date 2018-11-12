@@ -23,19 +23,21 @@ interface IProps {
   userId: string
 }
 
-const query = gql`
-  query Service($userId: ID!) {
-    service(userId: $userId) {
-      carpetClean
-      deepClean
-      general
-      hasOwnEquipment
-      hasOwnProducts
-      hourlyRate
-      id
-      name
-      ovenClean
-      radius
+export const query = gql`
+  query ProfileService($userId: ID!) {
+    services(limit: 1, userId: $userId) {
+      nodes {
+        carpetClean
+        deepClean
+        general
+        hasOwnEquipment
+        hasOwnProducts
+        hourlyRate
+        id
+        name
+        ovenClean
+        radius
+      }
     }
   }
 `
@@ -61,7 +63,7 @@ class Service extends React.PureComponent<IProps> {
             </Link>
           </ButtonGroup>
         </Card>
-        <Query query={query} variables={{ userId }}>
+        <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
           {({ loading, error, data }) => {
             if (loading) return <Spinner variation="page" />
             if (error) {
@@ -72,17 +74,17 @@ class Service extends React.PureComponent<IProps> {
               )
             }
 
-            const { service } = data
+            const [service] = data.services.nodes
 
-            if (service) {
-              return <ServiceCard key={service.id}>{service}</ServiceCard>
+            if (!service) {
+              return (
+                <p e-util="center">
+                  <Link to="/profile/service">Add a service here</Link>
+                </p>
+              )
             }
 
-            return (
-              <p e-util="center">
-                <Link to="/profile/service">Add a service here</Link>
-              </p>
-            )
+            return <ServiceCard>{service}</ServiceCard>
           }}
         </Query>
       </main>

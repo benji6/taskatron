@@ -1,12 +1,7 @@
 import { Request, Response } from 'express'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import log from '../log'
-import {
-  deleteService,
-  getService,
-  setService,
-  updateService,
-} from '../model/services'
+import { getService, setService, updateService } from '../model/services'
 import { getUser } from '../model/user'
 import {
   IServiceDocument,
@@ -21,38 +16,8 @@ interface IRequest extends Request {
 }
 
 const logCleaning = log('service')
-const logDelete = logCleaning('DELETE')
 const logPost = logCleaning('POST')
 const logPut = logCleaning('PUT')
-
-export const del = async (req: Request, res: Response) => {
-  const { user: userId } = req as IRequest
-  const { id } = req.params
-
-  try {
-    const document = await getService(id)
-
-    if (!document) {
-      res.status(404).end()
-      return logDelete(404, `id: ${id}`)
-    }
-
-    if (!(document.userId as any).equals(userId)) {
-      res.status(403).end()
-      return logDelete(
-        403,
-        `userId: ${userId} does not match document.userId: ${document.userId}`,
-      )
-    }
-
-    await deleteService(id)
-
-    res.status(204).end()
-  } catch (e) {
-    res.status(500).end()
-    logDelete(500, e)
-  }
-}
 
 export const post = async (req: Request, res: Response) => {
   const body: IServicePostBody = req.body

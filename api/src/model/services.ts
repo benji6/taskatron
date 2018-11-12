@@ -4,7 +4,6 @@ import {
   IServiceDocument,
   IServiceFilters,
   IServiceModelParams,
-  IServiceSearchParams,
 } from '../shared/types'
 import { SERVICES } from './collectionNames'
 import { withServicesCollection } from './withCollection'
@@ -41,29 +40,23 @@ export const getService = async (
     return result
   })
 
-export const getServiceByUserId = async (
-  userId: string,
-): Promise<IServiceDocument | undefined> =>
-  withServicesCollection(async collection => {
-    const [result] = await collection
-      .find({ userId: new ObjectId(userId) })
-      .toArray()
-
-    return result
-  })
-
 export const searchServices = async ({
   limit,
   skip,
+  userId,
   ...findParams
-}: IServiceSearchParams): Promise<IServiceDocument[]> =>
-  withServicesCollection(collection =>
+}: any): Promise<IServiceDocument[]> => {
+  return withServicesCollection(collection =>
     collection
-      .find(findParams)
+      .find({
+        ...findParams,
+        ...(userId ? { userId: new ObjectId(userId) } : {}),
+      })
       .skip(skip)
       .limit(limit)
       .toArray(),
   )
+}
 
 export const setService = async (
   service: IServiceModelParams,

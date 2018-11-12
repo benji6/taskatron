@@ -7,24 +7,7 @@ import {
   IUserResponse,
 } from '../shared/types'
 import ICredentials from '../types/ICredentials'
-import {
-  deleteConfig,
-  getConfig,
-  origin,
-  patchConfig,
-  postConfig,
-  putConfig,
-} from './utils'
-
-export const deleteCleaningService = async (id: string): Promise<Response> => {
-  const response = await fetch(
-    `${origin}/service/${id}`,
-    deleteConfig(getCredentials() as ICredentials),
-  )
-
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
+import { getConfig, origin, patchConfig, postConfig, putConfig } from './utils'
 
 export const getMe = (credentials: ICredentials): Promise<IUserResponse> =>
   fetch(`${origin}/me`, getConfig(credentials))

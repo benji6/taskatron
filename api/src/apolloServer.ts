@@ -1,18 +1,19 @@
-import { ApolloServer, gql } from 'apollo-server-express'
+import {
+  ApolloServer,
+  AuthenticationError,
+  gql,
+  UserInputError,
+} from 'apollo-server-express'
 import {
   countServices,
-  getServiceByUserId,
+  deleteService,
+  getService,
   searchServices,
 } from './model/services'
-import { IServiceSearchParams } from './shared/types'
 
 interface IContext {
   userId: string
 }
-
-const context = async ({ req }: any): Promise<IContext> => ({
-  userId: req.user,
-})
 
 const typeDefs = gql`
   interface Node {
@@ -44,8 +45,11 @@ const typeDefs = gql`
     total: Int!
   }
 
+  type Mutation {
+    deleteService(id: ID!): Service
+  }
+
   type Query {
-    service(userId: ID): Service
     services(
       carpetClean: Boolean
       deepClean: Boolean
@@ -56,18 +60,25 @@ const typeDefs = gql`
       limit: Int!
       ovenClean: Boolean
       skip: Int
+      userId: ID
     ): Services
   }
 `
 
 const resolvers = {
-  Query: {
-    service: async (_: unknown, args: any) => {
-      const service = await getServiceByUserId(args.userId)
+  Mutation: {
+    deleteService: async (_: unknown, args: any, context: IContext) => {
+      const service = await getService(args.id)
 
-      if (!service) return null
+      if (!service) throw new UserInputError('not found')
 
       const { _id, userId, ...rest } = service
+
+      if (!(userId as any).equals(context.userId)) {
+        throw new AuthenticationError('authed user does not match record user')
+      }
+
+      await deleteService(_id)
 
       return {
         ...rest,
@@ -75,13 +86,13 @@ const resolvers = {
         userId: userId.toString(),
       }
     },
-    services: async (_: unknown, args: object) => {
-      const searchParams = args as IServiceSearchParams
-
-      const { limit, skip, ...filters } = searchParams
+  },
+  Query: {
+    services: async (_: unknown, args: any) => {
+      const { limit, skip, ...filters } = args
 
       const [services, total] = await Promise.all([
-        searchServices(searchParams),
+        searchServices({ ...args, skip: args.skip || 0 }),
         countServices(filters),
       ])
 
@@ -97,4 +108,10 @@ const resolvers = {
   },
 }
 
-export default new ApolloServer({ context, resolvers, typeDefs })
+export default new ApolloServer({
+  context: async ({ req }: any): Promise<IContext> => ({
+    userId: req.user,
+  }),
+  resolvers,
+  typeDefs,
+})

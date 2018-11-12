@@ -126,18 +126,6 @@ export const ServiceFilters = t.partial({
 
 export type IServiceFilters = t.TypeOf<typeof ServiceFilters>
 
-export const ServiceSearchParams = t.exact(
-  t.intersection([
-    ServiceFilters,
-    t.type({
-      limit: t.number,
-      skip: t.number,
-    }),
-  ]),
-)
-
-export type IServiceSearchParams = t.TypeOf<typeof ServiceSearchParams>
-
 export interface IServiceModelParams extends IServicePostBody {
   location: ILocation
   userId: string

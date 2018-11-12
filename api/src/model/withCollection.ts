@@ -16,7 +16,7 @@ const withCollection = (
   } catch (e) {
     throw e
   } finally {
-    setTimeout(() => client.close(), 3000) // HACK
+    setTimeout(() => client.close(), 3000) // TODO - fix hack
   }
 }
 

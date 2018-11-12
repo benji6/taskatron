@@ -1,32 +1,37 @@
+import { gql } from 'apollo-boost'
 import { Button, ButtonGroup, Card, Icon } from 'eri'
 import * as React from 'react'
+import { Mutation } from 'react-apollo'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { deleteCleaningService } from '../../../api'
+import { query } from '.'
+import { userIdSelector } from '../../../selectors'
+import IStore from '../../../types/IStore'
 import { renderCurrency } from '../../../utils'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {
   children: any
+  userId: string
 }
+
+interface IState {
+  isDeleteDialogOpen: boolean
+}
+
+const mutation = gql`
+  mutation DeleteService($id: ID!) {
+    deleteService(id: $id) {
+      id
+    }
+  }
+`
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
 class ServiceForm extends React.PureComponent<IProps> {
-  public state = {
+  public state: IState = {
     isDeleteDialogOpen: false,
-    isDeleting: false,
-  }
-
-  public deleteService = async () => {
-    this.setState({ isDeleting: true })
-
-    try {
-      await deleteCleaningService(this.props.children.id)
-    } catch {
-      // TODO
-    } finally {
-      this.setState({ isDeleteDialogOpen: false, isDeleting: false })
-    }
   }
 
   public openDeleteDialog = () => {
@@ -36,7 +41,7 @@ class ServiceForm extends React.PureComponent<IProps> {
   public closeDeleteDialog = () => this.setState({ isDeleteDialogOpen: false })
 
   public render() {
-    const { isDeleteDialogOpen, isDeleting } = this.state
+    const { isDeleteDialogOpen } = this.state
     const {
       children: {
         carpetClean,
@@ -45,10 +50,12 @@ class ServiceForm extends React.PureComponent<IProps> {
         hasOwnEquipment,
         hasOwnProducts,
         hourlyRate,
+        id,
         name,
         ovenClean,
         radius,
       },
+      userId,
     } = this.props
 
     const editTo = 'profile/service'
@@ -79,15 +86,31 @@ class ServiceForm extends React.PureComponent<IProps> {
             Delete
           </Button>
         </ButtonGroup>
-        <DeleteDialog
-          disabled={isDeleting}
-          onClose={this.closeDeleteDialog}
-          onDelete={this.deleteService}
-          open={isDeleteDialogOpen}
-        />
+        <Mutation
+          mutation={mutation}
+          refetchQueries={[{ query, variables: { userId } }]}
+          variables={{ id }}
+        >
+          {(deleteService, { loading }) => (
+            // TODO - handle errors
+            <DeleteDialog
+              disabled={loading}
+              onClose={this.closeDeleteDialog}
+              onDelete={async () => {
+                await deleteService()
+                this.closeDeleteDialog()
+              }}
+              open={isDeleteDialogOpen}
+            />
+          )}
+        </Mutation>
       </Card>
     )
   }
 }
 
-export default ServiceForm
+const mapStateToProps = (state: IStore) => ({
+  userId: userIdSelector(state) as string,
+})
+
+export default connect(mapStateToProps)(ServiceForm)
