@@ -1,4 +1,8 @@
-import { DeleteWriteOpResultObject, ObjectId, WriteOpResult } from 'mongodb'
+import {
+  DeleteWriteOpResultObject,
+  ObjectId,
+  UpdateWriteOpResult,
+} from 'mongodb'
 import pino from '../pino'
 import {
   IServiceDocument,
@@ -18,6 +22,20 @@ withServicesCollection(collection =>
       pino.error(`${SERVICES} "2dsphere" index creation failure:`, e),
     ),
 )
+
+export const addService = async (
+  service: IServiceModelParams,
+): Promise<IServiceDocument> =>
+  withServicesCollection(async collection => {
+    const insertObj = {
+      ...service,
+      userId: new ObjectId(service.userId),
+    }
+
+    await collection.insertOne(insertObj)
+
+    return { ...service, _id: (insertObj as any)._id }
+  })
 
 export const countServices = async (
   findParams: IServiceFilters,
@@ -40,6 +58,17 @@ export const getService = async (
     return result
   })
 
+export const getServiceByUserId = async (
+  userId: string,
+): Promise<IServiceDocument | undefined> =>
+  withServicesCollection(async collection => {
+    const [result] = await collection
+      .find({ userId: new ObjectId(userId) })
+      .toArray()
+
+    return result
+  })
+
 export const searchServices = async ({
   limit,
   skip,
@@ -58,25 +87,10 @@ export const searchServices = async ({
   )
 }
 
-export const setService = async (
-  service: IServiceModelParams,
-): Promise<IServiceDocument> =>
-  withServicesCollection(async collection => {
-    await collection.insertOne({
-      ...service,
-      userId: new ObjectId(service.userId),
-    })
-
-    return service as IServiceDocument
-  })
-
-export const updateService = async (
-  document: IServiceDocument,
-): Promise<WriteOpResult> =>
+export const updateService = async ({
+  _id,
+  ...updatedFields
+}: IServiceDocument): Promise<UpdateWriteOpResult> =>
   withServicesCollection(async collection =>
-    collection.save({
-      ...document,
-      _id: new ObjectId((document as any)._id),
-      userId: new ObjectId(document.userId),
-    }),
+    collection.updateOne({ _id: new ObjectId(_id) }, { $set: updatedFields }),
   )

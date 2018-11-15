@@ -35,9 +35,3 @@ export const postConfig = (body: any, credentials?: ICredentials) => ({
   headers: jsonHeaders(credentials, true),
   method: 'POST',
 })
-
-export const putConfig = (body: any, credentials?: ICredentials) => ({
-  body: JSON.stringify(body),
-  headers: jsonHeaders(credentials, true),
-  method: 'PUT',
-})

@@ -4,7 +4,6 @@ import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
-import { post as postService, put as putService } from './controllers/service'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
@@ -33,9 +32,6 @@ router.post(
   postSendTokenErrorMiddleware,
   postSendToken,
 )
-
-router.post('/service', restricted(), postService)
-router.put('/service/:id', restricted(), putService)
 
 router.get('/sign-out', passwordless.logout(), getSignOut)
 
