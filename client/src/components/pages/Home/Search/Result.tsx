@@ -15,6 +15,7 @@ export default class Result extends React.PureComponent<IProps> {
       children: {
         carpetClean,
         deepClean,
+        description,
         general,
         hasOwnEquipment,
         hasOwnProducts,
@@ -27,6 +28,7 @@ export default class Result extends React.PureComponent<IProps> {
     return (
       <Card>
         <h3>{name}</h3>
+        <p>{description}</p>
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>

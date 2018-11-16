@@ -46,6 +46,7 @@ class ServiceForm extends React.PureComponent<IProps> {
       children: {
         carpetClean,
         deepClean,
+        description,
         general,
         hasOwnEquipment,
         hasOwnProducts,
@@ -60,17 +61,47 @@ class ServiceForm extends React.PureComponent<IProps> {
 
     return (
       <Card>
-        <h3>{name}</h3>
-        <p>These are the details of the service you are offering:</p>
+        <h3>My Service</h3>
+        <p>
+          These are the details of your service that people can view and search
+          for:
+        </p>
         <ul>
-          <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
-          <li>Radius: {radius} miles</li>
-          <li>General clean: {renderTrueFalse(general)}</li>
-          <li>One-off deep clean: {renderTrueFalse(deepClean)}</li>
-          <li>Specialist clean - carpets: {renderTrueFalse(carpetClean)}</li>
-          <li>Specialist clean - oven: {renderTrueFalse(ovenClean)}</li>
-          <li>I have my own products: {renderTrueFalse(hasOwnProducts)}</li>
-          <li>I have my own equipment: {renderTrueFalse(hasOwnEquipment)}</li>
+          <li>
+            <b>Name:</b> {name}
+          </li>
+          <li>
+            <b>Description</b>:{' '}
+            {description.includes('\n') ? (
+              <p e-util="pre-line">{description}</p>
+            ) : (
+              description
+            )}
+          </li>
+          <li>
+            <b>Hourly rate</b>: {renderCurrency(hourlyRate)}
+          </li>
+          <li>
+            <b>Radius</b>: {radius} miles
+          </li>
+          <li>
+            <b>General clean</b>: {renderTrueFalse(general)}
+          </li>
+          <li>
+            <b>One-off deep clean</b>: {renderTrueFalse(deepClean)}
+          </li>
+          <li>
+            <b>Specialist clean - carpets</b>: {renderTrueFalse(carpetClean)}
+          </li>
+          <li>
+            <b>Specialist clean - oven</b>: {renderTrueFalse(ovenClean)}
+          </li>
+          <li>
+            <b>I have my own products</b>: {renderTrueFalse(hasOwnProducts)}
+          </li>
+          <li>
+            <b>I have my own equipment</b>: {renderTrueFalse(hasOwnEquipment)}
+          </li>
         </ul>
         <ButtonGroup>
           <Link

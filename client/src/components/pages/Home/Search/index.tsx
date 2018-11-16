@@ -38,6 +38,7 @@ const query = gql`
       nodes {
         carpetClean
         deepClean
+        description
         general
         hasOwnEquipment
         hasOwnProducts

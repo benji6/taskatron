@@ -5,6 +5,7 @@ import {
   Checkbox,
   CurrencyField,
   Select,
+  TextArea,
   TextField,
 } from 'eri'
 import {
@@ -28,6 +29,7 @@ import { getFieldError } from '../../../utils'
 interface IFormValues {
   carpetClean: boolean
   deepClean: boolean
+  description: string
   general: boolean
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
@@ -49,6 +51,7 @@ const addServiceMutation = gql`
   mutation AddService(
     $carpetClean: Boolean
     $deepClean: Boolean
+    $description: String!
     $general: Boolean
     $hasOwnEquipment: Boolean
     $hasOwnProducts: Boolean
@@ -61,6 +64,7 @@ const addServiceMutation = gql`
     addService(
       carpetClean: $carpetClean
       deepClean: $deepClean
+      description: $description
       general: $general
       hasOwnEquipment: $hasOwnEquipment
       hasOwnProducts: $hasOwnProducts
@@ -72,6 +76,7 @@ const addServiceMutation = gql`
     ) {
       carpetClean
       deepClean
+      description
       general
       hasOwnEquipment
       hasOwnProducts
@@ -105,6 +110,7 @@ class AddService extends React.PureComponent<IProps> {
     const initialValues = {
       carpetClean: false,
       deepClean: false,
+      description: '',
       general: false,
       hasOwnEquipment: false,
       hasOwnProducts: false,
@@ -158,6 +164,17 @@ class AddService extends React.PureComponent<IProps> {
                           error={getFieldError(form, 'serviceName')}
                           label="Name"
                           supportiveText="This is the name people will see in their search results, put your name or company name"
+                        />
+                      )}
+                    />
+                    <Field
+                      name="description"
+                      render={({ field, form }: FieldProps<IFormValues>) => (
+                        <TextArea
+                          {...field}
+                          error={getFieldError(form, 'description')}
+                          label="Description"
+                          supportiveText="Let people know a little bit about yourself and the service you are offering"
                         />
                       )}
                     />
@@ -272,20 +289,21 @@ class AddService extends React.PureComponent<IProps> {
     )
   }
 
-  private validate = ({ hourlyRate, radius, serviceName }: IFormValues) => {
+  private validate = ({
+    description,
+    hourlyRate,
+    radius,
+    serviceName,
+  }: IFormValues) => {
     const errors: any = {}
 
     if (!isValidNumber(hourlyRate)) {
       errors.hourlyRate = 'Please enter a valid hourly rate'
     }
 
-    if (radius === '__initial') {
-      errors.radius = 'Please select a radius'
-    }
-
-    if (!serviceName.length) {
-      errors.serviceName = 'Please enter a name'
-    }
+    if (radius === '__initial') errors.radius = 'Please select a radius'
+    if (!description) errors.description = 'Please enter a description'
+    if (!serviceName) errors.serviceName = 'Please enter a name'
 
     return errors
   }

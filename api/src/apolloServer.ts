@@ -34,6 +34,7 @@ const typeDefs = gql`
   type Service implements Node {
     carpetClean: Boolean!
     deepClean: Boolean!
+    description: String!
     general: Boolean!
     hasOwnEquipment: Boolean!
     hasOwnProducts: Boolean!
@@ -55,6 +56,7 @@ const typeDefs = gql`
     addService(
       carpetClean: Boolean
       deepClean: Boolean
+      description: String!
       general: Boolean
       hasOwnEquipment: Boolean
       hasOwnProducts: Boolean
@@ -68,6 +70,7 @@ const typeDefs = gql`
     updateService(
       carpetClean: Boolean
       deepClean: Boolean
+      description: String
       general: Boolean
       hasOwnEquipment: Boolean
       hasOwnProducts: Boolean
