@@ -203,7 +203,7 @@ class EditService extends React.PureComponent<IProps> {
                                 {...field}
                                 error={getFieldError(form, 'serviceName')}
                                 label="Name"
-                                supportiveText="This is the name people will see in their search results, put your name or company name."
+                                supportiveText="This is the name people will see in their search results, put your name or company name"
                               />
                             )}
                           />
@@ -229,7 +229,8 @@ class EditService extends React.PureComponent<IProps> {
                               <Select
                                 {...field}
                                 error={getFieldError(form, 'radius')}
-                                label="Working radius"
+                                label="Working range"
+                                supportiveText="This is how far from your home you are willing to travel"
                               >
                                 <option hidden value="_initial">
                                   Select
