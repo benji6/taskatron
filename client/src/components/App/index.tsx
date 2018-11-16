@@ -8,10 +8,11 @@ import Auth from '../Auth'
 import Header from '../Header'
 import Menu from '../Menu'
 import About from '../pages/About'
+import AddService from '../pages/AddService'
+import EditService from '../pages/EditService'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
-import ServiceForm from '../pages/ServiceForm'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import UserForm from '../pages/UserForm'
@@ -60,8 +61,13 @@ class App extends React.PureComponent<IProps> {
                   isSignedIn={isSignedIn}
                 />
                 <PrivateRoute
-                  path="/profile/service"
-                  component={ServiceForm}
+                  path="/profile/service/add"
+                  component={AddService}
+                  isSignedIn={isSignedIn}
+                />
+                <PrivateRoute
+                  path="/profile/service/edit"
+                  component={EditService}
                   isSignedIn={isSignedIn}
                 />
                 <Redirect to="/" />

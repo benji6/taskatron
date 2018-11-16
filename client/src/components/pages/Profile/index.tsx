@@ -79,7 +79,7 @@ class Service extends React.PureComponent<IProps> {
             if (!service) {
               return (
                 <p e-util="center">
-                  <Link to="/profile/service">Add a service here</Link>
+                  <Link to="/profile/service/add">Add a service here</Link>
                 </p>
               )
             }

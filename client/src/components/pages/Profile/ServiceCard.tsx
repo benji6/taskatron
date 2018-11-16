@@ -58,8 +58,6 @@ class ServiceForm extends React.PureComponent<IProps> {
       userId,
     } = this.props
 
-    const editTo = 'profile/service'
-
     return (
       <Card>
         <h3>{name}</h3>
@@ -75,7 +73,10 @@ class ServiceForm extends React.PureComponent<IProps> {
           <li>I have my own equipment: {renderTrueFalse(hasOwnEquipment)}</li>
         </ul>
         <ButtonGroup>
-          <Link className="e-button e-button--primary" to={editTo}>
+          <Link
+            className="e-button e-button--primary"
+            to="profile/service/edit"
+          >
             Edit
           </Link>
           <Button
