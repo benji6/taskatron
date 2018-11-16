@@ -14,6 +14,7 @@ import {
   updateService,
 } from './model/services'
 import { getUser } from './model/user'
+import pino from './pino'
 import { IUserDocument } from './shared/types'
 
 interface IContext {
@@ -187,6 +188,14 @@ export default new ApolloServer({
   context: async ({ req }: any): Promise<IContext> => ({
     userId: req.user,
   }),
+  formatError: (error: Error) => {
+    pino.error('Apollo error:', error)
+    return error
+  },
+  formatResponse: (response: object) => {
+    pino.info('Apollo response:', response)
+    return response
+  },
   resolvers,
   typeDefs,
 })
