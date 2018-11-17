@@ -15,6 +15,10 @@ import {
 } from './model/services'
 import { getUser } from './model/user'
 import pino from './pino'
+import {
+  maxServiceDescriptionLength,
+  maxServiceNameLength,
+} from './shared/constants'
 import { IUserDocument } from './shared/types'
 
 interface IContext {
@@ -107,6 +111,22 @@ const resolvers = {
 
       if (await getServiceByUserId(args.userId)) {
         throw new UserInputError('record already exists')
+      }
+
+      if (args.description.length > maxServiceDescriptionLength) {
+        throw new UserInputError(
+          `description length is ${
+            args.description.lengt
+          }, but should be less than ${maxServiceDescriptionLength}`,
+        )
+      }
+
+      if (args.name.length > maxServiceNameLength) {
+        throw new UserInputError(
+          `name length is ${
+            args.name.lengt
+          }, but should be less than ${maxServiceNameLength}`,
+        )
       }
 
       const { location } = (await getUser(args.userId)) as IUserDocument

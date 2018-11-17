@@ -22,7 +22,11 @@ import { Mutation, Query } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import { userIdSelector } from '../../../selectors'
-import { radii } from '../../../shared/constants'
+import {
+  maxServiceDescriptionLength,
+  maxServiceNameLength,
+  radii,
+} from '../../../shared/constants'
 import { isValidNumber } from '../../../shared/validation'
 import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'
@@ -224,7 +228,7 @@ class EditService extends React.PureComponent<IProps> {
                                 {...field}
                                 error={getFieldError(form, 'description')}
                                 label="Description"
-                                supportiveText="Let people know a little bit about yourself and the service you are offering"
+                                supportiveText={`Let people know a little bit about yourself and the service you are offering (${maxServiceDescriptionLength} characters maximum)`}
                               />
                             )}
                           />
@@ -379,8 +383,17 @@ class EditService extends React.PureComponent<IProps> {
     }
 
     if (radius === '__initial') errors.radius = 'Please select a radius'
-    if (!description) errors.description = 'Please enter a description'
-    if (!serviceName) errors.serviceName = 'Please enter a name'
+    if (!description) {
+      errors.description = 'Please enter a description'
+    } else if (description.length > maxServiceDescriptionLength) {
+      errors.description = `Description is too long, please keep it under ${maxServiceDescriptionLength} characters`
+    }
+
+    if (!serviceName) {
+      errors.serviceName = 'Please enter a name'
+    } else if (serviceName.length > maxServiceNameLength) {
+      errors.serviceName = `Name is too long, please keep it under ${maxServiceNameLength} characters`
+    }
 
     return errors
   }
