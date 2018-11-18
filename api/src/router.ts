@@ -23,6 +23,7 @@ const sendTokenMiddleware = passwordless.requestToken(
   },
 )
 
+router.get('/health', (_, response) => response.status(200).end())
 router.get('/me', restricted(), getMe)
 router.patch('/me', restricted(), patchMe)
 
