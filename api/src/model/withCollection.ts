@@ -1,15 +1,15 @@
+import config = require('config')
 import { Collection, MongoClient } from 'mongodb'
 import * as collectionNames from './collectionNames'
 
 const { PASSWORDLESS_TOKENS, SERVICES, USERS } = collectionNames
 
-const url = 'mongodb://localhost:27017'
 const dbName = 'taskatron'
 
 const withCollection = (
   collectionName: collectionNames.TCollectionNames,
 ) => async <A>(f: (a: Collection) => A) => {
-  const client = await MongoClient.connect(url)
+  const client = await MongoClient.connect(config.get('mongoUrl'))
 
   try {
     return f(client.db(dbName).collection(collectionName))
