@@ -3,7 +3,11 @@
   publish = "client/dist"
   command = "yarn build"
 [build.environment]
-  API_URL='https://37g2d87rp7.execute-api.eu-west-2.amazonaws.com/prod'
+  API_URL='/api'
+[[redirects]]
+  from = "/api/*"
+  status = 200
+  to = "https://37g2d87rp7.execute-api.eu-west-2.amazonaws.com/prod/:splat"
 [[redirects]]
   from = "/*"
   status = 200

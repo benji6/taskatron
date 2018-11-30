@@ -8,15 +8,21 @@ import pino from './pino'
 import router from './router'
 import './setupPasswordless'
 
+const { NODE_ENV } = process.env
+
 const port = config.get('port')
 
 const app = express()
 
 app.use(bodyParser.json())
-app.use(cors())
+if (NODE_ENV !== 'production') app.use(cors())
 app.use(passwordless.acceptToken())
 app.use('/', router)
 
-apolloServer.applyMiddleware({ app })
+apolloServer.applyMiddleware({ app, cors: false })
 
-app.listen(port, (): void => pino.info(`API listening on port ${port}\n`))
+app.listen(
+  port,
+  (): void =>
+    pino.info(`NODE_ENV is ${NODE_ENV}, API listening on port ${port}\n`),
+)
