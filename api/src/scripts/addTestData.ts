@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
+import { ILocation, IServiceModelParams } from 'shared/types'
 import { setUser } from '../model/user'
 import { withServicesCollection } from '../model/withCollection'
-import { ILocation, IServiceModelParams } from '../shared/types'
 
 let i = 0
 const numberOfServices = 1024

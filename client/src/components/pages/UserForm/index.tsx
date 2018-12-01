@@ -10,6 +10,7 @@ import {
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
+import { isFirstName, isLastName, isPostcode } from 'shared/types'
 import { userSet } from '../../../actions'
 import { patchMe } from '../../../api'
 import {
@@ -17,7 +18,6 @@ import {
   userLastNameSelector,
   userPostcodeSelector,
 } from '../../../selectors'
-import { isFirstName, isLastName, isPostcode } from '../../../shared/types'
 import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'
 

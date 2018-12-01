@@ -26,8 +26,8 @@ import {
   maxServiceNameLength,
   radii,
 } from 'shared/constants'
+import { isValidNumber } from 'shared/validation'
 import { userIdSelector } from '../../../selectors'
-import { isValidNumber } from '../../../shared/validation'
 import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'
 

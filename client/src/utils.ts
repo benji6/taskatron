@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik'
-import { ICoord } from './shared/types'
+import { ICoord } from 'shared/types'
 
 interface ISearchStringObject {
   [key: string]: unknown

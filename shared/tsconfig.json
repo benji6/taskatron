@@ -9,7 +9,7 @@
     "noUnusedLocals": true,
     "rootDir": "src",
     "strict": true,
-    "target": "ES2017"
+    "target": "es5"
   },
   "exclude": ["build", "node_modules"]
 }

@@ -4,7 +4,7 @@ import {
   IUserModelParams,
   IUserPatchBody,
   IUserResponse,
-} from '../shared/types'
+} from 'shared/types'
 import { withUsersCollection } from './withCollection'
 
 const documentToResponse = ({

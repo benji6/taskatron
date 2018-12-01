@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as config from 'config'
+import { ICoord } from 'shared/types'
 import pino from '../pino'
-import { ICoord } from '../shared/types'
 
 // more info here https://msdn.microsoft.com/en-us/library/ff701714.aspx
 export default (postcode: string): Promise<ICoord> => {

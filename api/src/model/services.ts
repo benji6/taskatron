@@ -3,12 +3,12 @@ import {
   ObjectId,
   UpdateWriteOpResult,
 } from 'mongodb'
-import pino from '../pino'
 import {
   IServiceDocument,
   IServiceFilters,
   IServiceModelParams,
-} from '../shared/types'
+} from 'shared/types'
+import pino from '../pino'
 import { SERVICES } from './collectionNames'
 import { withServicesCollection } from './withCollection'
 

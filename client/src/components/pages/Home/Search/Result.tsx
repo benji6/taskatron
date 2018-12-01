@@ -1,6 +1,6 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { IServiceResponseObject } from '../../../../shared/types'
+import { IServiceResponseObject } from 'shared/types'
 import { renderCurrency } from '../../../../utils'
 
 interface IProps {

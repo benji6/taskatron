@@ -1,5 +1,5 @@
+import { IUserPatchBody, IUserPostBody, IUserResponse } from 'shared/types'
 import { getCredentials } from '../localStorage'
-import { IUserPatchBody, IUserPostBody, IUserResponse } from '../shared/types'
 import ICredentials from '../types/ICredentials'
 import { getConfig, origin, patchConfig, postConfig } from './utils'
 

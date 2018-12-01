@@ -1,4 +1,5 @@
 import * as express from 'express'
+import { IUserResponse } from 'shared/types'
 import { get as getMe, patch as patchMe } from './controllers/me'
 import {
   post as postSendToken,
@@ -8,7 +9,6 @@ import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
 import passwordless, { restricted } from './passwordless/index'
-import { IUserResponse } from './shared/types'
 
 const router = express.Router()
 

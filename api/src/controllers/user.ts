@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import { PathReporter } from 'io-ts/lib/PathReporter'
+import { UserPostBody } from 'shared/types'
 import log from '../log'
 import { getUserByEmail, setUser } from '../model/user'
 import passwordless from '../passwordless/index'
 import geocode from '../services/geocode'
-import { UserPostBody } from '../shared/types'
 
 const logUserPost = log('user')('POST')
 

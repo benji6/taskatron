@@ -8,6 +8,7 @@ import {
   maxServiceDescriptionLength,
   maxServiceNameLength,
 } from 'shared/constants'
+import { IUserDocument } from 'shared/types'
 import {
   addService,
   countServices,
@@ -19,7 +20,6 @@ import {
 } from './model/services'
 import { getUser } from './model/user'
 import pino from './pino'
-import { IUserDocument } from './shared/types'
 
 interface IContext {
   userId: string

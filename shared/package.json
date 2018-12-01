@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "tsc -w",
     "test": "run-p test:*",
-    "test:format": "prettier --list-different \"**/*.ts*\"",
+    "test:format": "prettier --list-different \"**/*.ts*\" && yarn test:lint --fix",
     "test:lint": "tslint -c tslint.json '**/*.ts'",
     "test:types": "tsc --noEmit"
   },
@@ -19,5 +19,8 @@
     "tslint-config-prettier": "^1.17.0",
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "^3.2.1"
+  },
+  "dependencies": {
+    "io-ts": "^1.4.2"
   }
 }

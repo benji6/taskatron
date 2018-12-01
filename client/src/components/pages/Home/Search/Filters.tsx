@@ -1,8 +1,8 @@
 import { Checkbox, Toggle } from 'eri'
 import * as React from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { IServiceFilters } from '../../../../shared/types'
-import { filterObj } from '../../../../shared/utils'
+import { IServiceFilters } from 'shared/types'
+import { filterObj } from 'shared/utils'
 
 interface IProps extends RouteComponentProps {
   urlSearchFilters: IServiceFilters

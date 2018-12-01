@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import { getUser, updateUser } from '../model/user'
-import pino from '../pino'
 import {
   isFirstName,
   isLastName,
   isPostcode,
   IUserPatchBody,
-} from '../shared/types'
+} from 'shared/types'
+import { getUser, updateUser } from '../model/user'
+import pino from '../pino'
 
 interface IRequest extends Request {
   user: string

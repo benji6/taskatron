@@ -4,11 +4,7 @@ import { History, Location } from 'history' // tslint:disable-line no-implicit-d
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import {
-  ICoord,
-  IServiceFilters,
-  IServiceResponseObject,
-} from '../../../../shared/types'
+import { ICoord, IServiceFilters, IServiceResponseObject } from 'shared/types'
 import { createSearchString, position } from '../../../../utils'
 import Filters from './Filters'
 import Result from './Result'

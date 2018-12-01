@@ -9,8 +9,8 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
+import { isEmail } from 'shared/types'
 import { sendToken } from '../../../api'
-import { isEmail } from '../../../shared/types'
 import { getFieldError } from '../../../utils'
 
 interface IFormValues {

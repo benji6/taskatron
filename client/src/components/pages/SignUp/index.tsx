@@ -2,13 +2,8 @@ import { Button, ButtonGroup, TextField } from 'eri'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
+import { isEmail, isFirstName, isLastName, isPostcode } from 'shared/types'
 import { postUser } from '../../../api'
-import {
-  isEmail,
-  isFirstName,
-  isLastName,
-  isPostcode,
-} from '../../../shared/types'
 import { getFieldError } from '../../../utils'
 
 interface IFormValues {
