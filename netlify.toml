@@ -1,7 +1,6 @@
 [build]
-  base = "client"
   publish = "client/dist"
-  command = "yarn build"
+  command = "cd client && yarn build"
 [build.environment]
   API_URL='/api'
 [[redirects]]

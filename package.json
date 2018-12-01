@@ -1,4 +1,8 @@
 {
   "private": true,
-  "workspaces": ["api", "client", "shared"]
+  "workspaces": [
+    "api",
+    "client",
+    "shared"
+  ]
 }
