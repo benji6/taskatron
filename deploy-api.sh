@@ -4,10 +4,13 @@ set -e
 
 git fetch
 git reset --hard origin/master
-cd api
 yarn
 
-NODE_ENV=production
-
+cd shared
 yarn build
+
+cd ../api
+yarn build
+
+NODE_ENV=production
 pm2 reload 0
