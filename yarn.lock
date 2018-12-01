@@ -2727,10 +2727,10 @@ entities@^1.1.1, entities@~1.1.1:
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.2.tgz#bdfa735299664dfafd34529ed4f8522a275fea56"
   integrity sha512-f2LZMYl1Fzu7YSBKg+RoROelpOaNrcGmE9AZubeDfrCEia483oW4MI4VyFd5VNHIgQ/7qm1I0wUHK1eJnn2y2w==
 
-eri@^4.31.1:
-  version "4.31.1"
-  resolved "https://registry.yarnpkg.com/eri/-/eri-4.31.1.tgz#2f4da70fbae9a1d4754c4a767fe10154700201a8"
-  integrity sha512-b+FXtZVjrtXPAg3il33eLkqY2aNiNxZXC3H2LdQDmtCS+qGJ0amPIawN4jEF8UH3fM5U2W+pFZAaRu+IHL3yiQ==
+eri@^4.31.2:
+  version "4.31.2"
+  resolved "https://registry.yarnpkg.com/eri/-/eri-4.31.2.tgz#b98b9f2600cbc4439e31efbe3260e16f0b999088"
+  integrity sha512-07inj9E5P94iNN2kLbwrMYO6pHIcEvRFqCRdPGDmxDmVlYdHL0aPVudhskK8gtuqie/ujHuSKNL3pJJcTtW9hw==
   dependencies:
     classnames "^2.2.6"
 
