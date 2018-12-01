@@ -14,7 +14,7 @@ class Home extends React.PureComponent<IProps> {
     const { firstName } = this.props
 
     return (
-      <main>
+      <>
         {!firstName && (
           <>
             <ButtonGroup>
@@ -26,7 +26,7 @@ class Home extends React.PureComponent<IProps> {
           </>
         )}
         <Search />
-      </main>
+      </>
     )
   }
 }

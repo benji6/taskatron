@@ -41,7 +41,7 @@ interface IState {
   submittedSuccessfully: boolean
 }
 
-class UserForm extends React.PureComponent<IProps> {
+class EditUser extends React.PureComponent<IProps> {
   public hasUnmounted = false
 
   public state: IState = {
@@ -64,63 +64,59 @@ class UserForm extends React.PureComponent<IProps> {
       radius: String(radius),
     }
 
-    return (
-      <main>
-        {error ? (
-          <p e-util="negative">Oops, there was an error, please try again.</p>
-        ) : submittedSuccessfully ? (
-          <Redirect to="/profile" />
-        ) : (
-          <Formik
-            initialValues={initialValues}
-            onSubmit={this.handleSubmit}
-            validate={this.validate}
-            render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form noValidate>
-                <h2>Edit my details</h2>
-                <p>Tell us about yourself.</p>
-                <Field
-                  autocomplete="given-name"
-                  name="firstName"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'firstName')}
-                      label="First name"
-                    />
-                  )}
+    return error ? (
+      <p e-util="negative">Oops, there was an error, please try again.</p>
+    ) : submittedSuccessfully ? (
+      <Redirect to="/profile" />
+    ) : (
+      <Formik
+        initialValues={initialValues}
+        onSubmit={this.handleSubmit}
+        validate={this.validate}
+        render={({ isSubmitting }: FormikProps<IFormValues>) => (
+          <Form noValidate>
+            <h2>Edit my details</h2>
+            <p>Tell us about yourself.</p>
+            <Field
+              autocomplete="given-name"
+              name="firstName"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  error={getFieldError(form, 'firstName')}
+                  label="First name"
                 />
-                <Field
-                  autocomplete="family-name"
-                  name="lastName"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'lastName')}
-                      label="Last name"
-                    />
-                  )}
+              )}
+            />
+            <Field
+              autocomplete="family-name"
+              name="lastName"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  error={getFieldError(form, 'lastName')}
+                  label="Last name"
                 />
-                <Field
-                  autocomplete="postal-code"
-                  name="postcode"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'postcode')}
-                      label="Postcode"
-                    />
-                  )}
+              )}
+            />
+            <Field
+              autocomplete="postal-code"
+              name="postcode"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  error={getFieldError(form, 'postcode')}
+                  label="Postcode"
                 />
-                <ButtonGroup>
-                  <Button disabled={isSubmitting}>Save</Button>
-                  <Link to="/profile">Cancel</Link>
-                </ButtonGroup>
-              </Form>
-            )}
-          />
+              )}
+            />
+            <ButtonGroup>
+              <Button disabled={isSubmitting}>Save</Button>
+              <Link to="/profile">Cancel</Link>
+            </ButtonGroup>
+          </Form>
         )}
-      </main>
+      />
     )
   }
 
@@ -170,4 +166,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(UserForm)
+)(EditUser)

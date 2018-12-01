@@ -48,7 +48,7 @@ class Service extends React.PureComponent<IProps> {
     const { email, firstName, userId, lastName, postcode } = this.props
 
     return (
-      <main>
+      <>
         <Card>
           <h3>My details</h3>
           <p>These are your personal details and can only be seen by you:</p>
@@ -96,7 +96,7 @@ class Service extends React.PureComponent<IProps> {
             return <ServiceCard>{service}</ServiceCard>
           }}
         </Query>
-      </main>
+      </>
     )
   }
 }

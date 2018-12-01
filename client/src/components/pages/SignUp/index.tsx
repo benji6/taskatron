@@ -35,100 +35,96 @@ class SignUp extends React.PureComponent<{}, IState> {
   public render() {
     const { email, errorCode, submittedSuccessfully } = this.state
 
-    return (
-      <main>
-        {errorCode === 409 ? (
-          <>
-            <h2>Sign up Failed</h2>
-            <p>Looks like we already have an account for {email}.</p>
-            <p>
-              Try <Link to="/sign-in">signing in</Link>.
+    return errorCode === 409 ? (
+      <>
+        <h2>Sign up Failed</h2>
+        <p>Looks like we already have an account for {email}.</p>
+        <p>
+          Try <Link to="/sign-in">signing in</Link>.
+        </p>
+      </>
+    ) : errorCode === 500 ? (
+      <>
+        <h2>Sign up Failed</h2>
+        <p>
+          We're sorry, something has gone wrong, please refresh the page and try
+          again.
+        </p>
+      </>
+    ) : submittedSuccessfully ? (
+      <>
+        <h2>Sign up Email Sent!</h2>
+        <p>Please check your email and click the link to sign in.</p>
+        <p>You can close this window now.</p>
+      </>
+    ) : (
+      <Formik
+        initialValues={{
+          email: '',
+          firstName: '',
+          lastName: '',
+          postcode: '',
+        }}
+        onSubmit={this.handleSubmit}
+        validate={this.validate}
+        render={({ isSubmitting }: FormikProps<IFormValues>) => (
+          <Form noValidate>
+            <h2>Sign up</h2>
+            <p>We just need a few details to get started.</p>
+            <Field
+              name="email"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  autoComplete="email"
+                  error={getFieldError(form, 'email')}
+                  label="Email"
+                  type="email"
+                />
+              )}
+            />
+            <Field
+              autocomplete="given-name"
+              name="firstName"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  error={getFieldError(form, 'firstName')}
+                  label="First name"
+                />
+              )}
+            />
+            <Field
+              autocomplete="family-name"
+              name="lastName"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  error={getFieldError(form, 'lastName')}
+                  label="Last name"
+                />
+              )}
+            />
+            <Field
+              autocomplete="postal-code"
+              name="postcode"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  error={getFieldError(form, 'postcode')}
+                  label="Postcode"
+                />
+              )}
+            />
+            <ButtonGroup>
+              <Button disabled={isSubmitting}>Send link</Button>
+            </ButtonGroup>
+            <p e-util="center">
+              Already have an account? <Link to="/sign-in">Sign in</Link>!
             </p>
-          </>
-        ) : errorCode === 500 ? (
-          <>
-            <h2>Sign up Failed</h2>
-            <p>
-              We're sorry, something has gone wrong, please refresh the page and
-              try again.
-            </p>
-          </>
-        ) : submittedSuccessfully ? (
-          <>
-            <h2>Sign up Email Sent!</h2>
-            <p>Please check your email and click the link to sign in.</p>
-            <p>You can close this window now.</p>
-          </>
-        ) : (
-          <Formik
-            initialValues={{
-              email: '',
-              firstName: '',
-              lastName: '',
-              postcode: '',
-            }}
-            onSubmit={this.handleSubmit}
-            validate={this.validate}
-            render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form noValidate>
-                <h2>Sign up</h2>
-                <p>We just need a few details to get started.</p>
-                <Field
-                  name="email"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      autoComplete="email"
-                      error={getFieldError(form, 'email')}
-                      label="Email"
-                      type="email"
-                    />
-                  )}
-                />
-                <Field
-                  autocomplete="given-name"
-                  name="firstName"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'firstName')}
-                      label="First name"
-                    />
-                  )}
-                />
-                <Field
-                  autocomplete="family-name"
-                  name="lastName"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'lastName')}
-                      label="Last name"
-                    />
-                  )}
-                />
-                <Field
-                  autocomplete="postal-code"
-                  name="postcode"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      error={getFieldError(form, 'postcode')}
-                      label="Postcode"
-                    />
-                  )}
-                />
-                <ButtonGroup>
-                  <Button disabled={isSubmitting}>Send link</Button>
-                </ButtonGroup>
-                <p e-util="center">
-                  Already have an account? <Link to="/sign-in">Sign in</Link>!
-                </p>
-              </Form>
-            )}
-          />
+          </Form>
         )}
-      </main>
+      />
     )
   }
 

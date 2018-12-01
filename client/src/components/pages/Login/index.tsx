@@ -23,13 +23,13 @@ class Login extends React.PureComponent<IProps> {
     if (isSignedIn) window.location.replace('/')
     if (logInFail) {
       return (
-        <main>
+        <>
           <h2>Error signing in</h2>
           <p>
             <Link to="sign-in">Click here</Link> to get a new token and remember
             that old tokens may no longer work.
           </p>
-        </main>
+        </>
       )
     }
     return <Spinner variation="page" />

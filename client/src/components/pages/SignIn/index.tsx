@@ -35,49 +35,45 @@ class SignIn extends React.PureComponent<{}, IState> {
   public render() {
     const { submittedSuccessfully } = this.state
 
-    return (
-      <main>
-        {submittedSuccessfully ? (
-          <>
-            <h2>Sign in Email Sent!</h2>
-            <p>Please check your email and click the link to sign in.</p>
-            <p>You can close this window now.</p>
-          </>
-        ) : (
-          <Formik
-            initialValues={{ email: '' }}
-            onSubmit={this.handleSubmit}
-            validate={this.validate}
-            render={({ isSubmitting }: FormikProps<IFormValues>) => (
-              <Form noValidate>
-                <h2>Sign in</h2>
-                <p>
-                  Send us your email address and we'll send you a secure link to
-                  sign in with.
-                </p>
-                <Field
-                  name="email"
-                  render={({ field, form }: FieldProps<IFormValues>) => (
-                    <TextField
-                      {...field}
-                      autoComplete="email"
-                      error={getFieldError(form, 'email')}
-                      label="Email"
-                      type="email"
-                    />
-                  )}
+    return submittedSuccessfully ? (
+      <>
+        <h2>Sign in Email Sent!</h2>
+        <p>Please check your email and click the link to sign in.</p>
+        <p>You can close this window now.</p>
+      </>
+    ) : (
+      <Formik
+        initialValues={{ email: '' }}
+        onSubmit={this.handleSubmit}
+        validate={this.validate}
+        render={({ isSubmitting }: FormikProps<IFormValues>) => (
+          <Form noValidate>
+            <h2>Sign in</h2>
+            <p>
+              Send us your email address and we'll send you a secure link to
+              sign in with.
+            </p>
+            <Field
+              name="email"
+              render={({ field, form }: FieldProps<IFormValues>) => (
+                <TextField
+                  {...field}
+                  autoComplete="email"
+                  error={getFieldError(form, 'email')}
+                  label="Email"
+                  type="email"
                 />
-                <ButtonGroup>
-                  <Button disabled={isSubmitting}>Send link</Button>
-                </ButtonGroup>
-                <p e-util="center">
-                  Don't have an account? <Link to="/sign-up">Sign up</Link>!
-                </p>
-              </Form>
-            )}
-          />
+              )}
+            />
+            <ButtonGroup>
+              <Button disabled={isSubmitting}>Send link</Button>
+            </ButtonGroup>
+            <p e-util="center">
+              Don't have an account? <Link to="/sign-up">Sign up</Link>!
+            </p>
+          </Form>
         )}
-      </main>
+      />
     )
   }
 

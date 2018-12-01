@@ -10,12 +10,12 @@ import Menu from '../Menu'
 import About from '../pages/About'
 import AddService from '../pages/AddService'
 import EditService from '../pages/EditService'
+import EditUser from '../pages/EditUser'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
-import UserForm from '../pages/UserForm'
 import PrivateRoute from '../PrivateRoute'
 
 interface IProps {
@@ -42,36 +42,38 @@ class App extends React.PureComponent<IProps> {
             <>
               <Header onMenuOpen={this.handleMenuOpen} />
               <Menu isOpen={isMenuOpen} onClose={this.handleMenuClose} />
-              <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/about" component={About} />
-                <Route path="/login" component={Login} />
-                <Route path="/sign-in" component={SignIn} />
-                <Route path="/sign-up" component={SignUp} />
-                <PrivateRoute
-                  exact
-                  path="/profile"
-                  component={Profile}
-                  isSignedIn={isSignedIn}
-                />
-                <PrivateRoute
-                  exact
-                  path="/profile/user"
-                  component={UserForm}
-                  isSignedIn={isSignedIn}
-                />
-                <PrivateRoute
-                  path="/profile/service/add"
-                  component={AddService}
-                  isSignedIn={isSignedIn}
-                />
-                <PrivateRoute
-                  path="/profile/service/edit"
-                  component={EditService}
-                  isSignedIn={isSignedIn}
-                />
-                <Redirect to="/" />
-              </Switch>
+              <main>
+                <Switch>
+                  <Route path="/" exact component={Home} />
+                  <Route path="/about" component={About} />
+                  <Route path="/login" component={Login} />
+                  <Route path="/sign-in" component={SignIn} />
+                  <Route path="/sign-up" component={SignUp} />
+                  <PrivateRoute
+                    exact
+                    path="/profile"
+                    component={Profile}
+                    isSignedIn={isSignedIn}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/profile/user"
+                    component={EditUser}
+                    isSignedIn={isSignedIn}
+                  />
+                  <PrivateRoute
+                    path="/profile/service/add"
+                    component={AddService}
+                    isSignedIn={isSignedIn}
+                  />
+                  <PrivateRoute
+                    path="/profile/service/edit"
+                    component={EditService}
+                    isSignedIn={isSignedIn}
+                  />
+                  <Redirect to="/" />
+                </Switch>
+              </main>
             </>
           )}
         </BrowserRouter>
