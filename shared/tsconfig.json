@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "rootDir": "src",
+    "strict": true,
+    "target": "ES2017"
+  },
+  "exclude": ["build", "node_modules"]
+}
