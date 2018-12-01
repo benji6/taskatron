@@ -30,7 +30,8 @@
     "io-ts": "^1.4.2",
     "mailgun-js": "^0.20.0",
     "mongodb": "^3.1.10",
-    "pino": "^5.9.0"
+    "pino": "^5.9.0",
+    "shared": "^0.1.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

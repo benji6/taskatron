@@ -12,5 +12,5 @@
     "strict": true,
     "target": "ES2017"
   },
-  "exclude": ["node_modules", "build"]
+  "exclude": ["build", "node_modules"]
 }

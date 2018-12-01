@@ -21,12 +21,12 @@ import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
-import { userIdSelector } from '../../../selectors'
 import {
   maxServiceDescriptionLength,
   maxServiceNameLength,
   radii,
-} from '../../../shared/constants'
+} from 'shared/constants'
+import { userIdSelector } from '../../../selectors'
 import { isValidNumber } from '../../../shared/validation'
 import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'

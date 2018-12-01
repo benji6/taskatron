@@ -5,6 +5,10 @@ import {
   UserInputError,
 } from 'apollo-server-express'
 import {
+  maxServiceDescriptionLength,
+  maxServiceNameLength,
+} from 'shared/constants'
+import {
   addService,
   countServices,
   deleteService,
@@ -15,10 +19,6 @@ import {
 } from './model/services'
 import { getUser } from './model/user'
 import pino from './pino'
-import {
-  maxServiceDescriptionLength,
-  maxServiceNameLength,
-} from './shared/constants'
 import { IUserDocument } from './shared/types'
 
 interface IContext {
