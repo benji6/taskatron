@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
-    "module": "esnext",
-    "target": "es5",
-    "lib": ["esnext", "dom"],
-    "sourceMap": true,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
     "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "rootDir": "src",
+    "sourceMap": true,
     "strict": true,
-    "noUnusedLocals": true
+    "target": "es5"
   },
-  "exclude": ["node_modules", "build", "scripts"]
+  "exclude": ["node_modules"]
 }
