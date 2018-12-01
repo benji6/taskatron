@@ -159,7 +159,7 @@ class AddService extends React.PureComponent<IProps> {
                 render={({ isSubmitting }: FormikProps<IFormValues>) => (
                   <Form noValidate>
                     <h2>Add cleaning service</h2>
-                    <p>Tell us about the cleaning service you're offering.</p>
+                    <p>Tell us about the cleaning service you're offering</p>
                     <Field
                       name="serviceName"
                       render={({ field, form }: FieldProps<IFormValues>) => (
@@ -213,72 +213,75 @@ class AddService extends React.PureComponent<IProps> {
                         </Select>
                       )}
                     />
-                    <Field
-                      name="general"
-                      render={({ field, form }: FieldProps<IFormValues>) => (
-                        <Checkbox
-                          {...field}
-                          checked={field.value}
-                          error={getFieldError(form, 'general')}
-                          label="General clean"
-                        />
-                      )}
-                    />
-                    <Field
-                      name="deepClean"
-                      render={({ field, form }: FieldProps<IFormValues>) => (
-                        <Checkbox
-                          {...field}
-                          checked={field.value}
-                          error={getFieldError(form, 'deepClean')}
-                          label="Oneoff deep clean"
-                        />
-                      )}
-                    />
-                    <Field
-                      name="carpetClean"
-                      render={({ field, form }: FieldProps<IFormValues>) => (
-                        <Checkbox
-                          {...field}
-                          checked={field.value}
-                          error={getFieldError(form, 'carpetClean')}
-                          label="Specialist clean  carpets"
-                        />
-                      )}
-                    />
-                    <Field
-                      name="ovenClean"
-                      render={({ field, form }: FieldProps<IFormValues>) => (
-                        <Checkbox
-                          {...field}
-                          checked={field.value}
-                          error={getFieldError(form, 'ovenClean')}
-                          label="Specialist clean  oven"
-                        />
-                      )}
-                    />
-                    <Field
-                      name="hasOwnProducts"
-                      render={({ field, form }: FieldProps<IFormValues>) => (
-                        <Checkbox
-                          {...field}
-                          checked={field.value}
-                          error={getFieldError(form, 'hasOwnProducts')}
-                          label="I have my own cleaning products"
-                        />
-                      )}
-                    />
-                    <Field
-                      name="hasOwnEquipment"
-                      render={({ field, form }: FieldProps<IFormValues>) => (
-                        <Checkbox
-                          {...field}
-                          checked={field.value}
-                          error={getFieldError(form, 'hasOwnEquipment')}
-                          label="I have my own cleaning equipment"
-                        />
-                      )}
-                    />
+                    <fieldset>
+                      <legend>Other information</legend>
+                      <Field
+                        name="general"
+                        render={({ field, form }: FieldProps<IFormValues>) => (
+                          <Checkbox
+                            {...field}
+                            checked={field.value}
+                            error={getFieldError(form, 'general')}
+                            label="General clean"
+                          />
+                        )}
+                      />
+                      <Field
+                        name="deepClean"
+                        render={({ field, form }: FieldProps<IFormValues>) => (
+                          <Checkbox
+                            {...field}
+                            checked={field.value}
+                            error={getFieldError(form, 'deepClean')}
+                            label="Oneoff deep clean"
+                          />
+                        )}
+                      />
+                      <Field
+                        name="carpetClean"
+                        render={({ field, form }: FieldProps<IFormValues>) => (
+                          <Checkbox
+                            {...field}
+                            checked={field.value}
+                            error={getFieldError(form, 'carpetClean')}
+                            label="Specialist clean  carpets"
+                          />
+                        )}
+                      />
+                      <Field
+                        name="ovenClean"
+                        render={({ field, form }: FieldProps<IFormValues>) => (
+                          <Checkbox
+                            {...field}
+                            checked={field.value}
+                            error={getFieldError(form, 'ovenClean')}
+                            label="Specialist clean  oven"
+                          />
+                        )}
+                      />
+                      <Field
+                        name="hasOwnProducts"
+                        render={({ field, form }: FieldProps<IFormValues>) => (
+                          <Checkbox
+                            {...field}
+                            checked={field.value}
+                            error={getFieldError(form, 'hasOwnProducts')}
+                            label="I have my own cleaning products"
+                          />
+                        )}
+                      />
+                      <Field
+                        name="hasOwnEquipment"
+                        render={({ field, form }: FieldProps<IFormValues>) => (
+                          <Checkbox
+                            {...field}
+                            checked={field.value}
+                            error={getFieldError(form, 'hasOwnEquipment')}
+                            label="I have my own cleaning equipment"
+                          />
+                        )}
+                      />
+                    </fieldset>
                     <ButtonGroup>
                       <Button disabled={isSubmitting}>Save</Button>
                       <Link to="/services">Cancel</Link>
