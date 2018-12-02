@@ -39,7 +39,7 @@ const resolvers = {
       if (args.description.length > maxServiceDescriptionLength) {
         throw new UserInputError(
           `description length is ${
-            args.description.lengt
+            args.description.length
           }, but should be less than ${maxServiceDescriptionLength}`,
         )
       }
@@ -47,7 +47,7 @@ const resolvers = {
       if (args.name.length > maxServiceNameLength) {
         throw new UserInputError(
           `name length is ${
-            args.name.lengt
+            args.name.length
           }, but should be less than ${maxServiceNameLength}`,
         )
       }
