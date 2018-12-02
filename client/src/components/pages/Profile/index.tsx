@@ -1,4 +1,3 @@
-import { gql } from 'apollo-boost'
 import { ButtonGroup, Card, Spinner } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
@@ -12,6 +11,7 @@ import {
   userPostcodeSelector,
 } from '../../../selectors'
 import IStore from '../../../types/IStore'
+import query from './query'
 import ServiceCard from './ServiceCard'
 
 interface IProps {
@@ -22,26 +22,6 @@ interface IProps {
   radius: number
   userId: string
 }
-
-export const query = gql`
-  query ProfileService($userId: ID!) {
-    services(limit: 1, userId: $userId) {
-      nodes {
-        carpetClean
-        deepClean
-        description
-        general
-        hasOwnEquipment
-        hasOwnProducts
-        hourlyRate
-        id
-        name
-        ovenClean
-        radius
-      }
-    }
-  }
-`
 
 class Service extends React.PureComponent<IProps> {
   public render() {

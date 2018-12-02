@@ -1,14 +1,14 @@
-import { gql } from 'apollo-boost'
 import { Button, ButtonGroup, Card, Icon } from 'eri'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { query } from '.'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { renderCurrency } from '../../../utils'
 import DeleteDialog from './DeleteDialog'
+import mutation from './mutation'
+import query from './query'
 
 interface IProps {
   children: any
@@ -18,14 +18,6 @@ interface IProps {
 interface IState {
   isDeleteDialogOpen: boolean
 }
-
-const mutation = gql`
-  mutation DeleteService($id: ID!) {
-    deleteService(id: $id) {
-      id
-    }
-  }
-`
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 

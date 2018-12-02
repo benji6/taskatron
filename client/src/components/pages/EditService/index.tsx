@@ -1,4 +1,3 @@
-import { gql } from 'apollo-boost'
 import {
   Button,
   ButtonGroup,
@@ -30,6 +29,8 @@ import { isValidNumber } from 'shared/validation'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'
+import getServiceQuery from './getServiceQuery'
+import updateServiceMutation from './updateServiceMutation'
 
 interface IFormValues {
   carpetClean: boolean
@@ -52,74 +53,6 @@ interface IState {
   submittedSuccessfully: boolean
 }
 
-const query = gql`
-  query GetServiceByUserId($userId: ID!) {
-    services(limit: 1, skip: 0, userId: $userId) {
-      nodes {
-        carpetClean
-        deepClean
-        description
-        general
-        hasOwnEquipment
-        hasOwnProducts
-        hourlyRate
-        id
-        location {
-          coordinates
-          type
-        }
-        name
-        ovenClean
-        radius
-        userId
-      }
-    }
-  }
-`
-
-const updateServiceMutation = gql`
-  mutation UpdateService(
-    $carpetClean: Boolean
-    $deepClean: Boolean
-    $description: String!
-    $general: Boolean
-    $hasOwnEquipment: Boolean
-    $hasOwnProducts: Boolean
-    $hourlyRate: Float
-    $id: ID!
-    $name: String
-    $ovenClean: Boolean
-    $radius: Int
-  ) {
-    updateService(
-      carpetClean: $carpetClean
-      deepClean: $deepClean
-      description: $description
-      general: $general
-      hasOwnEquipment: $hasOwnEquipment
-      hasOwnProducts: $hasOwnProducts
-      hourlyRate: $hourlyRate
-      id: $id
-      name: $name
-      ovenClean: $ovenClean
-      radius: $radius
-    ) {
-      carpetClean
-      deepClean
-      description
-      general
-      hasOwnEquipment
-      hasOwnProducts
-      hourlyRate
-      id
-      name
-      ovenClean
-      radius
-      userId
-    }
-  }
-`
-
 class EditService extends React.PureComponent<IProps> {
   public hasUnmounted = false
 
@@ -136,7 +69,11 @@ class EditService extends React.PureComponent<IProps> {
     const { submittedSuccessfully } = this.state
 
     return (
-      <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
+      <Query
+        fetchPolicy="network-only"
+        query={getServiceQuery}
+        variables={{ userId }}
+      >
         {({ loading, error, data }) => {
           if (loading) return <Spinner variation="page" />
 

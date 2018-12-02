@@ -1,4 +1,3 @@
-import { gql } from 'apollo-boost'
 import {
   Button,
   ButtonGroup,
@@ -29,6 +28,7 @@ import { isValidNumber } from 'shared/validation'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'
+import addServiceMutation from './addServiceMutation'
 
 interface IFormValues {
   carpetClean: boolean
@@ -50,49 +50,6 @@ interface IProps {
 interface IState {
   submittedSuccessfully: boolean
 }
-
-const addServiceMutation = gql`
-  mutation AddService(
-    $carpetClean: Boolean
-    $deepClean: Boolean
-    $description: String!
-    $general: Boolean
-    $hasOwnEquipment: Boolean
-    $hasOwnProducts: Boolean
-    $hourlyRate: Float!
-    $name: String!
-    $ovenClean: Boolean
-    $radius: Int!
-    $userId: ID!
-  ) {
-    addService(
-      carpetClean: $carpetClean
-      deepClean: $deepClean
-      description: $description
-      general: $general
-      hasOwnEquipment: $hasOwnEquipment
-      hasOwnProducts: $hasOwnProducts
-      hourlyRate: $hourlyRate
-      name: $name
-      ovenClean: $ovenClean
-      radius: $radius
-      userId: $userId
-    ) {
-      carpetClean
-      deepClean
-      description
-      general
-      hasOwnEquipment
-      hasOwnProducts
-      hourlyRate
-      id
-      name
-      ovenClean
-      radius
-      userId
-    }
-  }
-`
 
 class AddService extends React.PureComponent<IProps> {
   public hasUnmounted = false

@@ -1,4 +1,3 @@
-import { gql } from 'apollo-boost'
 import { Button, ButtonGroup, Pagination, Spinner } from 'eri'
 import { History, Location } from 'history' // tslint:disable-line no-implicit-dependencies
 import * as React from 'react'
@@ -7,47 +6,10 @@ import { withRouter } from 'react-router-dom'
 import { ICoord, IServiceFilters, IServiceResponseObject } from 'shared/types'
 import { createSearchString, position } from '../../../../utils'
 import Filters from './Filters'
+import query from './query'
 import Result from './Result'
 
-const resultsPerPage = 10
-
-const query = gql`
-  query Services(
-    $carpetClean: Boolean
-    $deepClean: Boolean
-    $general: Boolean
-    $hasOwnEquipment: Boolean
-    $hasOwnProducts: Boolean
-    $ovenClean: Boolean
-    $skip: Int!
-  ) {
-    services(
-      deepClean: $deepClean
-      carpetClean: $carpetClean
-      general: $general
-      hasOwnEquipment: $hasOwnEquipment
-      hasOwnProducts: $hasOwnProducts
-      ovenClean: $ovenClean
-      skip: $skip
-      limit: ${resultsPerPage}
-    ) {
-      nodes {
-        carpetClean
-        deepClean
-        description
-        general
-        hasOwnEquipment
-        hasOwnProducts
-        hourlyRate
-        id
-        name
-        ovenClean
-        radius
-      }
-      total
-    }
-  }
-`
+export const resultsPerPage = 10
 
 interface IProps {
   location: Location
