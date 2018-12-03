@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost'
-import { resultsPerPage } from '.'
+import { resultsPerPage } from './constants'
 
 export default gql`
   query Services(

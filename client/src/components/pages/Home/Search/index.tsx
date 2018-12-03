@@ -5,11 +5,10 @@ import { Query } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 import { ICoord, IServiceFilters, IServiceResponseObject } from 'shared/types'
 import { createSearchString, position } from '../../../../utils'
+import { resultsPerPage } from './constants'
 import Filters from './Filters'
 import query from './query'
 import Result from './Result'
-
-export const resultsPerPage = 10
 
 interface IProps {
   location: Location
