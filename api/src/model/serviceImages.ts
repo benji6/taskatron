@@ -7,7 +7,22 @@ interface IUploadData {
   Bucket: string
 }
 
+const Bucket = 'taskatron-service-images'
 const s3 = new AWS.S3({ apiVersion: '2006-03-01', region: 'eu-west-2' })
+
+export const deleteImage = (id: string): Promise<void> =>
+  new Promise((resolve, reject) =>
+    s3.deleteObject(
+      {
+        Bucket,
+        Key: `${id}.jpg`,
+      },
+      (err: Error) => {
+        if (err) return reject(err)
+        resolve()
+      },
+    ),
+  )
 
 export const uploadImage = ({
   id,
@@ -20,7 +35,7 @@ export const uploadImage = ({
     s3.upload(
       {
         Body: image,
-        Bucket: 'taskatron-service-images',
+        Bucket,
         Key: `${id}.jpg`,
       },
       (err: Error, data: IUploadData) => {

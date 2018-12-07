@@ -8,6 +8,7 @@ import {
   maxServiceNameLength,
 } from 'shared/constants'
 import { IUserDocument } from 'shared/types'
+import { deleteImage } from './model/serviceImages'
 import {
   addService,
   countServices,
@@ -77,6 +78,9 @@ const resolvers = {
       }
 
       await deleteService(_id)
+      deleteImage(_id).catch(err =>
+        pino.error(`deleteImage(${_id}) error:`, err),
+      )
 
       return {
         ...rest,
