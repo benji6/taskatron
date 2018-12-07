@@ -17,6 +17,7 @@ interface IProps {
 
 interface IState {
   isDeleteDialogOpen: boolean
+  showImage: boolean
 }
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
@@ -24,6 +25,7 @@ const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 class ServiceForm extends React.PureComponent<IProps> {
   public state: IState = {
     isDeleteDialogOpen: false,
+    showImage: true,
   }
 
   public openDeleteDialog = () => {
@@ -33,7 +35,6 @@ class ServiceForm extends React.PureComponent<IProps> {
   public closeDeleteDialog = () => this.setState({ isDeleteDialogOpen: false })
 
   public render() {
-    const { isDeleteDialogOpen } = this.state
     const {
       children: {
         carpetClean,
@@ -50,6 +51,7 @@ class ServiceForm extends React.PureComponent<IProps> {
       },
       userId,
     } = this.props
+    const { isDeleteDialogOpen, showImage } = this.state
 
     return (
       <Card>
@@ -58,10 +60,13 @@ class ServiceForm extends React.PureComponent<IProps> {
           These are the details of your service that people can view and search
           for:
         </p>
-        <img
-          alt="your service image"
-          src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
-        />
+        {showImage && (
+          <img
+            alt="your service image"
+            onError={this.handleImageLoadError}
+            src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
+          />
+        )}
         <ul>
           <li>
             <b>Name:</b> {name}
@@ -135,6 +140,8 @@ class ServiceForm extends React.PureComponent<IProps> {
       </Card>
     )
   }
+
+  private handleImageLoadError = () => this.setState({ showImage: false })
 }
 
 const mapStateToProps = (state: IStore) => ({

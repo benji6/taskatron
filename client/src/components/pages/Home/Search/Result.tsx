@@ -7,9 +7,17 @@ interface IProps {
   children: IServiceResponseObject
 }
 
+interface IState {
+  showImage: boolean
+}
+
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
 export default class Result extends React.PureComponent<IProps> {
+  public state: IState = {
+    showImage: true,
+  }
+
   public render() {
     const {
       children: {
@@ -20,15 +28,24 @@ export default class Result extends React.PureComponent<IProps> {
         hasOwnEquipment,
         hasOwnProducts,
         hourlyRate,
+        id,
         name,
         ovenClean,
       },
     } = this.props
+    const { showImage } = this.state
 
     return (
       <Card>
         <h3>{name}</h3>
         <p>{description}</p>
+        {showImage && (
+          <img
+            alt={`profile image for ${name}`}
+            onError={this.handleImageLoadError}
+            src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
+          />
+        )}
         <ul>
           <li>Hourly rate: {renderCurrency(hourlyRate)}</li>
           <li>General clean: {renderTrueFalse(general)}</li>
@@ -41,4 +58,6 @@ export default class Result extends React.PureComponent<IProps> {
       </Card>
     )
   }
+
+  private handleImageLoadError = () => this.setState({ showImage: false })
 }

@@ -132,6 +132,7 @@ export interface IServiceModelParams extends IServicePostBody {
 }
 
 export interface IServiceResponseObject extends IServiceDocument {
+  id: string
   description: string
   providerName: string
 }
