@@ -1,7 +1,13 @@
 import { IUserPatchBody, IUserPostBody, IUserResponse } from 'shared/types'
 import { getCredentials } from '../localStorage'
 import ICredentials from '../types/ICredentials'
-import { getConfig, origin, patchConfig, postConfig } from './utils'
+import {
+  getConfig,
+  origin,
+  patchConfig,
+  postConfig,
+  postFileConfig,
+} from './utils'
 
 export const getMe = (credentials: ICredentials): Promise<IUserResponse> =>
   fetch(`${origin}/me`, getConfig(credentials))
@@ -33,6 +39,21 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
   if (!response.ok) throw Error(String(response.status))
   return response
 }
+
+export const postServiceImage = ({
+  id,
+  image,
+}: {
+  id: string
+  image: File
+}): Promise<Response> =>
+  fetch(
+    `${origin}/services/${id}/image`,
+    postFileConfig(image, getCredentials()),
+  ).then(response => {
+    if (!response.ok) throw Error(String(response.status))
+    return response
+  })
 
 export const postUser = (user: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/user`, postConfig(user)).then(response => {

@@ -58,6 +58,10 @@ class ServiceForm extends React.PureComponent<IProps> {
           These are the details of your service that people can view and search
           for:
         </p>
+        <img
+          alt="your service image"
+          src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
+        />
         <ul>
           <li>
             <b>Name:</b> {name}

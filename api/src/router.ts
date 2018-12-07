@@ -5,6 +5,7 @@ import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
+import { post as postServiceImage } from './controllers/serviceImages'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
@@ -26,14 +27,13 @@ const sendTokenMiddleware = passwordless.requestToken(
 router.get('/health', (_, response) => response.status(200).end())
 router.get('/me', restricted(), getMe)
 router.patch('/me', restricted(), patchMe)
-
 router.post(
   '/send-token',
   sendTokenMiddleware,
   postSendTokenErrorMiddleware,
   postSendToken,
 )
-
+router.post('/services/:id/image', restricted(), postServiceImage)
 router.get('/sign-out', passwordless.logout(), getSignOut)
 
 router.post('/user', postUser)

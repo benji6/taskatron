@@ -2,7 +2,7 @@ import ICredentials from '../types/ICredentials'
 
 export const origin = process.env.API_URL
 
-const jsonHeaders = (
+const createHeaders = (
   credentials?: ICredentials,
   withContentType?: boolean,
 ): Headers => {
@@ -21,17 +21,23 @@ const jsonHeaders = (
 }
 
 export const getConfig = (credentials?: ICredentials) => ({
-  headers: jsonHeaders(credentials),
+  headers: createHeaders(credentials),
 })
 
 export const patchConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders(credentials, true),
+  headers: createHeaders(credentials, true),
   method: 'PATCH',
 })
 
 export const postConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
-  headers: jsonHeaders(credentials, true),
+  headers: createHeaders(credentials, true),
+  method: 'POST',
+})
+
+export const postFileConfig = (body: File, credentials?: ICredentials) => ({
+  body,
+  headers: createHeaders(credentials),
   method: 'POST',
 })
