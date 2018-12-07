@@ -5,9 +5,8 @@ import {
   userGetFailure,
   userGetSuccess,
   userLogInFail,
-  userSignOut,
 } from '../actions'
-import { getMe, getSignOut } from '../api'
+import { getMe } from '../api'
 import {
   deleteCredentials,
   getCredentials,
@@ -61,19 +60,6 @@ function* handleUserCheckSignedIn() {
   yield put(userGetCredentialsFailure())
 }
 
-function* handleUserSignOut() {
-  try {
-    yield call(getSignOut, getCredentials())
-  } catch (e) {
-    // empty
-  } finally {
-    deleteCredentials()
-  }
-}
-
 export default function* watchSignUpRequest() {
-  yield all([
-    takeLatest(userAuth, handleUserCheckSignedIn),
-    takeLatest(userSignOut, handleUserSignOut),
-  ])
+  yield all([takeLatest(userAuth, handleUserCheckSignedIn)])
 }

@@ -3,6 +3,8 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { userSignOut } from '../../actions'
+import { getSignOut } from '../../api'
+import { deleteCredentials } from '../../localStorage'
 import { userFirstNameSelector } from '../../selectors'
 import IStore from '../../types/IStore'
 
@@ -15,7 +17,7 @@ interface IProps {
 
 class Menu extends React.PureComponent<IProps> {
   public render() {
-    const { firstName, isOpen, onClose, onSignOut } = this.props
+    const { firstName, isOpen, onClose } = this.props
 
     return (
       <EriMenu onClose={onClose} open={isOpen}>
@@ -37,21 +39,30 @@ class Menu extends React.PureComponent<IProps> {
           </Link>
         </p>
         <p>
-          <Link
-            onClick={() => {
-              onClose()
-              onSignOut()
-              // TODO - to remove will need to remove auth header from
-              // Apollo Client and clear the Apollo Client cache
-              window.location.href = '/'
-            }}
-            to="/"
-          >
+          <Link onClick={this.handleSignOut} to="/">
             Sign out
           </Link>
         </p>
       </EriMenu>
     )
+  }
+
+  private handleSignOut = async () => {
+    const { onClose, onSignOut } = this.props
+    onClose()
+    onSignOut()
+
+    try {
+      await getSignOut()
+    } catch {
+      // empty
+    }
+
+    deleteCredentials()
+
+    // TODO - to remove will need to remove auth header from
+    // Apollo Client and clear the Apollo Client cache
+    window.location.href = '/'
   }
 }
 

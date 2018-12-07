@@ -19,10 +19,8 @@ export const getMe = (credentials: ICredentials): Promise<IUserResponse> =>
     })
     .then(response => response.json())
 
-export const getSignOut = (
-  credentials: ICredentials | undefined,
-): Promise<Response> =>
-  fetch(`${origin}/sign-out`, getConfig(credentials))
+export const getSignOut = (): Promise<Response> =>
+  fetch(`${origin}/sign-out`, getConfig(getCredentials()))
     .then(response => {
       if (!response.ok) {
         throw Error(String(response.status))
