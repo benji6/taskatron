@@ -1,57 +1,26 @@
-import { ButtonGroup, Card, Spinner } from 'eri'
+import { Spinner } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import {
-  userEmailSelector,
-  userFirstNameSelector,
-  userIdSelector,
-  userLastNameSelector,
-  userPostcodeSelector,
-} from '../../../selectors'
+import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
+import MyDetails from './MyDetails'
 import MyService from './MyService'
 import query from './query'
 
 interface IProps {
-  email: string
-  firstName: string
-  lastName: string
-  postcode: string
   radius: number
   userId: string
 }
 
 class Service extends React.PureComponent<IProps> {
   public render() {
-    const { email, firstName, userId, lastName, postcode } = this.props
+    const { userId } = this.props
 
     return (
       <>
-        <Card>
-          <h3>My details</h3>
-          <p>These are your personal details and can only be seen by you:</p>
-          <ul>
-            <li>
-              <b>First name:</b> {firstName}
-            </li>
-            <li>
-              <b>Last name:</b> {lastName}
-            </li>
-            <li>
-              <b>Email:</b> {email}
-            </li>
-            <li>
-              <b>Postcode:</b> {postcode}
-            </li>
-          </ul>
-          <ButtonGroup>
-            <Link className="e-button e-button--primary" to="/profile/user">
-              Edit
-            </Link>
-          </ButtonGroup>
-        </Card>
+        <MyDetails />
         <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
           {({ loading, error, data }) => {
             if (loading) return <Spinner variation="page" />
@@ -82,10 +51,6 @@ class Service extends React.PureComponent<IProps> {
 }
 
 const mapStateToProps = (state: IStore) => ({
-  email: userEmailSelector(state) as string,
-  firstName: userFirstNameSelector(state) as string,
-  lastName: userLastNameSelector(state) as string,
-  postcode: userPostcodeSelector(state) as string,
   userId: userIdSelector(state) as string,
 })
 
