@@ -7,7 +7,7 @@ import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import MyDetails from './MyDetails'
 import MyService from './MyService'
-import query from './query'
+import query from './MyService/ServiceDetails/query'
 
 interface IProps {
   radius: number
