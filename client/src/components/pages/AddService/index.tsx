@@ -157,7 +157,6 @@ class AddService extends React.PureComponent<IProps> {
                     name="image"
                     render={({
                       field: { value, ...field },
-                      form,
                     }: FieldProps<IFormValues>) => (
                       <ImageUpload
                         {...field}

@@ -5,7 +5,10 @@ import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
 } from './controllers/sendToken'
-import { post as postServiceImage } from './controllers/serviceImages'
+import {
+  del as deleteServiceImage,
+  post as postServiceImage,
+} from './controllers/serviceImages'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
 import { getUserByEmail } from './model/user'
@@ -33,6 +36,7 @@ router.post(
   postSendTokenErrorMiddleware,
   postSendToken,
 )
+router.delete('/services/:id/image', restricted(), deleteServiceImage)
 router.post('/services/:id/image', restricted(), postServiceImage)
 router.get('/sign-out', passwordless.logout(), getSignOut)
 

@@ -3,12 +3,13 @@ import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { userIdSelector } from '../../../selectors'
-import IStore from '../../../types/IStore'
-import { renderCurrency } from '../../../utils'
-import DeleteDialog from './DeleteDialog'
-import mutation from './mutation'
-import query from './query'
+import { userIdSelector } from '../../../../selectors'
+import IStore from '../../../../types/IStore'
+import { renderCurrency } from '../../../../utils'
+import DeleteDialog from '../DeleteDialog'
+import mutation from '../mutation'
+import query from '../query'
+import ServiceImage from './ServiceImage'
 
 interface IProps {
   children: any
@@ -17,22 +18,14 @@ interface IProps {
 
 interface IState {
   isDeleteDialogOpen: boolean
-  showImage: boolean
 }
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
-class ServiceForm extends React.PureComponent<IProps> {
+class MyService extends React.PureComponent<IProps> {
   public state: IState = {
     isDeleteDialogOpen: false,
-    showImage: true,
   }
-
-  public openDeleteDialog = () => {
-    this.setState({ isDeleteDialogOpen: true })
-  }
-
-  public closeDeleteDialog = () => this.setState({ isDeleteDialogOpen: false })
 
   public render() {
     const {
@@ -51,7 +44,7 @@ class ServiceForm extends React.PureComponent<IProps> {
       },
       userId,
     } = this.props
-    const { isDeleteDialogOpen, showImage } = this.state
+    const { isDeleteDialogOpen } = this.state
 
     return (
       <Card>
@@ -60,13 +53,8 @@ class ServiceForm extends React.PureComponent<IProps> {
           These are the details of your service that people can view and search
           for:
         </p>
-        {showImage && (
-          <img
-            alt="your service image"
-            onError={this.handleImageLoadError}
-            src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
-          />
-        )}
+        <ServiceImage id={id} />
+        <h4>Details</h4>
         <ul>
           <li>
             <b>Name:</b> {name}
@@ -109,14 +97,14 @@ class ServiceForm extends React.PureComponent<IProps> {
             className="e-button e-button--primary"
             to="profile/service/edit"
           >
-            Edit
+            Edit details
           </Link>
           <Button
             onClick={this.openDeleteDialog}
             sentiment="negative"
             variant="secondary"
           >
-            Delete
+            Delete service
           </Button>
         </ButtonGroup>
         <Mutation
@@ -141,11 +129,15 @@ class ServiceForm extends React.PureComponent<IProps> {
     )
   }
 
-  private handleImageLoadError = () => this.setState({ showImage: false })
+  private closeDeleteDialog = () => this.setState({ isDeleteDialogOpen: false })
+
+  private openDeleteDialog = () => {
+    this.setState({ isDeleteDialogOpen: true })
+  }
 }
 
 const mapStateToProps = (state: IStore) => ({
   userId: userIdSelector(state) as string,
 })
 
-export default connect(mapStateToProps)(ServiceForm)
+export default connect(mapStateToProps)(MyService)

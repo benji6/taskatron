@@ -9,6 +9,7 @@ import Header from '../Header'
 import Menu from '../Menu'
 import About from '../pages/About'
 import AddService from '../pages/AddService'
+import AddServiceImage from '../pages/AddServiceImage'
 import EditService from '../pages/EditService'
 import EditUser from '../pages/EditUser'
 import Home from '../pages/Home'
@@ -64,6 +65,11 @@ class App extends React.PureComponent<IProps> {
                   <PrivateRoute
                     path="/profile/service/add"
                     component={AddService}
+                    isSignedIn={isSignedIn}
+                  />
+                  <PrivateRoute
+                    path="/service/:id/image/add"
+                    component={AddServiceImage}
                     isSignedIn={isSignedIn}
                   />
                   <PrivateRoute

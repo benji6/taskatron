@@ -1,3 +1,4 @@
+import { getCredentials } from '../localStorage'
 import ICredentials from '../types/ICredentials'
 
 export const origin = process.env.API_URL
@@ -19,6 +20,11 @@ const createHeaders = (
 
   return headers
 }
+
+export const deleteConfig = () => ({
+  headers: createHeaders(getCredentials()),
+  method: 'DELETE',
+})
 
 export const getConfig = (credentials?: ICredentials) => ({
   headers: createHeaders(credentials),

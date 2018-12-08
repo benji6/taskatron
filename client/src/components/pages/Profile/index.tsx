@@ -11,8 +11,8 @@ import {
   userPostcodeSelector,
 } from '../../../selectors'
 import IStore from '../../../types/IStore'
+import MyService from './MyService'
 import query from './query'
-import ServiceCard from './ServiceCard'
 
 interface IProps {
   email: string
@@ -73,7 +73,7 @@ class Service extends React.PureComponent<IProps> {
               )
             }
 
-            return <ServiceCard>{service}</ServiceCard>
+            return <MyService>{service}</MyService>
           }}
         </Query>
       </>
