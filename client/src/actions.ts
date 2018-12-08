@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions'
 
-export const userAuth = createAction('USER_AUTH')
 export const userGetCredentialsFailure = createAction(
   'USER_GET_CREDENTIALS_FAILURE',
 )

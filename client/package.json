@@ -26,7 +26,6 @@
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
     "redux-actions": "^2.6.4",
-    "redux-saga": "^0.16.0",
     "shared": "^0.1.0"
   },
   "devDependencies": {

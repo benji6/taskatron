@@ -4,13 +4,11 @@ import * as React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { applyMiddleware, compose, createStore } from 'redux'
-import createSagaMiddleware from 'redux-saga'
+import { createStore } from 'redux'
 import { origin } from './api/utils'
 import App from './components/App'
 import { getCredentials } from './localStorage'
 import reducer from './reducers'
-import rootSaga from './sagas'
 
 const credentials = getCredentials()
 
@@ -21,17 +19,11 @@ const client = new ApolloClient({
   uri: `${origin}/graphql`,
 })
 
-const sagaMiddleware = createSagaMiddleware()
-
-const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
 const store = createStore(
   reducer,
-  composeEnhancers(applyMiddleware(sagaMiddleware)),
+  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
 )
-
-sagaMiddleware.run(rootSaga)
 
 ReactDOM.render(
   <Provider store={store}>
