@@ -307,7 +307,7 @@ class AddService extends React.PureComponent<IProps> {
 
     if (image && image.size > maxImageSize) {
       errors.image = `Image must be less than ${maxImageSize /
-        1e6}MB, but is ${image.size / 1e6}MB`
+        1e6}MB, but is ${(image.size / 1e6).toFixed(2)}MB`
     }
 
     if (!isValidNumber(hourlyRate)) {

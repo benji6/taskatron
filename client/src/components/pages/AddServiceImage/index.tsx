@@ -105,8 +105,9 @@ export default class AddServiceImage extends React.PureComponent<IProps> {
 
     if (image.size > maxImageSize) {
       return {
-        image: `Image must be less than ${maxImageSize /
-          1e6}MB, but is ${image.size / 1e6}MB`,
+        image: `Image must be less than ${maxImageSize / 1e6}MB, but is ${(
+          image.size / 1e6
+        ).toFixed(2)}MB`,
       }
     }
 
