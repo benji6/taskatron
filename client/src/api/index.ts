@@ -8,6 +8,7 @@ import {
   patchConfig,
   postConfig,
   postFileConfig,
+  putFileConfig,
 } from './utils'
 
 export const deleteServiceImage = (id: string): Promise<Response> =>
@@ -52,19 +53,32 @@ export const postServiceImage = ({
   id: string
   image: File
 }): Promise<Response> =>
-  fetch(
-    `${origin}/services/${id}/image`,
-    postFileConfig(image, getCredentials()),
-  ).then(response => {
-    if (!response.ok) throw Error(String(response.status))
-    return response
-  })
+  fetch(`${origin}/services/${id}/image`, postFileConfig(image)).then(
+    response => {
+      if (!response.ok) throw Error(String(response.status))
+      return response
+    },
+  )
 
 export const postUser = (user: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/user`, postConfig(user)).then(response => {
     if (!response.ok) throw Error(String(response.status))
     return response
   })
+
+export const putServiceImage = ({
+  id,
+  image,
+}: {
+  id: string
+  image: File
+}): Promise<Response> =>
+  fetch(`${origin}/services/${id}/image`, putFileConfig(image)).then(
+    response => {
+      if (!response.ok) throw Error(String(response.status))
+      return response
+    },
+  )
 
 export const sendToken = (email: string): Promise<Response> =>
   fetch(`${origin}/send-token`, postConfig({ user: email })).then(response => {

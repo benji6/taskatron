@@ -8,6 +8,7 @@ import {
 import {
   del as deleteServiceImage,
   post as postServiceImage,
+  put as putServiceImage,
 } from './controllers/serviceImages'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
@@ -38,6 +39,7 @@ router.post(
 )
 router.delete('/services/:id/image', restricted(), deleteServiceImage)
 router.post('/services/:id/image', restricted(), postServiceImage)
+router.put('/services/:id/image', restricted(), putServiceImage)
 router.get('/sign-out', passwordless.logout(), getSignOut)
 
 router.post('/user', postUser)

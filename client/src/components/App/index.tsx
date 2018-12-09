@@ -11,6 +11,7 @@ import About from '../pages/About'
 import AddService from '../pages/AddService'
 import AddServiceImage from '../pages/AddServiceImage'
 import EditService from '../pages/EditService'
+import EditServiceImage from '../pages/EditServiceImage'
 import EditUser from '../pages/EditUser'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
@@ -70,6 +71,11 @@ class App extends React.PureComponent<IProps> {
                   <PrivateRoute
                     path="/service/:id/image/add"
                     component={AddServiceImage}
+                    isSignedIn={isSignedIn}
+                  />
+                  <PrivateRoute
+                    path="/service/:id/image/edit"
+                    component={EditServiceImage}
                     isSignedIn={isSignedIn}
                   />
                   <PrivateRoute

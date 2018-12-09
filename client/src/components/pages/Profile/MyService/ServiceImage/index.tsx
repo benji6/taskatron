@@ -36,6 +36,7 @@ export default class ServiceImage extends React.PureComponent<IProps> {
               src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
             />
             <ButtonGroup>
+              <Button to={`/service/${id}/image/edit`}>Edit image</Button>
               <Button
                 onClick={this.openDeleteDialog}
                 sentiment="negative"

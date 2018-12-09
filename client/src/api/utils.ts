@@ -42,8 +42,14 @@ export const postConfig = (body: any, credentials?: ICredentials) => ({
   method: 'POST',
 })
 
-export const postFileConfig = (body: File, credentials?: ICredentials) => ({
+export const postFileConfig = (body: File) => ({
   body,
-  headers: createHeaders(credentials),
+  headers: createHeaders(getCredentials()),
   method: 'POST',
+})
+
+export const putFileConfig = (body: File) => ({
+  body,
+  headers: createHeaders(getCredentials()),
+  method: 'PUT',
 })
