@@ -11,7 +11,7 @@ import * as React from 'react'
 import { Link, match, Redirect } from 'react-router-dom'
 import { maxImageSize } from 'shared/constants'
 import { putServiceImage } from '../../../api'
-import { getFieldError } from '../../../utils'
+import { getFieldError, serviceImageUrl } from '../../../utils'
 
 interface IFormValues {
   image?: File
@@ -74,10 +74,7 @@ export default class EditServiceImage extends React.PureComponent<IProps> {
           <Form noValidate>
             <h2>Edit image</h2>
             <h3>Current image</h3>
-            <img
-              alt="your service image"
-              src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
-            />
+            <img alt="your service image" src={serviceImageUrl(id)} />
             <h3>Choose a new image</h3>
             <Field
               name="image"

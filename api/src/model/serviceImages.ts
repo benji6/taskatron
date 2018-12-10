@@ -15,7 +15,7 @@ export const deleteImage = (id: string): Promise<void> =>
     s3.deleteObject(
       {
         Bucket,
-        Key: `${id}.jpg`,
+        Key: `${id}/image.jpg`,
       },
       (err: Error) => {
         if (err) return reject(err)
@@ -36,7 +36,7 @@ export const uploadImage = ({
       {
         Body: image,
         Bucket,
-        Key: `${id}.jpg`,
+        Key: `${id}/image.jpg`,
       },
       (err: Error, data: IUploadData) => {
         if (err) return reject(err)

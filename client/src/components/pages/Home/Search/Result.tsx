@@ -1,7 +1,7 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
 import { IServiceResponseObject } from 'shared/types'
-import { renderCurrency } from '../../../../utils'
+import { renderCurrency, serviceImageUrl } from '../../../../utils'
 
 interface IProps {
   children: IServiceResponseObject
@@ -43,7 +43,7 @@ export default class Result extends React.PureComponent<IProps> {
           <img
             alt={`profile image for ${name}`}
             onError={this.handleImageLoadError}
-            src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
+            src={serviceImageUrl(id)}
           />
         )}
         <ul>

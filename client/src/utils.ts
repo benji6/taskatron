@@ -42,3 +42,6 @@ export const position: Promise<ICoord> = new Promise((resolve, reject) => {
 export const renderDecimal = (n: number): string => n.toFixed(2)
 
 export const renderCurrency = (n: number): string => `£${renderDecimal(n)}`
+
+export const serviceImageUrl = (id: string): string =>
+  `https://taskatron-service-images.s3.amazonaws.com/${id}/image.jpg`

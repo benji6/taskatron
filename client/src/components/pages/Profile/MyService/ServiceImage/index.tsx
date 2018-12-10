@@ -2,6 +2,7 @@ import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { deleteServiceImage } from '../../../../../api'
+import { serviceImageUrl } from '../../../../../utils'
 import DeleteDialog from './DeleteDialog'
 
 interface IProps {
@@ -33,7 +34,7 @@ export default class ServiceImage extends React.PureComponent<IProps> {
             <img
               alt="your service image"
               onError={this.handleImageLoadError}
-              src={`https://taskatron-service-images.s3.amazonaws.com/${id}.jpg`}
+              src={serviceImageUrl(id)}
             />
             <ButtonGroup>
               <Button to={`/service/${id}/image/edit`}>Edit image</Button>
