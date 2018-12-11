@@ -22,9 +22,9 @@ import { Link, Redirect } from 'react-router-dom'
 import {
   maxServiceDescriptionLength,
   maxServiceNameLength,
-  radii,
 } from 'shared/constants'
 import { isValidNumber } from 'shared/validation'
+import { radii } from '../../../constants'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'

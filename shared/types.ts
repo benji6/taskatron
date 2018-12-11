@@ -1,5 +1,4 @@
 import * as t from 'io-ts'
-import { radii } from './constants'
 
 const postCodeRegex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})/
 
@@ -17,8 +16,6 @@ export const isLongitude = (a: any): a is number =>
   typeof a === 'number' && a >= -180 && a <= 180
 export const isPostcode = (a: any): a is string =>
   typeof a === 'string' && postCodeRegex.test(a)
-const isRadius = (a: any): a is number =>
-  typeof a === 'number' && radii.includes(a)
 
 const decimal = new t.Type<number, number>(
   'decimal',
@@ -69,28 +66,17 @@ const postcode = new t.Type<string, string>(
   t.identity,
 )
 
-const radius = new t.Type<number, number>(
-  'radius',
-  isRadius,
-  (m: any, c) => (isRadius(m) ? t.success(m) : t.failure(m, c)),
-  t.identity,
-)
-
-const servicePostBodyObj = {
-  carpetClean: t.boolean,
-  deepClean: t.boolean,
-  general: t.boolean,
-  hasOwnEquipment: t.boolean,
-  hasOwnProducts: t.boolean,
-  hourlyRate: decimal,
-  name: t.string,
-  ovenClean: t.boolean,
-  radius,
+export interface IServicePostBody {
+  carpetClean: boolean
+  deepClean: boolean
+  general: boolean
+  hasOwnEquipment: boolean
+  hasOwnProducts: boolean
+  hourlyRate: number
+  name: string
+  ovenClean: boolean
+  radius: number
 }
-
-export const ServicePostBody = t.exact(t.type(servicePostBodyObj))
-
-export type IServicePostBody = t.TypeOf<typeof ServicePostBody>
 
 const Location = t.exact(
   t.type({
@@ -101,16 +87,11 @@ const Location = t.exact(
 
 export type ILocation = t.TypeOf<typeof Location>
 
-export const ServiceDocument = t.exact(
-  t.type({
-    ...servicePostBodyObj,
-    _id: t.string,
-    location: Location,
-    userId: t.string,
-  }),
-)
-
-export type IServiceDocument = t.TypeOf<typeof ServiceDocument>
+export interface IServiceDocument extends IServicePostBody {
+  _id: string
+  location: ILocation
+  userId: string
+}
 
 export const ServiceFilters = t.partial({
   carpetClean: t.boolean,
