@@ -12,7 +12,6 @@ export default gql`
 
   type Service implements Node {
     carpetClean: Boolean!
-    imagePath: String
     deepClean: Boolean!
     description: String!
     general: Boolean!
@@ -63,6 +62,7 @@ export default gql`
   }
 
   type Query {
+    service(id: ID!): Service
     services(
       carpetClean: Boolean
       deepClean: Boolean

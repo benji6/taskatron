@@ -114,6 +114,7 @@ const resolvers = {
     },
   },
   Query: {
+    service: (_: unknown, { id }: any) => getService(id),
     services: async (_: unknown, args: any) => {
       const { limit, skip, ...filters } = args
 
