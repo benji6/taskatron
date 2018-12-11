@@ -3,7 +3,6 @@ import {
   ButtonGroup,
   Checkbox,
   CurrencyField,
-  ImageUpload,
   Select,
   TextArea,
   TextField,
@@ -21,13 +20,11 @@ import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import {
-  maxImageSize,
   maxServiceDescriptionLength,
   maxServiceNameLength,
   radii,
 } from 'shared/constants'
 import { isValidNumber } from 'shared/validation'
-import { postServiceImage } from '../../../api'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'
@@ -41,7 +38,6 @@ interface IFormValues {
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
   hourlyRate: string
-  image?: File
   ovenClean: boolean
   radius: string
   serviceName: string
@@ -80,7 +76,6 @@ class AddService extends React.PureComponent<IProps> {
       hasOwnEquipment: false,
       hasOwnProducts: false,
       hourlyRate: '',
-      image: undefined,
       ovenClean: false,
       radius: '__initial',
       serviceName: '',
@@ -93,19 +88,9 @@ class AddService extends React.PureComponent<IProps> {
             values: IFormValues,
             actions: FormikActions<IFormValues>,
           ) => {
-            const {
-              hourlyRate,
-              image,
-              radius,
-              serviceName: name,
-              ...rest
-            } = values
+            const { hourlyRate, radius, serviceName: name, ...rest } = values
 
-            const {
-              data: {
-                addService: { id },
-              },
-            }: any = await addService({
+            await addService({
               variables: {
                 ...rest,
                 hourlyRate: Number(hourlyRate),
@@ -114,13 +99,6 @@ class AddService extends React.PureComponent<IProps> {
                 userId,
               },
             })
-
-            if (image) {
-              await postServiceImage({
-                id,
-                image,
-              })
-            }
 
             if (this.hasUnmounted) return
 
@@ -150,25 +128,6 @@ class AddService extends React.PureComponent<IProps> {
                         error={getFieldError(form, 'serviceName')}
                         label="Name"
                         supportiveText="This is the name people will see in their search results, put your name or company name"
-                      />
-                    )}
-                  />
-                  <Field
-                    name="image"
-                    render={({
-                      field: { value, ...field },
-                    }: FieldProps<IFormValues>) => (
-                      <ImageUpload
-                        {...field}
-                        label="Image"
-                        onChange={({
-                          target,
-                        }: React.ChangeEvent<HTMLInputElement>) =>
-                          setValues({
-                            ...values,
-                            [target.name]: target.files && target.files[0],
-                          })
-                        }
                       />
                     )}
                   />
@@ -299,16 +258,10 @@ class AddService extends React.PureComponent<IProps> {
   private validate = ({
     description,
     hourlyRate,
-    image,
     radius,
     serviceName,
   }: IFormValues) => {
     const errors: any = {}
-
-    if (image && image.size > maxImageSize) {
-      errors.image = `Image must be less than ${maxImageSize /
-        1e6}MB, but is ${(image.size / 1e6).toFixed(2)}MB`
-    }
 
     if (!isValidNumber(hourlyRate)) {
       errors.hourlyRate = 'Please enter a valid hourly rate'

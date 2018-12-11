@@ -49,9 +49,11 @@ export default class ServiceImage extends React.PureComponent<IProps> {
           </>
         ) : (
           <p e-util="center">
-            <Link to={`/service/${id}/image/add`}>
-              Click here to add an image to your service
-            </Link>
+            <strong>
+              <Link to={`/service/${id}/image/add`}>
+                Click here to add an image to your service
+              </Link>
+            </strong>
           </p>
         )}
         <DeleteDialog
