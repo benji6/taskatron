@@ -19,6 +19,7 @@ export default gql`
     hasOwnProducts: Boolean!
     hourlyRate: Float!
     id: ID!
+    imagePath: String
     location: Location!
     name: String!
     ovenClean: Boolean!
@@ -55,6 +56,7 @@ export default gql`
       hasOwnProducts: Boolean
       hourlyRate: Float
       id: ID!
+      imagePath: String
       name: String
       ovenClean: Boolean
       radius: Int
