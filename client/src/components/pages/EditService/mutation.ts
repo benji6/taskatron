@@ -1,10 +1,10 @@
 import { gql } from 'apollo-boost'
 
 export default gql`
-  mutation UpdateService(
+  mutation EditService(
     $carpetClean: Boolean
     $deepClean: Boolean
-    $description: String!
+    $description: String
     $general: Boolean
     $hasOwnEquipment: Boolean
     $hasOwnProducts: Boolean

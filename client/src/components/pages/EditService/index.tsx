@@ -29,8 +29,8 @@ import { radii } from '../../../constants'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'
-import getServiceQuery from './getServiceQuery'
-import updateServiceMutation from './updateServiceMutation'
+import mutation from './mutation'
+import query from './query'
 
 interface IFormValues {
   carpetClean: boolean
@@ -69,11 +69,7 @@ class EditService extends React.PureComponent<IProps> {
     const { submittedSuccessfully } = this.state
 
     return (
-      <Query
-        fetchPolicy="network-only"
-        query={getServiceQuery}
-        variables={{ userId }}
-      >
+      <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
         {({ loading, error, data }) => {
           if (loading) return <Spinner variation="page" />
 
@@ -103,7 +99,7 @@ class EditService extends React.PureComponent<IProps> {
           }
 
           return (
-            <Mutation mutation={updateServiceMutation}>
+            <Mutation mutation={mutation}>
               {updateService => {
                 const handleSubmit = async (
                   values: IFormValues,
