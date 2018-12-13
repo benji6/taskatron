@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost'
 
 export default gql`
-  query ProfileService($userId: ID!) {
+  query MyService($userId: ID!) {
     services(limit: 1, userId: $userId) {
       nodes {
         carpetClean

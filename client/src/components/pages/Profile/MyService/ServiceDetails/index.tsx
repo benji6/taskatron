@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom'
 import { userIdSelector } from '../../../../../selectors'
 import IStore from '../../../../../types/IStore'
 import { renderCurrency } from '../../../../../utils'
+import query from '../query'
 import DeleteDialog from './DeleteDialog'
 import mutation from './mutation'
-import query from './query'
 
 interface IProps {
   children: any
