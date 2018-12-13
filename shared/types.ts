@@ -66,18 +66,6 @@ const postcode = new t.Type<string, string>(
   t.identity,
 )
 
-export interface IServicePostBody {
-  carpetClean: boolean
-  deepClean: boolean
-  general: boolean
-  hasOwnEquipment: boolean
-  hasOwnProducts: boolean
-  hourlyRate: number
-  name: string
-  ovenClean: boolean
-  radius: number
-}
-
 const Location = t.exact(
   t.type({
     coordinates: t.tuple([t.number, t.number]),
@@ -87,9 +75,18 @@ const Location = t.exact(
 
 export type ILocation = t.TypeOf<typeof Location>
 
-export interface IServiceDocument extends IServicePostBody {
+export interface IServiceDocument {
   _id: string
+  carpetClean: boolean
+  deepClean: boolean
+  general: boolean
+  hasOwnEquipment: boolean
+  hasOwnProducts: boolean
+  hourlyRate: number
   location: ILocation
+  name: string
+  ovenClean: boolean
+  radius: number
   userId: string
 }
 
@@ -107,8 +104,17 @@ export const ServiceFilters = t.partial({
 
 export type IServiceFilters = t.TypeOf<typeof ServiceFilters>
 
-export interface IServiceModelParams extends IServicePostBody {
+export interface IServiceModelParams {
+  carpetClean: boolean
+  deepClean: boolean
+  general: boolean
+  hasOwnEquipment: boolean
+  hasOwnProducts: boolean
+  hourlyRate: number
   location: ILocation
+  name: string
+  ovenClean: boolean
+  radius: number
   userId: string
 }
 
