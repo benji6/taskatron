@@ -3,7 +3,7 @@ import { History, Location } from 'history' // tslint:disable-line no-implicit-d
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import { ICoord, IServiceFilters, IServiceResponseObject } from 'shared/types'
+import { ICoord, IServiceDocument, IServiceFilters } from 'shared/types'
 import { createSearchString, position } from '../../../../utils'
 import { resultsPerPage } from './constants'
 import Filters from './Filters'
@@ -15,10 +15,16 @@ interface IProps {
   history: History
 }
 
+interface IService extends IServiceDocument {
+  id: string
+  description: string
+  providerName: string
+}
+
 interface IState {
   coords?: ICoord
   filters?: IServiceFilters
-  services?: IServiceResponseObject[]
+  services?: IService[]
   total: number
 }
 

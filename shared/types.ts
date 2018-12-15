@@ -118,12 +118,6 @@ export interface IServiceModelParams {
   userId: string
 }
 
-export interface IServiceResponseObject extends IServiceDocument {
-  id: string
-  description: string
-  providerName: string
-}
-
 export interface IUserPatchBody {
   firstName: string
   lastName: string

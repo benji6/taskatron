@@ -1,10 +1,16 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { IServiceResponseObject } from 'shared/types'
+import { IServiceDocument } from 'shared/types'
 import { renderCurrency, serviceImageUrl } from '../../../../utils'
 
+interface IChildren extends IServiceDocument {
+  id: string
+  description: string
+  providerName: string
+}
+
 interface IProps {
-  children: IServiceResponseObject
+  children: IChildren
 }
 
 interface IState {
