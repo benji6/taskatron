@@ -55,7 +55,7 @@ export const post = async (req: Request, res: Response) => {
   }
 
   await uploadImage({ id, image: body })
-  res.status(204).end()
+  res.status(200).send({ imagePath: `${id}/image.jpg` })
 }
 
 export const put = async (req: Request, res: Response) => {
@@ -82,5 +82,5 @@ export const put = async (req: Request, res: Response) => {
 
   // TODO: get the old file name and if it's different from the new one then delete it (different extension for example)
   await uploadImage({ id, image: body })
-  res.status(204).end()
+  res.status(200).send({ imagePath: `${id}/image.jpg` })
 }
