@@ -52,11 +52,11 @@ export const postServiceImage = ({
 }: {
   id: string
   image: File
-}): Promise<Response> =>
+}): Promise<{ imagePath: string }> =>
   fetch(`${origin}/services/${id}/image`, postFileConfig(image)).then(
     response => {
       if (!response.ok) throw Error(String(response.status))
-      return response
+      return response.json()
     },
   )
 
@@ -72,11 +72,11 @@ export const putServiceImage = ({
 }: {
   id: string
   image: File
-}): Promise<Response> =>
+}): Promise<{ imagePath: string }> =>
   fetch(`${origin}/services/${id}/image`, putFileConfig(image)).then(
     response => {
       if (!response.ok) throw Error(String(response.status))
-      return response
+      return response.json()
     },
   )
 

@@ -48,24 +48,19 @@ export default class AddServiceImage extends React.PureComponent<IProps> {
     }
 
     return (
-      <Mutation
-        mutation={mutation}
-        variables={{ id, imagePath: `${id}/image.jpg` }}
-      >
+      <Mutation mutation={mutation}>
         {updateService => {
           const handleSubmit = async (
             values: IFormValues,
             actions: FormikActions<IFormValues>,
           ) => {
             const image = values.image as File
-
-            await postServiceImage({ id, image })
-            await updateService()
-
+            const { imagePath } = await postServiceImage({ id, image })
+            await updateService({
+              variables: { id, imagePath },
+            })
             if (this.hasUnmounted) return
-
             actions.setSubmitting(false)
-
             this.setState({ submittedSuccessfully: true })
           }
 

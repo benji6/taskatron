@@ -52,24 +52,19 @@ export default class EditServiceImage extends React.PureComponent<IProps> {
     return (
       <Query fetchPolicy="network-only" query={query} variables={{ id }}>
         {({ loading, error, data }) => (
-          <Mutation
-            mutation={mutation}
-            variables={{ id, imagePath: `${id}/image.jpg` }}
-          >
+          <Mutation mutation={mutation}>
             {updateService => {
               const handleSubmit = async (
                 values: IFormValues,
                 actions: FormikActions<IFormValues>,
               ) => {
                 const image = values.image as File
-
-                await putServiceImage({ id, image })
-                await updateService()
-
+                const { imagePath } = await putServiceImage({ id, image })
+                await updateService({
+                  variables: { id, imagePath },
+                })
                 if (this.hasUnmounted) return
-
                 actions.setSubmitting(false)
-
                 this.setState({ submittedSuccessfully: true })
               }
 
