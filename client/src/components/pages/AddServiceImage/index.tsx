@@ -8,9 +8,11 @@ import {
   FormikProps,
 } from 'formik'
 import * as React from 'react'
+import { Mutation } from 'react-apollo'
 import { Link, match, Redirect } from 'react-router-dom'
 import { maxImageSize } from 'shared/constants'
 import { postServiceImage } from '../../../api'
+import mutation from './mutation'
 
 interface IFormValues {
   image?: File
@@ -45,58 +47,72 @@ export default class AddServiceImage extends React.PureComponent<IProps> {
       image: undefined,
     }
 
-    const handleSubmit = async (
-      values: IFormValues,
-      actions: FormikActions<IFormValues>,
-    ) => {
-      const image = values.image as File
-
-      await postServiceImage({ id, image })
-
-      if (this.hasUnmounted) return
-
-      actions.setSubmitting(false)
-
-      this.setState({ submittedSuccessfully: true })
-    }
-
     return (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validate={this.validate}
-        render={({
-          isSubmitting,
-          setValues,
-          values,
-        }: FormikProps<IFormValues>) => (
-          <Form noValidate>
-            <h2>Add image</h2>
-            <p>Add an image for people to see when searching for a cleaner</p>
-            <Field
-              name="image"
+      <Mutation
+        mutation={mutation}
+        variables={{ id, imagePath: `${id}/image.jpg` }}
+      >
+        {updateService => {
+          const handleSubmit = async (
+            values: IFormValues,
+            actions: FormikActions<IFormValues>,
+          ) => {
+            const image = values.image as File
+
+            await postServiceImage({ id, image })
+            await updateService()
+
+            if (this.hasUnmounted) return
+
+            actions.setSubmitting(false)
+
+            this.setState({ submittedSuccessfully: true })
+          }
+
+          return (
+            <Formik
+              initialValues={initialValues}
+              onSubmit={handleSubmit}
+              validate={this.validate}
               render={({
-                field: { value, ...field },
-              }: FieldProps<IFormValues>) => (
-                <ImageUpload
-                  {...field}
-                  label="Image"
-                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
-                    setValues({
-                      ...values,
-                      [target.name]: target.files && target.files[0],
-                    })
-                  }
-                />
+                isSubmitting,
+                setValues,
+                values,
+              }: FormikProps<IFormValues>) => (
+                <Form noValidate>
+                  <h2>Add image</h2>
+                  <p>
+                    Add an image for people to see when searching for a cleaner
+                  </p>
+                  <Field
+                    name="image"
+                    render={({
+                      field: { value, ...field },
+                    }: FieldProps<IFormValues>) => (
+                      <ImageUpload
+                        {...field}
+                        label="Image"
+                        onChange={({
+                          target,
+                        }: React.ChangeEvent<HTMLInputElement>) =>
+                          setValues({
+                            ...values,
+                            [target.name]: target.files && target.files[0],
+                          })
+                        }
+                      />
+                    )}
+                  />
+                  <ButtonGroup>
+                    <Button disabled={isSubmitting}>Save</Button>
+                    <Link to="/profile">Cancel</Link>
+                  </ButtonGroup>
+                </Form>
               )}
             />
-            <ButtonGroup>
-              <Button disabled={isSubmitting}>Save</Button>
-              <Link to="/profile">Cancel</Link>
-            </ButtonGroup>
-          </Form>
-        )}
-      />
+          )
+        }}
+      </Mutation>
     )
   }
 

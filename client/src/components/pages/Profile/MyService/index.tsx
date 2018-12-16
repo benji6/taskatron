@@ -44,9 +44,13 @@ class MyService extends React.PureComponent<IProps> {
               <h3>My Service</h3>
               <p>
                 These are the details of your service that people can view and
-                search for:
+                search for
               </p>
-              <ServiceImage id={service.id} />
+              <ServiceImage
+                id={service.id}
+                imagePath={service.imagePath}
+                userId={userId}
+              />
               <ServiceDetails>{service}</ServiceDetails>
             </Card>
           )

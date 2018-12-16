@@ -4,8 +4,9 @@ import { IServiceDocument } from 'shared/types'
 import { renderCurrency, serviceImageUrl } from '../../../../utils'
 
 interface IChildren extends IServiceDocument {
-  id: string
   description: string
+  id: string
+  imagePath: string
   providerName: string
 }
 
@@ -13,17 +14,9 @@ interface IProps {
   children: IChildren
 }
 
-interface IState {
-  showImage: boolean
-}
-
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />
 
 export default class Result extends React.PureComponent<IProps> {
-  public state: IState = {
-    showImage: true,
-  }
-
   public render() {
     const {
       children: {
@@ -34,22 +27,20 @@ export default class Result extends React.PureComponent<IProps> {
         hasOwnEquipment,
         hasOwnProducts,
         hourlyRate,
-        id,
+        imagePath,
         name,
         ovenClean,
       },
     } = this.props
-    const { showImage } = this.state
 
     return (
       <Card>
         <h3>{name}</h3>
         <p>{description}</p>
-        {showImage && (
+        {imagePath && (
           <img
             alt={`profile image for ${name}`}
-            onError={this.handleImageLoadError}
-            src={serviceImageUrl(id)}
+            src={serviceImageUrl(imagePath)}
           />
         )}
         <ul>
@@ -64,6 +55,4 @@ export default class Result extends React.PureComponent<IProps> {
       </Card>
     )
   }
-
-  private handleImageLoadError = () => this.setState({ showImage: false })
 }

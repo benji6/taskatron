@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, ImageUpload } from 'eri'
+import { Button, ButtonGroup, ImageUpload, Spinner } from 'eri'
 import {
   Field,
   FieldProps,
@@ -8,10 +8,13 @@ import {
   FormikProps,
 } from 'formik'
 import * as React from 'react'
+import { Mutation, Query } from 'react-apollo'
 import { Link, match, Redirect } from 'react-router-dom'
 import { maxImageSize } from 'shared/constants'
 import { putServiceImage } from '../../../api'
 import { getFieldError, serviceImageUrl } from '../../../utils'
+import mutation from './mutation'
+import query from './query'
 
 interface IFormValues {
   image?: File
@@ -46,62 +49,89 @@ export default class EditServiceImage extends React.PureComponent<IProps> {
       image: undefined,
     }
 
-    const handleSubmit = async (
-      values: IFormValues,
-      actions: FormikActions<IFormValues>,
-    ) => {
-      const image = values.image as File
-
-      await putServiceImage({ id, image })
-
-      if (this.hasUnmounted) return
-
-      actions.setSubmitting(false)
-
-      this.setState({ submittedSuccessfully: true })
-    }
-
     return (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validate={this.validate}
-        render={({
-          isSubmitting,
-          setValues,
-          values,
-        }: FormikProps<IFormValues>) => (
-          <Form noValidate>
-            <h2>Edit image</h2>
-            <h3>Current image</h3>
-            <img alt="your service image" src={serviceImageUrl(id)} />
-            <h3>Choose a new image</h3>
-            <Field
-              name="image"
-              render={({
-                field: { value, ...field },
-                form,
-              }: FieldProps<IFormValues>) => (
-                <ImageUpload
-                  {...field}
-                  error={getFieldError(form, 'image')}
-                  label="Image"
-                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
-                    setValues({
-                      ...values,
-                      [target.name]: target.files && target.files[0],
-                    })
-                  }
+      <Query fetchPolicy="network-only" query={query} variables={{ id }}>
+        {({ loading, error, data }) => (
+          <Mutation
+            mutation={mutation}
+            variables={{ id, imagePath: `${id}/image.jpg` }}
+          >
+            {updateService => {
+              const handleSubmit = async (
+                values: IFormValues,
+                actions: FormikActions<IFormValues>,
+              ) => {
+                const image = values.image as File
+
+                await putServiceImage({ id, image })
+                await updateService()
+
+                if (this.hasUnmounted) return
+
+                actions.setSubmitting(false)
+
+                this.setState({ submittedSuccessfully: true })
+              }
+
+              return (
+                <Formik
+                  initialValues={initialValues}
+                  onSubmit={handleSubmit}
+                  validate={this.validate}
+                  render={({
+                    isSubmitting,
+                    setValues,
+                    values,
+                  }: FormikProps<IFormValues>) => (
+                    <Form noValidate>
+                      <h2>Edit image</h2>
+                      <h3>Current image</h3>
+                      {loading ? (
+                        <Spinner variation="page" />
+                      ) : error ? (
+                        <p e-util="center negative">
+                          Oops, there was an error loading your image.
+                        </p>
+                      ) : (
+                        <img
+                          alt="your service image"
+                          src={serviceImageUrl(data.service.imagePath)}
+                        />
+                      )}
+                      <h3>Choose a new image</h3>
+                      <Field
+                        name="image"
+                        render={({
+                          field: { value, ...field },
+                          form,
+                        }: FieldProps<IFormValues>) => (
+                          <ImageUpload
+                            {...field}
+                            error={getFieldError(form, 'image')}
+                            label="Image"
+                            onChange={({
+                              target,
+                            }: React.ChangeEvent<HTMLInputElement>) =>
+                              setValues({
+                                ...values,
+                                [target.name]: target.files && target.files[0],
+                              })
+                            }
+                          />
+                        )}
+                      />
+                      <ButtonGroup>
+                        <Button disabled={isSubmitting}>Save</Button>
+                        <Link to="/profile">Cancel</Link>
+                      </ButtonGroup>
+                    </Form>
+                  )}
                 />
-              )}
-            />
-            <ButtonGroup>
-              <Button disabled={isSubmitting}>Save</Button>
-              <Link to="/profile">Cancel</Link>
-            </ButtonGroup>
-          </Form>
+              )
+            }}
+          </Mutation>
         )}
-      />
+      </Query>
     )
   }
 

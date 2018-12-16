@@ -1,41 +1,40 @@
 import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
+import { Mutation } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import { deleteServiceImage } from '../../../../../api'
 import { serviceImageUrl } from '../../../../../utils'
+import query from '../query'
 import DeleteDialog from './DeleteDialog'
+import mutation from './mutation'
 
 interface IProps {
   id: string
+  imagePath: string
+  userId: string
 }
 
 interface IState {
   isSubmitting: boolean
   showDeleteDialog: boolean
-  showImage: boolean
 }
 
 export default class ServiceImage extends React.PureComponent<IProps> {
   public state: IState = {
     isSubmitting: false,
     showDeleteDialog: false,
-    showImage: true,
   }
 
   public render() {
-    const { id } = this.props
-    const { isSubmitting, showDeleteDialog, showImage } = this.state
+    const { id, imagePath, userId } = this.props
+    const { isSubmitting, showDeleteDialog } = this.state
 
     return (
       <>
         <h4>Image</h4>
-        {showImage ? (
+        {imagePath ? (
           <>
-            <img
-              alt="your service image"
-              onError={this.handleImageLoadError}
-              src={serviceImageUrl(id)}
-            />
+            <img alt="your service image" src={serviceImageUrl(imagePath)} />
             <ButtonGroup>
               <Button to={`/service/${id}/image/edit`}>Edit image</Button>
               <Button
@@ -56,28 +55,35 @@ export default class ServiceImage extends React.PureComponent<IProps> {
             </strong>
           </p>
         )}
-        <DeleteDialog
-          disabled={isSubmitting}
-          onClose={this.closeDeleteDialog}
-          onDelete={async () => {
-            this.setState({ isSubmitting: true })
-            try {
-              await deleteServiceImage(id)
-            } catch {
-              // TODO
-            }
-            this.setState({ isSubmitting: false })
-            this.closeDeleteDialog()
-          }}
-          open={showDeleteDialog}
-        />
+        <Mutation
+          mutation={mutation}
+          refetchQueries={[{ query, variables: { userId } }]}
+          variables={{ id }}
+        >
+          {updateService => (
+            <DeleteDialog
+              disabled={isSubmitting}
+              onClose={this.closeDeleteDialog}
+              onDelete={async () => {
+                this.setState({ isSubmitting: true })
+                try {
+                  await deleteServiceImage(id)
+                  await updateService()
+                } catch {
+                  // TODO
+                }
+                this.setState({ isSubmitting: false })
+                this.closeDeleteDialog()
+              }}
+              open={showDeleteDialog}
+            />
+          )}
+        </Mutation>
       </>
     )
   }
 
   private closeDeleteDialog = () => this.setState({ showDeleteDialog: false })
-
-  private handleImageLoadError = () => this.setState({ showImage: false })
 
   private openDeleteDialog = () => {
     this.setState({ showDeleteDialog: true })

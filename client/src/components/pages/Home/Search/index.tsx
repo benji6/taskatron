@@ -121,7 +121,7 @@ class Search extends React.PureComponent<IProps> {
 
               if (error) {
                 return (
-                  <p e-util="center negative" e-sentiment="negative">
+                  <p e-util="center negative">
                     Oops, there was an error searching services, please try
                     again.
                   </p>

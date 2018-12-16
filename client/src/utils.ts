@@ -43,5 +43,5 @@ export const renderDecimal = (n: number): string => n.toFixed(2)
 
 export const renderCurrency = (n: number): string => `£${renderDecimal(n)}`
 
-export const serviceImageUrl = (id: string): string =>
-  `https://taskatron-service-images.s3.amazonaws.com/${id}/image.jpg`
+export const serviceImageUrl = (path: string): string =>
+  `https://taskatron-service-images.s3.amazonaws.com/${path}`

@@ -10,6 +10,7 @@ export default gql`
     $hasOwnProducts: Boolean
     $hourlyRate: Float
     $id: ID!
+    $imagePath: String
     $name: String
     $ovenClean: Boolean
     $radius: Int
@@ -23,6 +24,7 @@ export default gql`
       hasOwnProducts: $hasOwnProducts
       hourlyRate: $hourlyRate
       id: $id
+      imagePath: $imagePath
       name: $name
       ovenClean: $ovenClean
       radius: $radius

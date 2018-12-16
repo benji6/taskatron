@@ -30,6 +30,7 @@ export default gql`
         hasOwnProducts
         hourlyRate
         id
+        imagePath
         name
         ovenClean
         radius
