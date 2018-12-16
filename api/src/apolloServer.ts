@@ -114,7 +114,19 @@ const resolvers = {
     },
   },
   Query: {
-    service: (_: unknown, { id }: any) => getService(id),
+    service: async (_: unknown, { id }: any) => {
+      const service = await getService(id)
+
+      if (!service) throw new UserInputError('not found')
+
+      const { _id, userId, ...rest } = service
+
+      return {
+        ...rest,
+        id: _id.toString(),
+        userId: userId.toString(),
+      }
+    },
     services: async (_: unknown, args: any) => {
       const { limit, skip, ...filters } = args
 
