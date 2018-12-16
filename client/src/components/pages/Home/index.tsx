@@ -9,27 +9,21 @@ interface IProps {
   firstName?: string
 }
 
-class Home extends React.PureComponent<IProps> {
-  public render() {
-    const { firstName } = this.props
-
-    return (
+const Home = ({ firstName }: IProps) => (
+  <>
+    {!firstName && (
       <>
-        {!firstName && (
-          <>
-            <ButtonGroup>
-              <Button to="sign-up">Join us!</Button>
-              <Button to="sign-in" variant="secondary">
-                Sign in
-              </Button>
-            </ButtonGroup>
-          </>
-        )}
-        <Search />
+        <ButtonGroup>
+          <Button to="sign-up">Join us!</Button>
+          <Button to="sign-in" variant="secondary">
+            Sign in
+          </Button>
+        </ButtonGroup>
       </>
-    )
-  }
-}
+    )}
+    <Search />
+  </>
+)
 
 const mapStateToProps = (state: IStore) => ({
   firstName: userFirstNameSelector(state),

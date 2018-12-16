@@ -19,37 +19,31 @@ interface IProps {
   userId: string
 }
 
-class MyDetails extends React.PureComponent<IProps> {
-  public render() {
-    const { email, firstName, lastName, postcode } = this.props
-
-    return (
-      <Card>
-        <h3>My details</h3>
-        <p>These are your personal details and can only be seen by you:</p>
-        <ul>
-          <li>
-            <b>First name:</b> {firstName}
-          </li>
-          <li>
-            <b>Last name:</b> {lastName}
-          </li>
-          <li>
-            <b>Email:</b> {email}
-          </li>
-          <li>
-            <b>Postcode:</b> {postcode}
-          </li>
-        </ul>
-        <ButtonGroup>
-          <Link className="e-button e-button--primary" to="/profile/user">
-            Edit
-          </Link>
-        </ButtonGroup>
-      </Card>
-    )
-  }
-}
+const MyDetails = ({ email, firstName, lastName, postcode }: IProps) => (
+  <Card>
+    <h3>My details</h3>
+    <p>These are your personal details and can only be seen by you:</p>
+    <ul>
+      <li>
+        <b>First name:</b> {firstName}
+      </li>
+      <li>
+        <b>Last name:</b> {lastName}
+      </li>
+      <li>
+        <b>Email:</b> {email}
+      </li>
+      <li>
+        <b>Postcode:</b> {postcode}
+      </li>
+    </ul>
+    <ButtonGroup>
+      <Link className="e-button e-button--primary" to="/profile/user">
+        Edit
+      </Link>
+    </ButtonGroup>
+  </Card>
+)
 
 const mapStateToProps = (state: IStore) => ({
   email: userEmailSelector(state) as string,

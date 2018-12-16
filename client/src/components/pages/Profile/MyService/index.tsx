@@ -13,52 +13,44 @@ interface IProps {
   userId: string
 }
 
-class MyService extends React.PureComponent<IProps> {
-  public render() {
-    const { userId } = this.props
+const MyService = ({ userId }: IProps) => (
+  <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
+    {({ loading, error, data }) => {
+      if (loading) return <Spinner variation="page" />
+      if (error) {
+        return (
+          <p e-util="negative">Oops, there was an error, please try again.</p>
+        )
+      }
 
-    return (
-      <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
-        {({ loading, error, data }) => {
-          if (loading) return <Spinner variation="page" />
-          if (error) {
-            return (
-              <p e-util="negative">
-                Oops, there was an error, please try again.
-              </p>
-            )
-          }
+      const [service] = data.services.nodes
 
-          const [service] = data.services.nodes
+      if (!service) {
+        return (
+          <p e-util="center">
+            <Link to="/profile/service/add">Add a service here</Link>
+          </p>
+        )
+      }
 
-          if (!service) {
-            return (
-              <p e-util="center">
-                <Link to="/profile/service/add">Add a service here</Link>
-              </p>
-            )
-          }
-
-          return (
-            <Card>
-              <h3>My Service</h3>
-              <p>
-                These are the details of your service that people can view and
-                search for
-              </p>
-              <ServiceImage
-                id={service.id}
-                imagePath={service.imagePath}
-                userId={userId}
-              />
-              <ServiceDetails>{service}</ServiceDetails>
-            </Card>
-          )
-        }}
-      </Query>
-    )
-  }
-}
+      return (
+        <Card>
+          <h3>My Service</h3>
+          <p>
+            These are the details of your service that people can view and
+            search for
+          </p>
+          <ServiceImage
+            id={service.id}
+            imagePath={service.imagePath}
+            userId={userId}
+          />
+          <ServiceDetails>{service}</ServiceDetails>
+        </Card>
+      )
+    }}
+  </Query>
+)
 
 const mapStateToProps = (state: IStore) => ({
   userId: userIdSelector(state) as string,

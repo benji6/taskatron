@@ -10,22 +10,16 @@ interface IProps {
   onMenuOpen(): void
 }
 
-class Header extends React.PureComponent<IProps> {
-  public render() {
-    const { firstName, onMenuOpen } = this.props
-
-    return (
-      <EriHeader>
-        <h1>
-          <Link className="header__heading-link" to="/">
-            Taskatron
-          </Link>
-        </h1>
-        {Boolean(firstName) && <MenuButton onClick={onMenuOpen} />}
-      </EriHeader>
-    )
-  }
-}
+const Header = ({ firstName, onMenuOpen }: IProps) => (
+  <EriHeader>
+    <h1>
+      <Link className="header__heading-link" to="/">
+        Taskatron
+      </Link>
+    </h1>
+    {Boolean(firstName) && <MenuButton onClick={onMenuOpen} />}
+  </EriHeader>
+)
 
 const mapStateToProps = (state: IStore) => ({
   firstName: userFirstNameSelector(state),
