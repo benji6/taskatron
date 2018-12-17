@@ -27,14 +27,14 @@ export const deleteImage = (Key: string): Promise<void> =>
 export const uploadImage = ({
   id,
   image,
-  name,
+  filename,
 }: {
   id: string
-  image: any
-  name: string
+  image: Buffer
+  filename: string
 }): Promise<string> =>
   new Promise((resolve, reject) => {
-    const Key = `${id}/${name}.jpg`
+    const Key = `${id}/${filename}`
 
     s3.upload(
       {

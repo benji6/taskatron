@@ -47,18 +47,21 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
 }
 
 export const postServiceImage = ({
+  extension,
   id,
   image,
 }: {
+  extension: string
   id: string
   image: File
 }): Promise<{ imagePath: string }> =>
-  fetch(`${origin}/services/${id}/image`, postFileConfig(image)).then(
-    response => {
-      if (!response.ok) throw Error(String(response.status))
-      return response.json()
-    },
-  )
+  fetch(
+    `${origin}/services/${id}/image/${extension}`,
+    postFileConfig(image),
+  ).then(response => {
+    if (!response.ok) throw Error(String(response.status))
+    return response.json()
+  })
 
 export const postUser = (user: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/user`, postConfig(user)).then(response => {
@@ -67,18 +70,21 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
   })
 
 export const putServiceImage = ({
+  extension,
   id,
   image,
 }: {
+  extension: string
   id: string
   image: File
 }): Promise<{ imagePath: string }> =>
-  fetch(`${origin}/services/${id}/image`, putFileConfig(image)).then(
-    response => {
-      if (!response.ok) throw Error(String(response.status))
-      return response.json()
-    },
-  )
+  fetch(
+    `${origin}/services/${id}/image/${extension}`,
+    putFileConfig(image),
+  ).then(response => {
+    if (!response.ok) throw Error(String(response.status))
+    return response.json()
+  })
 
 export const sendToken = (email: string): Promise<Response> =>
   fetch(`${origin}/send-token`, postConfig({ user: email })).then(response => {

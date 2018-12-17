@@ -38,8 +38,8 @@ router.post(
   postSendToken,
 )
 router.delete('/services/:id/image', restricted(), deleteServiceImage)
-router.post('/services/:id/image', restricted(), postServiceImage)
-router.put('/services/:id/image', restricted(), putServiceImage)
+router.post('/services/:id/image/:extension', restricted(), postServiceImage)
+router.put('/services/:id/image/:extension', restricted(), putServiceImage)
 router.get('/sign-out', passwordless.logout(), getSignOut)
 
 router.post('/user', postUser)

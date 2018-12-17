@@ -8,11 +8,11 @@ interface IRequest extends Request {
   user: string
 }
 
-const computeImageName = (file: Buffer) =>
-  crypto
+const computeImageName = (extension: string, file: Buffer) =>
+  `${crypto
     .createHash('md5')
     .update(file)
-    .digest('base64')
+    .digest('base64')}.${extension}`
 
 export const del = async (req: Request, res: Response) => {
   const {
@@ -47,7 +47,7 @@ export const del = async (req: Request, res: Response) => {
 export const post = async (req: Request, res: Response) => {
   const {
     body,
-    params: { id },
+    params: { extension, id },
     user,
   } = req as IRequest
   const service = await getService(id)
@@ -67,9 +67,9 @@ export const post = async (req: Request, res: Response) => {
   }
 
   const imagePath = await uploadImage({
+    filename: computeImageName(extension, body),
     id,
     image: body,
-    name: computeImageName(body),
   })
 
   res.status(200).send({ imagePath })
@@ -78,7 +78,7 @@ export const post = async (req: Request, res: Response) => {
 export const put = async (req: Request, res: Response) => {
   const {
     body,
-    params: { id },
+    params: { extension, id },
     user,
   } = req as IRequest
   const service = await getService(id)
@@ -98,9 +98,9 @@ export const put = async (req: Request, res: Response) => {
   }
 
   const imagePath = await uploadImage({
+    filename: computeImageName(extension, body),
     id,
     image: body,
-    name: computeImageName(body),
   })
 
   if (oldImagePath && imagePath !== oldImagePath) deleteImage(oldImagePath)

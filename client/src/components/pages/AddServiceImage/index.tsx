@@ -7,6 +7,7 @@ import {
   FormikActions,
   FormikProps,
 } from 'formik'
+import { extname } from 'path'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { Link, match, Redirect } from 'react-router-dom'
@@ -56,7 +57,11 @@ export default class AddServiceImage extends React.PureComponent<IProps> {
             actions: FormikActions<IFormValues>,
           ) => {
             const image = values.image as File
-            const { imagePath } = await postServiceImage({ id, image })
+            const { imagePath } = await postServiceImage({
+              extension: extname(image.name).slice(1),
+              id,
+              image,
+            })
             await updateService({
               variables: { id, imagePath },
             })
