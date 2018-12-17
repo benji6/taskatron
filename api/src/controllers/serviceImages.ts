@@ -26,7 +26,7 @@ export const del = async (req: Request, res: Response) => {
     return res.status(404).end()
   }
 
-  const { userId } = service
+  const { imagePath, userId } = service
 
   if (!(userId as any).equals(user)) {
     pino.error(
@@ -35,7 +35,12 @@ export const del = async (req: Request, res: Response) => {
     return res.status(403).end()
   }
 
-  await deleteImage(id)
+  if (!imagePath) {
+    pino.error(`DELETE /services/${id}/image 404 - imagePath is undefined`)
+    return res.status(404).end()
+  }
+
+  await deleteImage(imagePath)
   res.status(204).end()
 }
 
@@ -83,7 +88,7 @@ export const put = async (req: Request, res: Response) => {
     return res.status(404).end()
   }
 
-  const { userId } = service
+  const { imagePath: oldImagePath, userId } = service
 
   if (!(userId as any).equals(user)) {
     pino.error(
@@ -92,11 +97,13 @@ export const put = async (req: Request, res: Response) => {
     return res.status(403).end()
   }
 
-  // TODO: get the old file name and if it's different from the new one then delete it (different extension for example)
   const imagePath = await uploadImage({
     id,
     image: body,
     name: computeImageName(body),
   })
+
+  if (oldImagePath && imagePath !== oldImagePath) deleteImage(oldImagePath)
+
   res.status(200).send({ imagePath })
 }

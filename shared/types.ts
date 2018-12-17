@@ -83,6 +83,7 @@ export interface IServiceDocument {
   hasOwnEquipment: boolean
   hasOwnProducts: boolean
   hourlyRate: number
+  imagePath?: string
   location: ILocation
   name: string
   ovenClean: boolean
