@@ -16,11 +16,11 @@ export const createSearchString = (o: ISearchStringObject) => {
 }
 
 export const getFieldError = <IFormValues>(
-  form: FormikProps<IFormValues>,
+  { errors, submitCount, touched }: FormikProps<IFormValues>,
   prop: keyof IFormValues,
 ): string | undefined =>
-  form.touched[prop] && form.errors[prop]
-    ? String(form.errors[prop])
+  submitCount && touched[prop] && errors[prop]
+    ? String(errors[prop])
     : undefined
 
 export const position: Promise<ICoord> = new Promise((resolve, reject) => {

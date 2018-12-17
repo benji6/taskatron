@@ -12,6 +12,7 @@ import { Mutation } from 'react-apollo'
 import { Link, match, Redirect } from 'react-router-dom'
 import { maxImageSize } from 'shared/constants'
 import { postServiceImage } from '../../../api'
+import { getFieldError } from '../../../utils'
 import mutation from './mutation'
 
 interface IFormValues {
@@ -83,9 +84,11 @@ export default class AddServiceImage extends React.PureComponent<IProps> {
                     name="image"
                     render={({
                       field: { value, ...field },
+                      form,
                     }: FieldProps<IFormValues>) => (
                       <ImageUpload
                         {...field}
+                        error={getFieldError(form, 'image')}
                         label="Image"
                         onChange={({
                           target,

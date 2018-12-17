@@ -42,7 +42,7 @@ export const uploadImage = ({
         Bucket,
         Key,
       },
-      (err: Error, data: IUploadData) => {
+      (err: Error, _: IUploadData) => {
         if (err) return reject(err)
         resolve(Key)
       },
