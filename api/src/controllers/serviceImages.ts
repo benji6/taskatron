@@ -12,7 +12,10 @@ const computeImageName = (extension: string, file: Buffer) =>
   `${crypto
     .createHash('md5')
     .update(file)
-    .digest('base64')}.${extension}`
+    .digest('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')}.${extension}`
 
 export const del = async (req: Request, res: Response) => {
   const {
