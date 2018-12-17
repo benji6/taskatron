@@ -9,6 +9,7 @@
     "curly": [true, "ignore-same-line"],
     "jsx-boolean-value": [true, "never"],
     "jsx-no-lambda": false,
+    "no-bitwise": false,
     "no-submodule-imports": false
   }
 }

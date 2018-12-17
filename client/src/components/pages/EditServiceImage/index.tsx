@@ -13,6 +13,7 @@ import { Mutation, Query } from 'react-apollo'
 import { Link, match, Redirect } from 'react-router-dom'
 import { maxImageSize } from 'shared/constants'
 import { putServiceImage } from '../../../api'
+import compactor from '../../../compactor'
 import { getFieldError, serviceImageUrl } from '../../../utils'
 import mutation from './mutation'
 import query from './query'
@@ -59,11 +60,20 @@ export default class EditServiceImage extends React.PureComponent<IProps> {
                 values: IFormValues,
                 actions: FormikActions<IFormValues>,
               ) => {
-                const image = values.image as File
+                const originalImage = values.image as File
+
+                const compressedImage = await compactor({
+                  file: originalImage,
+                  maxHeight: 512,
+                  maxWidth: 512,
+                  quality: 0.9,
+                  sizeThreshold: 1e3,
+                })
+
                 const { imagePath } = await putServiceImage({
-                  extension: extname(image.name).slice(1),
+                  extension: extname(originalImage.name).slice(1),
                   id,
-                  image,
+                  image: compressedImage,
                 })
                 await updateService({
                   variables: { id, imagePath },

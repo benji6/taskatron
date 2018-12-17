@@ -16,7 +16,7 @@ const port = config.get('port')
 const app = express()
 
 app.use(bodyParser.json({ type: '*/json' }))
-app.use(bodyParser.raw({ limit: maxImageSize * 1.05, type: 'image/*' }))
+app.use(bodyParser.raw({ limit: maxImageSize, type: 'image/*' }))
 if (NODE_ENV !== 'production') app.use(cors())
 app.use(passwordless.acceptToken())
 app.use('/', router)
