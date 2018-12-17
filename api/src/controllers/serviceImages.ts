@@ -1,3 +1,4 @@
+import * as crypto from 'crypto'
 import { Request, Response } from 'express'
 import { deleteImage, uploadImage } from '../model/serviceImages'
 import { getService } from '../model/services'
@@ -6,6 +7,12 @@ import pino from '../pino'
 interface IRequest extends Request {
   user: string
 }
+
+const computeImageName = (file: Buffer) =>
+  crypto
+    .createHash('md5')
+    .update(file)
+    .digest('base64')
 
 export const del = async (req: Request, res: Response) => {
   const {
@@ -54,8 +61,13 @@ export const post = async (req: Request, res: Response) => {
     return res.status(403).end()
   }
 
-  await uploadImage({ id, image: body })
-  res.status(200).send({ imagePath: `${id}/image.jpg` })
+  const imagePath = await uploadImage({
+    id,
+    image: body,
+    name: computeImageName(body),
+  })
+
+  res.status(200).send({ imagePath })
 }
 
 export const put = async (req: Request, res: Response) => {
@@ -81,6 +93,10 @@ export const put = async (req: Request, res: Response) => {
   }
 
   // TODO: get the old file name and if it's different from the new one then delete it (different extension for example)
-  await uploadImage({ id, image: body })
-  res.status(200).send({ imagePath: `${id}/image.jpg` })
+  const imagePath = await uploadImage({
+    id,
+    image: body,
+    name: computeImageName(body),
+  })
+  res.status(200).send({ imagePath })
 }
