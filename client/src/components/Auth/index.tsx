@@ -52,6 +52,8 @@ class Auth extends React.PureComponent<IProps> {
           return
         }
         onUserGetFailure()
+        const statusCode = Number(e.message)
+        if (statusCode >= 500 && statusCode < 600) return
         deleteCredentials()
       }
       return
