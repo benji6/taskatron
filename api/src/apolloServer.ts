@@ -113,6 +113,7 @@ const resolvers = {
       }
     },
   },
+  Node: { __resolveType: () => null },
   Query: {
     service: async (_: unknown, { id }: any) => {
       const service = await getService(id)
