@@ -1,4 +1,5 @@
 import { IUserPatchBody, IUserPostBody, IUserResponse } from 'shared/types'
+import compactor from '../compactor'
 import { getCredentials } from '../localStorage'
 import ICredentials from '../types/ICredentials'
 import {
@@ -46,7 +47,7 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
   return response
 }
 
-export const postServiceImage = ({
+export const postServiceImage = async ({
   extension,
   id,
   image,
@@ -54,14 +55,22 @@ export const postServiceImage = ({
   extension: string
   id: string
   image: File
-}): Promise<{ imagePath: string }> =>
-  fetch(
+}): Promise<{ imagePath: string }> => {
+  const compressedImage = await compactor({
+    file: image,
+    maxHeight: 512,
+    maxWidth: 512,
+    quality: 0.9,
+    sizeThreshold: 1e3,
+  })
+  return fetch(
     `${origin}/services/${id}/image/${extension}`,
-    postFileConfig(image),
+    postFileConfig(compressedImage),
   ).then(response => {
     if (!response.ok) throw Error(String(response.status))
     return response.json()
   })
+}
 
 export const postUser = (user: IUserPostBody): Promise<Response> =>
   fetch(`${origin}/user`, postConfig(user)).then(response => {
@@ -69,7 +78,7 @@ export const postUser = (user: IUserPostBody): Promise<Response> =>
     return response
   })
 
-export const putServiceImage = ({
+export const putServiceImage = async ({
   extension,
   id,
   image,
@@ -77,14 +86,22 @@ export const putServiceImage = ({
   extension: string
   id: string
   image: File
-}): Promise<{ imagePath: string }> =>
-  fetch(
+}): Promise<{ imagePath: string }> => {
+  const compressedImage = await compactor({
+    file: image,
+    maxHeight: 512,
+    maxWidth: 512,
+    quality: 0.9,
+    sizeThreshold: 1e3,
+  })
+  return fetch(
     `${origin}/services/${id}/image/${extension}`,
-    putFileConfig(image),
+    putFileConfig(compressedImage),
   ).then(response => {
     if (!response.ok) throw Error(String(response.status))
     return response.json()
   })
+}
 
 export const sendToken = (email: string): Promise<Response> =>
   fetch(`${origin}/send-token`, postConfig({ user: email })).then(response => {
