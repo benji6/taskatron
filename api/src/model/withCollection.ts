@@ -9,7 +9,10 @@ const dbName = 'taskatron'
 const withCollection = (
   collectionName: collectionNames.TCollectionNames,
 ) => async <A>(f: (a: Collection) => A) => {
-  const client = await MongoClient.connect(config.get('mongoUrl'))
+  const client = await MongoClient.connect(
+    config.get('mongoUrl'),
+    { useNewUrlParser: true },
+  )
 
   try {
     return f(client.db(dbName).collection(collectionName))
