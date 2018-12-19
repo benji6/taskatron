@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "main": "build",
   "scripts": {
-    "build": "rm -rf build && tsc",
+    "build": "rm -rf build && mkdirp build && cp -r config build/config && tsc",
     "format": "prettier --write \"src/**/*.ts*\" && yarn test:lint --fix",
     "server:watch": "nodemon .",
     "start": "rm -rf build && run-p tsc:watch server:watch",
