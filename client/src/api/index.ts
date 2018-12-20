@@ -47,6 +47,9 @@ export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
   return response
 }
 
+const getFormatFromExtension = (extension: string) =>
+  extension === 'png' ? 'png' : extension === 'webp' ? 'webp' : 'jpg'
+
 export const postServiceImage = async ({
   extension,
   id,
@@ -58,10 +61,10 @@ export const postServiceImage = async ({
 }): Promise<{ imagePath: string }> => {
   const compressedImage = await compactor({
     file: image,
+    format: getFormatFromExtension(extension),
     maxHeight: 512,
     maxWidth: 512,
     quality: 0.9,
-    sizeThreshold: 1e3,
   })
   return fetch(
     `${origin}/services/${id}/image/${extension}`,
@@ -89,10 +92,10 @@ export const putServiceImage = async ({
 }): Promise<{ imagePath: string }> => {
   const compressedImage = await compactor({
     file: image,
+    format: getFormatFromExtension(extension),
     maxHeight: 512,
     maxWidth: 512,
     quality: 0.9,
-    sizeThreshold: 1e3,
   })
   return fetch(
     `${origin}/services/${id}/image/${extension}`,

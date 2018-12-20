@@ -1,19 +1,25 @@
-const toBlob = (
-  canvas: HTMLCanvasElement,
-  callback: BlobCallback,
-  type: string,
-  quality: number,
-) => {
-  if (canvas.toBlob) return canvas.toBlob(callback, type, quality)
+type Format = 'jpg' | 'png' | 'webp'
+type MimeType = 'image/jpeg' | 'image/png' | 'image/webp'
 
-  const binaryString = atob(canvas.toDataURL(type, quality).split(',')[1])
-  const { length } = binaryString
-  const arr = new Uint8Array(length)
-
-  for (let i = 0; i < length; i++) arr[i] = binaryString.charCodeAt(i)
-
-  callback(new Blob([arr], { type: type || 'image/png' }))
+const typeToMimeType: { [key in Format]: MimeType } = {
+  jpg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
 }
+
+const canvasToBlob = (
+  canvas: HTMLCanvasElement,
+  type: MimeType,
+  quality: number,
+): Promise<Blob | null> =>
+  new Promise(resolve => {
+    if (canvas.toBlob) return canvas.toBlob(resolve, type, quality)
+    const binaryString = atob(canvas.toDataURL(type, quality).split(',')[1])
+    const { length } = binaryString
+    const arr = new Uint8Array(length)
+    for (let i = 0; i < length; i++) arr[i] = binaryString.charCodeAt(i)
+    resolve(new Blob([arr], { type }))
+  })
 
 // -2 = not jpeg, -1 = no data, 1..8 = orientations
 // https://stackoverflow.com/a/32490603
@@ -64,10 +70,8 @@ const renderToCanvas = ({
   width: number
 }): HTMLCanvasElement => {
   const canvas = document.createElement('canvas')
-
   canvas.width = orientation > 4 ? height : width
   canvas.height = orientation > 4 ? width : height
-
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
   if (orientation === 2) ctx.transform(-1, 0, 0, 1, width, 0)
@@ -79,22 +83,23 @@ const renderToCanvas = ({
   else if (orientation === 8) ctx.transform(0, -1, 1, 0, 0, width)
 
   ctx.drawImage(image, 0, 0, width, height)
-
   return canvas
 }
 
 export default ({
   file: originalFile,
-  maxHeight,
-  maxWidth,
-  quality,
-  sizeThreshold,
+  format = 'jpg',
+  maxHeight = Infinity,
+  maxWidth = Infinity,
+  quality = 1,
+  sizeThreshold = 0,
 }: {
   file: File
-  maxHeight: number
-  maxWidth: number
-  quality: number
-  sizeThreshold: number
+  format?: Format
+  maxHeight?: number
+  maxWidth?: number
+  quality?: number
+  sizeThreshold?: number
 }): Promise<File> =>
   new Promise(resolve => {
     if (originalFile.size <= sizeThreshold) return resolve(originalFile)
@@ -127,19 +132,14 @@ export default ({
         width: Math.round(width * scale),
       })
 
-      toBlob(
-        canvas,
-        (blob: Blob | null) => {
-          if (!blob) return resolve(originalFile)
-          const newFile = new File([blob], originalFile.name, {
-            lastModified: originalFile.lastModified,
-            type: originalFile.type,
-          })
-          resolve(newFile)
-        },
-        'image/jpeg',
-        quality,
-      )
+      const mimeType = typeToMimeType[format]
+      const blob = await canvasToBlob(canvas, mimeType, quality)
+      if (!blob) return resolve(originalFile)
+      const newFile = new File([blob], originalFile.name, {
+        lastModified: originalFile.lastModified,
+        type: mimeType,
+      })
+      resolve(newFile.size < originalFile.size ? newFile : originalFile)
     }
 
     image.src = URL.createObjectURL(originalFile)
