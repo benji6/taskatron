@@ -1,14 +1,10 @@
-import {
-  ApolloServer,
-  AuthenticationError,
-  UserInputError,
-} from 'apollo-server-express'
+import { AuthenticationError, UserInputError } from 'apollo-server-express'
 import {
   maxServiceDescriptionLength,
   maxServiceNameLength,
 } from 'shared/constants'
 import { IUserDocument } from 'shared/types'
-import { deleteImage } from './model/serviceImages'
+import { deleteImage } from '../model/serviceImages'
 import {
   addService,
   countServices,
@@ -17,16 +13,15 @@ import {
   getServiceByUserId,
   searchServices,
   updateService,
-} from './model/services'
-import { getUser } from './model/user'
-import pino from './pino'
-import typeDefs from './typeDefs'
+} from '../model/services'
+import { getUser } from '../model/user'
+import pino from '../pino'
 
 interface IContext {
   userId: string
 }
 
-const resolvers = {
+export default {
   Mutation: {
     addService: async (_: unknown, args: any, context: IContext) => {
       if (args.userId !== context.userId) {
@@ -147,19 +142,3 @@ const resolvers = {
     },
   },
 }
-
-export default new ApolloServer({
-  context: async ({ req }: any): Promise<IContext> => ({
-    userId: req.user,
-  }),
-  formatError: (error: Error) => {
-    pino.error('Apollo error:', error)
-    return error
-  },
-  formatResponse: (response: object) => {
-    pino.info('Apollo response:', response)
-    return response
-  },
-  resolvers,
-  typeDefs,
-})
