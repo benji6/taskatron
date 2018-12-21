@@ -1,5 +1,4 @@
 import { FormikProps } from 'formik'
-import { ICoord } from 'shared/types'
 
 interface ISearchStringObject {
   [key: string]: unknown
@@ -22,22 +21,6 @@ export const getFieldError = <IFormValues>(
   submitCount && touched[prop] && errors[prop]
     ? String(errors[prop])
     : undefined
-
-export const position: Promise<ICoord> = new Promise((resolve, reject) => {
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => resolve({ latitude, longitude }),
-      reject,
-      {
-        maximumAge: 6e5,
-        // timeout: 1e4,
-        timeout: 1e3,
-      },
-    )
-  } else {
-    reject(new Error('geolocation not available'))
-  }
-})
 
 export const renderDecimal = (n: number): string => n.toFixed(2)
 

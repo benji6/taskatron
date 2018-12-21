@@ -3,8 +3,8 @@ import { History, Location } from 'history' // tslint:disable-line no-implicit-d
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import { ICoord, IServiceDocument, IServiceFilters } from 'shared/types'
-import { createSearchString, position } from '../../../../utils'
+import { IServiceDocument, IServiceFilters } from 'shared/types'
+import { createSearchString } from '../../../../utils'
 import { resultsPerPage } from './constants'
 import Filters from './Filters'
 import query from './query'
@@ -22,7 +22,6 @@ interface IService extends IServiceDocument {
 }
 
 interface IState {
-  coords?: ICoord
   filters?: IServiceFilters
   services?: IService[]
   total: number
@@ -60,19 +59,6 @@ class Search extends React.PureComponent<IProps> {
   }
 
   public setFilters = (filters: IServiceFilters) => this.setState({ filters })
-
-  public async componentDidMount() {
-    try {
-      const { latitude, longitude } = await position
-      this.setState((state: IState) => ({
-        ...state,
-        filters: { ...state.filters, latitude, longitude },
-      }))
-    } catch (e) {
-      // tslint:disable-next-line:no-console
-      console.error(e) // TODO
-    }
-  }
 
   public handlePaginationChange = (page: number) => {
     this.props.history.push(
