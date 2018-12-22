@@ -32,6 +32,14 @@ export default gql`
     total: Int!
   }
 
+  type User implements Node {
+    email: String!
+    firstName: String!
+    id: ID!
+    lastName: String!
+    postcode: String!
+  }
+
   type Mutation {
     addService(
       carpetClean: Boolean
@@ -64,6 +72,7 @@ export default gql`
   }
 
   type Query {
+    me: User
     service(id: ID!): Service
     services(
       carpetClean: Boolean

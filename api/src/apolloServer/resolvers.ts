@@ -3,7 +3,6 @@ import {
   maxServiceDescriptionLength,
   maxServiceNameLength,
 } from 'shared/constants'
-import { IUserDocument } from 'shared/types'
 import { deleteImage } from '../model/serviceImages'
 import {
   addService,
@@ -16,7 +15,7 @@ import {
 } from '../model/services'
 import { getUser } from '../model/users'
 import pino from '../pino'
-import { IService } from '../types'
+import { IService, IUser } from '../types'
 
 interface IContext {
   userId: string
@@ -32,9 +31,9 @@ export default {
     addService: async (
       _: unknown,
       args: any,
-      context: IContext,
+      { userId }: IContext,
     ): Promise<IService> => {
-      if (args.userId !== context.userId) {
+      if (args.userId !== userId) {
         throw new AuthenticationError('Authed user does not match record user')
       }
       if (await getServiceByUserId(args.userId)) {
@@ -54,7 +53,7 @@ export default {
           }, but should be less than ${maxServiceNameLength}`,
         )
       }
-      const { location } = (await getUser(args.userId)) as IUserDocument
+      const { location } = (await getUser(args.userId)) as IUser
       return addService({
         ...args,
         location,
@@ -63,12 +62,12 @@ export default {
     deleteService: async (
       _: unknown,
       args: any,
-      context: IContext,
+      { userId }: IContext,
     ): Promise<IService> => {
       const service = await getService(args.id)
       if (!service) throw new UserInputError('Not found')
       const { id: serviceId } = service
-      if (service.userId !== context.userId) {
+      if (service.userId !== userId) {
         throw new AuthenticationError('Authed user does not match record user')
       }
       await deleteService(serviceId)
@@ -80,11 +79,11 @@ export default {
     updateService: async (
       _: unknown,
       args: any,
-      context: IContext,
+      { userId }: IContext,
     ): Promise<IService> => {
       const service = await getService(args.id)
       if (!service) throw new UserInputError('Not found')
-      if (service.userId !== context.userId) {
+      if (service.userId !== userId) {
         throw new AuthenticationError('Authed user does not match record user')
       }
       await updateService(args)
@@ -93,6 +92,11 @@ export default {
   },
   Node: { __resolveType: () => null },
   Query: {
+    me: async (_: unknown, __: any, { userId }: IContext): Promise<IUser> => {
+      const user = await getUser(userId)
+      if (!user) throw new AuthenticationError('User is not logged in')
+      return user
+    },
     service: async (_: unknown, { id }: any): Promise<IService> => {
       const service = await getService(id)
       if (!service) throw new UserInputError('Not found')

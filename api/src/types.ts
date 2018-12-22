@@ -19,3 +19,12 @@ export interface IService extends IServiceCreateParams {
   id: string
   imagePath?: string
 }
+
+export interface IUser {
+  email: string
+  firstName: string
+  id: string
+  lastName: string
+  location: ILocation
+  postcode: string
+}

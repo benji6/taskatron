@@ -1,10 +1,6 @@
 import { ObjectId } from 'mongodb'
-import {
-  IUserDocument,
-  IUserModelParams,
-  IUserPatchBody,
-  IUserResponse,
-} from 'shared/types'
+import { IUserModelParams, IUserPatchBody, IUserResponse } from 'shared/types'
+import { IUser } from '../types'
 import { withUsersCollection } from './withCollection'
 
 const documentToResponse = ({
@@ -12,16 +8,17 @@ const documentToResponse = ({
     coordinates: [longitude, latitude],
   },
   ...rest
-}: IUserDocument): IUserResponse => ({
+}: any): IUserResponse => ({
   ...rest,
   coords: { latitude, longitude },
 })
 
-export const getUser = async (id: string): Promise<IUserDocument | undefined> =>
+export const getUser = async (id: string): Promise<IUser | undefined> =>
   withUsersCollection(async collection => {
     const [result] = await collection.find(new ObjectId(id)).toArray()
-
-    return result
+    if (!result) return
+    const { _id, ...rest } = result
+    return { ...rest, id: _id.toString() }
   })
 
 export const getUserByEmail = async (
@@ -51,7 +48,7 @@ export const setUser = async ({
 
     await collection.insertOne(document)
 
-    return documentToResponse(document as IUserDocument)
+    return documentToResponse(document)
   })
 
 // TODO: updating location

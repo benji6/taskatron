@@ -19,7 +19,10 @@ const MyService = ({ userId }: IProps) => (
       if (loading) return <Spinner variation="page" />
       if (error) {
         return (
-          <p e-util="negative">Oops, there was an error, please try again.</p>
+          <p e-util="negative">
+            Oops, there was an error fetching the details of your service,
+            please try again.
+          </p>
         )
       }
 

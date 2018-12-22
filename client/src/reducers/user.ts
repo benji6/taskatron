@@ -9,7 +9,7 @@ import {
 import IAction from '../types/IAction'
 
 export interface IState {
-  _id?: string
+  id?: string
   email?: string
   firstName?: string
   isLoading: boolean

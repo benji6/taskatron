@@ -106,11 +106,6 @@ export interface IUserModelParams extends IUserPostBody {
   coords: ICoord
 }
 
-export interface IUserDocument extends IUserPostBody {
-  _id: string
-  location: ILocation
-}
-
 export interface IUserResponse extends IUserModelParams {
   _id: string
 }
