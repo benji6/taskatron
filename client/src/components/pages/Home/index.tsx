@@ -1,6 +1,6 @@
-import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
+import { Link } from 'react-router-dom'
 import { queryMyId } from '../../../queries'
 import Search from './Search'
 
@@ -13,12 +13,10 @@ const Home = () => (
           return null
         }
         return (
-          <ButtonGroup>
-            <Button to="sign-up">Join us!</Button>
-            <Button to="sign-in" variant="secondary">
-              Sign in
-            </Button>
-          </ButtonGroup>
+          <p e-util="center">
+            <Link to="sign-up">Join us</Link>, or{' '}
+            <Link to="sign-in">sign in</Link> to list your cleaning service!
+          </p>
         )
       }}
     </Query>
