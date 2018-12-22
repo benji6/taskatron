@@ -1,16 +1,13 @@
 import { Menu as EriMenu } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { userSignOut } from '../../actions'
 import { getSignOut } from '../../api'
 import { deleteCredentials } from '../../localStorage'
 import query from './query'
 
 interface IProps {
   isOpen: boolean
-  onSignOut: typeof userSignOut
   onClose(): void
 }
 
@@ -55,9 +52,8 @@ class Menu extends React.PureComponent<IProps> {
   }
 
   private handleSignOut = async () => {
-    const { onClose, onSignOut } = this.props
+    const { onClose } = this.props
     onClose()
-    onSignOut()
 
     try {
       await getSignOut()
@@ -73,11 +69,4 @@ class Menu extends React.PureComponent<IProps> {
   }
 }
 
-const mapDispatchToProps = {
-  onSignOut: userSignOut,
-}
-
-export default connect(
-  undefined,
-  mapDispatchToProps,
-)(Menu)
+export default Menu

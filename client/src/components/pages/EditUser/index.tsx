@@ -9,10 +9,8 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import { isFirstName, isLastName, isPostcode } from 'shared/types'
-import { userSet } from '../../../actions'
 import { patchMe } from '../../../api'
 import { getFieldError } from '../../../utils'
 import GenericErrorMessage from '../../GenericErrorMessage'
@@ -30,7 +28,6 @@ interface IProps {
   lastName: string
   postcode: string
   radius: number
-  setUser: typeof userSet
 }
 
 interface IState {
@@ -136,7 +133,6 @@ class EditUser extends React.PureComponent<IProps> {
     try {
       const body = { ...values, radius: Number(values.radius) }
       await patchMe(body)
-      this.props.setUser(body)
 
       if (this.hasUnmounted) return
 
@@ -162,11 +158,4 @@ class EditUser extends React.PureComponent<IProps> {
   }
 }
 
-const mapDispatchToProps = {
-  setUser: userSet,
-}
-
-export default connect(
-  undefined,
-  mapDispatchToProps,
-)(EditUser)
+export default EditUser

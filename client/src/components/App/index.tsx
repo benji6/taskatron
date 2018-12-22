@@ -3,7 +3,6 @@ import * as React from 'react'
 import { Query } from 'react-apollo'
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import { queryMyId } from '../../queries'
-import Auth from '../Auth'
 import Header from '../Header'
 import Menu from '../Menu'
 import About from '../pages/About'
@@ -28,66 +27,63 @@ class App extends React.PureComponent {
     const { isMenuOpen } = this.state
 
     return (
-      <>
-        <Auth />
-        <Query query={queryMyId}>
-          {({ data, error, loading }) => {
-            if (loading) return <Spinner variation="page" />
-            const isSignedIn = Boolean(!error && data.me.id)
+      <Query query={queryMyId}>
+        {({ data, error, loading }) => {
+          if (loading) return <Spinner variation="page" />
+          const isSignedIn = Boolean(!error && data.me.id)
 
-            return (
-              <BrowserRouter>
-                <>
-                  <Header onMenuOpen={this.handleMenuOpen} />
-                  <Menu isOpen={isMenuOpen} onClose={this.handleMenuClose} />
-                  <main>
-                    <Switch>
-                      <Route path="/" exact component={Home} />
-                      <Route path="/about" component={About} />
-                      <Route path="/login" component={Login} />
-                      <Route path="/sign-in" component={SignIn} />
-                      <Route path="/sign-up" component={SignUp} />
-                      <PrivateRoute
-                        exact
-                        path="/profile"
-                        component={Profile}
-                        isSignedIn={isSignedIn}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/profile/user"
-                        component={EditUser}
-                        isSignedIn={isSignedIn}
-                      />
-                      <PrivateRoute
-                        path="/profile/service/add"
-                        component={AddService}
-                        isSignedIn={isSignedIn}
-                      />
-                      <PrivateRoute
-                        path="/service/:id/image/add"
-                        component={AddServiceImage}
-                        isSignedIn={isSignedIn}
-                      />
-                      <PrivateRoute
-                        path="/service/:id/image/edit"
-                        component={EditServiceImage}
-                        isSignedIn={isSignedIn}
-                      />
-                      <PrivateRoute
-                        path="/profile/service/edit"
-                        component={EditService}
-                        isSignedIn={isSignedIn}
-                      />
-                      <Redirect to="/" />
-                    </Switch>
-                  </main>
-                </>
-              </BrowserRouter>
-            )
-          }}
-        </Query>
-      </>
+          return (
+            <BrowserRouter>
+              <>
+                <Header onMenuOpen={this.handleMenuOpen} />
+                <Menu isOpen={isMenuOpen} onClose={this.handleMenuClose} />
+                <main>
+                  <Switch>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/about" component={About} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/sign-in" component={SignIn} />
+                    <Route path="/sign-up" component={SignUp} />
+                    <PrivateRoute
+                      exact
+                      path="/profile"
+                      component={Profile}
+                      isSignedIn={isSignedIn}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/profile/user"
+                      component={EditUser}
+                      isSignedIn={isSignedIn}
+                    />
+                    <PrivateRoute
+                      path="/profile/service/add"
+                      component={AddService}
+                      isSignedIn={isSignedIn}
+                    />
+                    <PrivateRoute
+                      path="/service/:id/image/add"
+                      component={AddServiceImage}
+                      isSignedIn={isSignedIn}
+                    />
+                    <PrivateRoute
+                      path="/service/:id/image/edit"
+                      component={EditServiceImage}
+                      isSignedIn={isSignedIn}
+                    />
+                    <PrivateRoute
+                      path="/profile/service/edit"
+                      component={EditService}
+                      isSignedIn={isSignedIn}
+                    />
+                    <Redirect to="/" />
+                  </Switch>
+                </main>
+              </>
+            </BrowserRouter>
+          )
+        }}
+      </Query>
     )
   }
 
