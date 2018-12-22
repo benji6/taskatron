@@ -1,9 +1,5 @@
 import ICredentials from './types/ICredentials'
 
-export const setCredentials = (credentials: ICredentials): void => {
-  localStorage.setItem('credentials', JSON.stringify(credentials))
-}
-
 export const deleteCredentials = (): void => localStorage.clear()
 
 export const getCredentials = (): ICredentials | undefined => {
@@ -17,4 +13,13 @@ export const getCredentials = (): ICredentials | undefined => {
     }
   }
   return undefined
+}
+
+export const getUserId = (): string | undefined => {
+  const credentials = getCredentials()
+  return credentials ? credentials.uid : undefined
+}
+
+export const setCredentials = (credentials: ICredentials): void => {
+  localStorage.setItem('credentials', JSON.stringify(credentials))
 }

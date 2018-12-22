@@ -1,10 +1,8 @@
 import { Button, ButtonGroup, Icon } from 'eri'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { userIdSelector } from '../../../../../selectors'
-import IStore from '../../../../../types/IStore'
+import { getUserId } from '../../../../../localStorage'
 import { renderCurrency } from '../../../../../utils'
 import query from '../query'
 import DeleteDialog from './DeleteDialog'
@@ -12,7 +10,6 @@ import mutation from './mutation'
 
 interface IProps {
   children: any
-  userId: string
 }
 
 interface IState {
@@ -41,7 +38,6 @@ class ServiceDetails extends React.PureComponent<IProps> {
         ovenClean,
         radius,
       },
-      userId,
     } = this.props
     const { isDeleteDialogOpen } = this.state
 
@@ -102,7 +98,7 @@ class ServiceDetails extends React.PureComponent<IProps> {
         </ButtonGroup>
         <Mutation
           mutation={mutation}
-          refetchQueries={[{ query, variables: { userId } }]}
+          refetchQueries={[{ query, variables: { userId: getUserId() } }]}
           variables={{ id }}
         >
           {(deleteService, { loading }) => (
@@ -129,8 +125,4 @@ class ServiceDetails extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  userId: userIdSelector(state) as string,
-})
-
-export default connect(mapStateToProps)(ServiceDetails)
+export default ServiceDetails

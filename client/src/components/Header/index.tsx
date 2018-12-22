@@ -2,7 +2,7 @@ import { Header as EriHeader, MenuButton } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
-import query from './query'
+import { queryMyId } from '../../queries'
 
 interface IProps {
   onMenuOpen(): void
@@ -15,7 +15,7 @@ const Header = ({ onMenuOpen }: IProps) => (
         Taskatron
       </Link>
     </h1>
-    <Query query={query}>
+    <Query query={queryMyId}>
       {({ data }) => (data ? <MenuButton onClick={onMenuOpen} /> : null)}
     </Query>
   </EriHeader>

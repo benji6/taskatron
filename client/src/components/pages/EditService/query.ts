@@ -2,6 +2,9 @@ import { gql } from 'apollo-boost'
 
 export default gql`
   query GetServiceByUserId($userId: ID!) {
+    me {
+      id
+    }
     services(limit: 1, skip: 0, userId: $userId) {
       nodes {
         carpetClean

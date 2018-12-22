@@ -1,12 +1,12 @@
 import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import query from './query'
+import { queryMyId } from '../../../queries'
 import Search from './Search'
 
 const Home = () => (
   <>
-    <Query query={query}>
+    <Query query={queryMyId}>
       {({ error, loading }) => {
         if (loading) return null
         if (!error || !error.message.includes('User is not logged in')) {

@@ -17,7 +17,6 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
-import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import {
   maxServiceDescriptionLength,
@@ -25,8 +24,7 @@ import {
 } from 'shared/constants'
 import { isValidNumber } from 'shared/validation'
 import { radii } from '../../../constants'
-import { userIdSelector } from '../../../selectors'
-import IStore from '../../../types/IStore'
+import { getUserId } from '../../../localStorage'
 import { getFieldError } from '../../../utils'
 import addServiceMutation from './addServiceMutation'
 
@@ -63,7 +61,6 @@ class AddService extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { userId } = this.props
     const { submittedSuccessfully } = this.state
 
     if (submittedSuccessfully) return <Redirect to="/profile" />
@@ -96,7 +93,7 @@ class AddService extends React.PureComponent<IProps> {
                 hourlyRate: Number(hourlyRate),
                 name,
                 radius: Number(radius),
-                userId,
+                userId: getUserId(),
               },
             })
 
@@ -112,11 +109,7 @@ class AddService extends React.PureComponent<IProps> {
               initialValues={initialValues}
               onSubmit={handleSubmit}
               validate={this.validate}
-              render={({
-                isSubmitting,
-                setValues,
-                values,
-              }: FormikProps<IFormValues>) => (
+              render={({ isSubmitting }: FormikProps<IFormValues>) => (
                 <Form noValidate>
                   <h2>Add cleaning service</h2>
                   <p>Tell us about the cleaning service you're offering</p>
@@ -284,8 +277,4 @@ class AddService extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  userId: userIdSelector(state) as string,
-})
-
-export default connect(mapStateToProps)(AddService)
+export default AddService

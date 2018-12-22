@@ -1,13 +1,9 @@
 import { gql } from 'apollo-boost'
 
-export const queryMe = gql`
+export const queryMyId = gql`
   {
     me {
-      email
-      firstName
       id
-      lastName
-      postcode
     }
   }
 `

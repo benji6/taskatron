@@ -18,7 +18,6 @@ import {
 } from 'formik'
 import * as React from 'react'
 import { Mutation, Query } from 'react-apollo'
-import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import {
   maxServiceDescriptionLength,
@@ -26,8 +25,7 @@ import {
 } from 'shared/constants'
 import { isValidNumber } from 'shared/validation'
 import { radii } from '../../../constants'
-import { userIdSelector } from '../../../selectors'
-import IStore from '../../../types/IStore'
+import { getUserId } from '../../../localStorage'
 import { getFieldError, renderDecimal } from '../../../utils'
 import GenericErrorMessage from '../../GenericErrorMessage'
 import mutation from './mutation'
@@ -46,15 +44,11 @@ interface IFormValues {
   serviceName: string
 }
 
-interface IProps {
-  userId: string
-}
-
 interface IState {
   submittedSuccessfully: boolean
 }
 
-class EditService extends React.PureComponent<IProps> {
+class EditService extends React.PureComponent {
   public hasUnmounted = false
 
   public state: IState = {
@@ -66,18 +60,17 @@ class EditService extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { userId } = this.props
     const { submittedSuccessfully } = this.state
 
     return (
-      <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
+      <Query
+        fetchPolicy="network-only"
+        query={query}
+        variables={{ userId: getUserId() }}
+      >
         {({ loading, error, data }) => {
           if (loading) return <Spinner variation="page" />
-
-          if (error) {
-            return <GenericErrorMessage />
-          }
-
+          if (error) return <GenericErrorMessage />
           if (submittedSuccessfully) return <Redirect to="/profile" />
 
           const [service] = data.services.nodes
@@ -328,8 +321,4 @@ class EditService extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  userId: userIdSelector(state) as string,
-})
-
-export default connect(mapStateToProps)(EditService)
+export default EditService
