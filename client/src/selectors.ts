@@ -1,7 +1,5 @@
 import IStore from './types/IStore'
 
-export const userFirstNameSelector = (state: IStore): string | undefined =>
-  state.user.firstName
 export const userIdSelector = (state: IStore): string | undefined =>
   state.user.id
 export const userIsLoadingSelector = (state: IStore): boolean =>

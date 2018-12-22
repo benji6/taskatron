@@ -1,15 +1,14 @@
 import { Menu as EriMenu } from 'eri'
 import * as React from 'react'
+import { Query } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { userSignOut } from '../../actions'
 import { getSignOut } from '../../api'
 import { deleteCredentials } from '../../localStorage'
-import { userFirstNameSelector } from '../../selectors'
-import IStore from '../../types/IStore'
+import query from './query'
 
 interface IProps {
-  firstName: string
   isOpen: boolean
   onSignOut: typeof userSignOut
   onClose(): void
@@ -17,33 +16,41 @@ interface IProps {
 
 class Menu extends React.PureComponent<IProps> {
   public render() {
-    const { firstName, isOpen, onClose } = this.props
+    const { isOpen, onClose } = this.props
 
     return (
-      <EriMenu onClose={onClose} open={isOpen}>
-        <p>Hi {firstName}!</p>
-        <hr />
-        <p>
-          <Link onClick={onClose} to="/">
-            Home
-          </Link>
-        </p>
-        <p>
-          <Link onClick={onClose} to="/profile">
-            Manage profile
-          </Link>
-        </p>
-        <p>
-          <Link onClick={onClose} to="/about">
-            About
-          </Link>
-        </p>
-        <p>
-          <Link onClick={this.handleSignOut} to="/">
-            Sign out
-          </Link>
-        </p>
-      </EriMenu>
+      <Query query={query}>
+        {({ error, data, loading }) => {
+          if (error || loading) return null
+          const { firstName } = data.me
+          return (
+            <EriMenu onClose={onClose} open={isOpen}>
+              <p>Hi {firstName}!</p>
+              <hr />
+              <p>
+                <Link onClick={onClose} to="/">
+                  Home
+                </Link>
+              </p>
+              <p>
+                <Link onClick={onClose} to="/profile">
+                  Manage profile
+                </Link>
+              </p>
+              <p>
+                <Link onClick={onClose} to="/about">
+                  About
+                </Link>
+              </p>
+              <p>
+                <Link onClick={this.handleSignOut} to="/">
+                  Sign out
+                </Link>
+              </p>
+            </EriMenu>
+          )
+        }}
+      </Query>
     )
   }
 
@@ -66,15 +73,11 @@ class Menu extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  firstName: userFirstNameSelector(state) as string,
-})
-
 const mapDispatchToProps = {
   onSignOut: userSignOut,
 }
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps,
 )(Menu)

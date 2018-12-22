@@ -1,32 +1,29 @@
 import { Button, ButtonGroup } from 'eri'
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { userFirstNameSelector } from '../../../selectors'
-import IStore from '../../../types/IStore'
+import { Query } from 'react-apollo'
+import query from './query'
 import Search from './Search'
 
-interface IProps {
-  firstName?: string
-}
-
-const Home = ({ firstName }: IProps) => (
+const Home = () => (
   <>
-    {!firstName && (
-      <>
-        <ButtonGroup>
-          <Button to="sign-up">Join us!</Button>
-          <Button to="sign-in" variant="secondary">
-            Sign in
-          </Button>
-        </ButtonGroup>
-      </>
-    )}
+    <Query query={query}>
+      {({ error, loading }) => {
+        if (loading) return null
+        if (!error || !error.message.includes('User is not logged in')) {
+          return null
+        }
+        return (
+          <ButtonGroup>
+            <Button to="sign-up">Join us!</Button>
+            <Button to="sign-in" variant="secondary">
+              Sign in
+            </Button>
+          </ButtonGroup>
+        )
+      }}
+    </Query>
     <Search />
   </>
 )
 
-const mapStateToProps = (state: IStore) => ({
-  firstName: userFirstNameSelector(state),
-})
-
-export default connect(mapStateToProps)(Home)
+export default Home

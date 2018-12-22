@@ -1,28 +1,24 @@
 import { Header as EriHeader, MenuButton } from 'eri'
 import * as React from 'react'
-import { connect } from 'react-redux'
+import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
-import { userFirstNameSelector } from '../../selectors'
-import IStore from '../../types/IStore'
+import query from './query'
 
 interface IProps {
-  firstName?: string
   onMenuOpen(): void
 }
 
-const Header = ({ firstName, onMenuOpen }: IProps) => (
+const Header = ({ onMenuOpen }: IProps) => (
   <EriHeader>
     <h1>
       <Link className="header__heading-link" to="/">
         Taskatron
       </Link>
     </h1>
-    {Boolean(firstName) && <MenuButton onClick={onMenuOpen} />}
+    <Query query={query}>
+      {({ data }) => (data ? <MenuButton onClick={onMenuOpen} /> : null)}
+    </Query>
   </EriHeader>
 )
 
-const mapStateToProps = (state: IStore) => ({
-  firstName: userFirstNameSelector(state),
-})
-
-export default connect(mapStateToProps)(Header)
+export default Header
