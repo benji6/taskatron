@@ -16,7 +16,9 @@ const Header = ({ onMenuOpen }: IProps) => (
       </Link>
     </h1>
     <Query query={queryMyId}>
-      {({ data }) => (data ? <MenuButton onClick={onMenuOpen} /> : null)}
+      {({ data }) =>
+        data && data.me ? <MenuButton onClick={onMenuOpen} /> : null
+      }
     </Query>
   </EriHeader>
 )
