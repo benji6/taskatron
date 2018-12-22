@@ -1,7 +1,8 @@
 import { ObjectId } from 'mongodb'
-import { ILocation, IServiceModelParams } from 'shared/types'
-import { setUser } from '../model/user'
+import { ILocation } from 'shared/types'
+import { setUser } from '../model/users'
 import { withServicesCollection } from '../model/withCollection'
+import { IServiceCreateParams } from '../types'
 
 let i = 0
 const numberOfServices = 1024
@@ -25,7 +26,7 @@ const main = async () => {
     postcode: 'SW1A 1AA',
   } as any)
 
-  const cleaningServices: IServiceModelParams[] = [
+  const cleaningServices: IServiceCreateParams[] = [
     ...Array(numberOfServices).keys(),
   ].map(() => ({
     carpetClean: randomBoolean(),

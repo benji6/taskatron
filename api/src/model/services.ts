@@ -3,12 +3,9 @@ import {
   ObjectId,
   UpdateWriteOpResult,
 } from 'mongodb'
-import {
-  IServiceDocument,
-  IServiceFilters,
-  IServiceModelParams,
-} from 'shared/types'
+import { IServiceFilters } from 'shared/types'
 import pino from '../pino'
+import { IService, IServiceCreateParams } from '../types'
 import { SERVICES } from './collectionNames'
 import { withServicesCollection } from './withCollection'
 
@@ -23,18 +20,21 @@ withServicesCollection(collection =>
     ),
 )
 
-export const addService = async (
-  service: IServiceModelParams,
-): Promise<IServiceDocument> =>
+export const addService = async ({
+  userId,
+  ...rest
+}: IServiceCreateParams): Promise<IService> =>
   withServicesCollection(async collection => {
     const insertObj = {
-      ...service,
-      userId: new ObjectId(service.userId),
+      ...rest,
+      userId: new ObjectId(userId),
     }
-
     await collection.insertOne(insertObj)
-
-    return { ...service, _id: (insertObj as any)._id }
+    return {
+      ...rest,
+      id: (insertObj as any)._id.toString(),
+      userId,
+    }
   })
 
 export const countServices = async (
@@ -49,24 +49,24 @@ export const deleteService = async (
     collection.deleteOne({ _id: new ObjectId(id) }),
   )
 
-export const getService = async (
-  id: string,
-): Promise<IServiceDocument | undefined> =>
+export const getService = async (id: string): Promise<IService | undefined> =>
   withServicesCollection(async collection => {
     const [result] = await collection.find(new ObjectId(id)).toArray()
-
-    return result
+    if (!result) return
+    const { _id, userId, ...rest } = result
+    return { ...rest, id: _id.toString(), userId: userId.toString() }
   })
 
 export const getServiceByUserId = async (
   userId: string,
-): Promise<IServiceDocument | undefined> =>
+): Promise<IService | undefined> =>
   withServicesCollection(async collection => {
     const [result] = await collection
       .find({ userId: new ObjectId(userId) })
       .toArray()
-
-    return result
+    if (!result) return
+    const { _id, ...rest } = result
+    return { ...rest, id: _id.toString(), userId }
   })
 
 export const searchServices = async ({
@@ -74,23 +74,28 @@ export const searchServices = async ({
   skip,
   userId,
   ...findParams
-}: any): Promise<IServiceDocument[]> => {
-  return withServicesCollection(collection =>
-    collection
+}: any): Promise<IService[]> =>
+  withServicesCollection(async collection => {
+    const results = await collection
       .find({
         ...findParams,
         ...(userId ? { userId: new ObjectId(userId) } : {}),
       })
       .skip(skip)
       .limit(limit)
-      .toArray(),
-  )
-}
+      .toArray()
+
+    return results.map(({ _id, ...rest }) => ({
+      ...rest,
+      id: _id.toString(),
+      userId: rest.userId.toString(),
+    }))
+  })
 
 export const updateService = async ({
-  _id,
+  id,
   ...updatedFields
-}: IServiceDocument): Promise<UpdateWriteOpResult> =>
+}: IService): Promise<UpdateWriteOpResult> =>
   withServicesCollection(async collection =>
-    collection.updateOne({ _id: new ObjectId(_id) }, { $set: updatedFields }),
+    collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedFields }),
   )

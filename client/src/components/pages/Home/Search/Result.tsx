@@ -1,17 +1,9 @@
 import { Card, Icon } from 'eri'
 import * as React from 'react'
-import { IServiceDocument } from 'shared/types'
 import { renderCurrency, serviceImageUrl } from '../../../../utils'
 
-interface IChildren extends IServiceDocument {
-  description: string
-  id: string
-  imagePath: string
-  providerName: string
-}
-
 interface IProps {
-  children: IChildren
+  children: any
 }
 
 const renderTrueFalse = (a: boolean) => <Icon name={a ? 'check' : 'cross'} />

@@ -1,6 +1,6 @@
 import * as config from 'config'
 import * as Mailgun from 'mailgun-js'
-import { getUser } from './model/user'
+import { getUser } from './model/users'
 import passwordless from './passwordless'
 import MongoStore from './passwordless/MongoStore'
 import pino from './pino'
@@ -24,7 +24,7 @@ passwordless.addDelivery(
     getUser(uidToSend)
       .then(
         (user): void => {
-          if (!user) throw Error('user not found')
+          if (!user) throw Error('user Not found')
 
           const text = `Hello ${user.firstName},
 

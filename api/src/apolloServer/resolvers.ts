@@ -14,24 +14,32 @@ import {
   searchServices,
   updateService,
 } from '../model/services'
-import { getUser } from '../model/user'
+import { getUser } from '../model/users'
 import pino from '../pino'
+import { IService } from '../types'
 
 interface IContext {
   userId: string
 }
 
+interface IServices {
+  nodes: IService[]
+  total: number
+}
+
 export default {
   Mutation: {
-    addService: async (_: unknown, args: any, context: IContext) => {
+    addService: async (
+      _: unknown,
+      args: any,
+      context: IContext,
+    ): Promise<IService> => {
       if (args.userId !== context.userId) {
-        throw new AuthenticationError('authed user does not match record user')
+        throw new AuthenticationError('Authed user does not match record user')
       }
-
       if (await getServiceByUserId(args.userId)) {
         throw new UserInputError('record already exists')
       }
-
       if (args.description.length > maxServiceDescriptionLength) {
         throw new UserInputError(
           `description length is ${
@@ -39,7 +47,6 @@ export default {
           }, but should be less than ${maxServiceDescriptionLength}`,
         )
       }
-
       if (args.name.length > maxServiceNameLength) {
         throw new UserInputError(
           `name length is ${
@@ -47,98 +54,57 @@ export default {
           }, but should be less than ${maxServiceNameLength}`,
         )
       }
-
       const { location } = (await getUser(args.userId)) as IUserDocument
-
-      const { _id, userId, ...serviceDocumentRest } = await addService({
+      return addService({
         ...args,
         location,
       })
-
-      return {
-        ...serviceDocumentRest,
-        id: _id.toString(),
-        userId: userId.toString(),
-      }
     },
-    deleteService: async (_: unknown, args: any, context: IContext) => {
+    deleteService: async (
+      _: unknown,
+      args: any,
+      context: IContext,
+    ): Promise<IService> => {
       const service = await getService(args.id)
-
-      if (!service) throw new UserInputError('not found')
-
-      const { _id, userId, ...rest } = service
-
-      if (!(userId as any).equals(context.userId)) {
-        throw new AuthenticationError('authed user does not match record user')
+      if (!service) throw new UserInputError('Not found')
+      const { id: serviceId } = service
+      if (service.userId !== context.userId) {
+        throw new AuthenticationError('Authed user does not match record user')
       }
-
-      await deleteService(_id)
-      deleteImage(_id).catch(err =>
-        pino.error(`deleteImage(${_id}) error:`, err),
+      await deleteService(serviceId)
+      deleteImage(serviceId).catch(e =>
+        pino.error(`deleteImage(${serviceId}) error:`, e),
       )
-
-      return {
-        ...rest,
-        id: _id.toString(),
-        userId: userId.toString(),
-      }
+      return service
     },
-    updateService: async (_: unknown, args: any, context: IContext) => {
+    updateService: async (
+      _: unknown,
+      args: any,
+      context: IContext,
+    ): Promise<IService> => {
       const service = await getService(args.id)
-
-      if (!service) throw new UserInputError('not found')
-
-      const { _id, userId, ...rest } = service
-
-      if (!(userId as any).equals(context.userId)) {
-        throw new AuthenticationError('authed user does not match record user')
+      if (!service) throw new UserInputError('Not found')
+      if (service.userId !== context.userId) {
+        throw new AuthenticationError('Authed user does not match record user')
       }
-
-      const { id, ...restArgs } = args
-
-      await updateService({
-        _id: id,
-        ...restArgs,
-      })
-
-      return {
-        ...rest,
-        id: _id.toString(),
-        userId: userId.toString(),
-      }
+      await updateService(args)
+      return { ...service, ...args }
     },
   },
   Node: { __resolveType: () => null },
   Query: {
-    service: async (_: unknown, { id }: any) => {
+    service: async (_: unknown, { id }: any): Promise<IService> => {
       const service = await getService(id)
-
-      if (!service) throw new UserInputError('not found')
-
-      const { _id, userId, ...rest } = service
-
-      return {
-        ...rest,
-        id: _id.toString(),
-        userId: userId.toString(),
-      }
+      if (!service) throw new UserInputError('Not found')
+      return service
     },
-    services: async (_: unknown, args: any) => {
+    services: async (_: unknown, args: any): Promise<IServices> => {
       const { limit, skip, ...filters } = args
-
-      const [services, total] = await Promise.all([
+      const [nodes, total] = await Promise.all([
         searchServices({ ...args, skip: args.skip || 0 }),
         countServices(filters),
       ])
-
-      return {
-        nodes: services.map(({ _id, userId, ...rest }) => ({
-          ...rest,
-          id: _id.toString(),
-          userId: userId.toString(),
-        })),
-        total,
-      }
+      return { nodes, total }
     },
   },
 }

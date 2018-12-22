@@ -5,7 +5,7 @@ import {
   isPostcode,
   IUserPatchBody,
 } from 'shared/types'
-import { getUser, updateUser } from '../model/user'
+import { getUser, updateUser } from '../model/users'
 import pino from '../pino'
 
 interface IRequest extends Request {

@@ -12,7 +12,7 @@ import {
 } from './controllers/serviceImages'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
-import { getUserByEmail } from './model/user'
+import { getUserByEmail } from './model/users'
 import passwordless, { restricted } from './passwordless/index'
 
 const router = express.Router()
