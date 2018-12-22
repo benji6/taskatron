@@ -15,6 +15,7 @@ import { isFirstName, isLastName, isPostcode } from 'shared/types'
 import { userSet } from '../../../actions'
 import { patchMe } from '../../../api'
 import { getFieldError } from '../../../utils'
+import GenericErrorMessage from '../../GenericErrorMessage'
 import query from './query'
 
 interface IFormValues {
@@ -54,7 +55,7 @@ class EditUser extends React.PureComponent<IProps> {
     const { error, submittedSuccessfully } = this.state
 
     return error ? (
-      <p e-util="negative">Oops, there was an error, please try again.</p>
+      <GenericErrorMessage />
     ) : submittedSuccessfully ? (
       <Redirect to="/profile" />
     ) : (
@@ -62,11 +63,7 @@ class EditUser extends React.PureComponent<IProps> {
         {({ data, error: queryError, loading }) => {
           if (loading) return <Spinner variation="page" />
           if (queryError) {
-            return (
-              <p e-util="negative">
-                Oops, there was an error, please try again.
-              </p>
-            )
+            return <GenericErrorMessage />
           }
           const {
             me: { firstName, lastName, postcode },

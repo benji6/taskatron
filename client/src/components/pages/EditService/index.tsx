@@ -29,6 +29,7 @@ import { radii } from '../../../constants'
 import { userIdSelector } from '../../../selectors'
 import IStore from '../../../types/IStore'
 import { getFieldError, renderDecimal } from '../../../utils'
+import GenericErrorMessage from '../../GenericErrorMessage'
 import mutation from './mutation'
 import query from './query'
 
@@ -74,11 +75,7 @@ class EditService extends React.PureComponent<IProps> {
           if (loading) return <Spinner variation="page" />
 
           if (error) {
-            return (
-              <p e-util="negative">
-                Oops, there was an error, please try again.
-              </p>
-            )
+            return <GenericErrorMessage />
           }
 
           if (submittedSuccessfully) return <Redirect to="/profile" />
