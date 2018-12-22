@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, TextField } from 'eri'
+import { Button, ButtonGroup, Spinner, TextField } from 'eri'
 import {
   Field,
   FieldProps,
@@ -8,18 +8,14 @@ import {
   FormikProps,
 } from 'formik'
 import * as React from 'react'
+import { Query } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import { isFirstName, isLastName, isPostcode } from 'shared/types'
 import { userSet } from '../../../actions'
 import { patchMe } from '../../../api'
-import {
-  userFirstNameSelector,
-  userLastNameSelector,
-  userPostcodeSelector,
-} from '../../../selectors'
-import IStore from '../../../types/IStore'
 import { getFieldError } from '../../../utils'
+import query from './query'
 
 interface IFormValues {
   firstName: string
@@ -54,69 +50,85 @@ class EditUser extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { firstName, lastName, postcode, radius } = this.props
+    const { radius } = this.props
     const { error, submittedSuccessfully } = this.state
-
-    const initialValues = {
-      firstName,
-      lastName,
-      postcode,
-      radius: String(radius),
-    }
 
     return error ? (
       <p e-util="negative">Oops, there was an error, please try again.</p>
     ) : submittedSuccessfully ? (
       <Redirect to="/profile" />
     ) : (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={this.handleSubmit}
-        validate={this.validate}
-        render={({ isSubmitting }: FormikProps<IFormValues>) => (
-          <Form noValidate>
-            <h2>Edit my details</h2>
-            <p>Tell us about yourself.</p>
-            <Field
-              autocomplete="given-name"
-              name="firstName"
-              render={({ field, form }: FieldProps<IFormValues>) => (
-                <TextField
-                  {...field}
-                  error={getFieldError(form, 'firstName')}
-                  label="First name"
-                />
+      <Query query={query}>
+        {({ data, error: queryError, loading }) => {
+          if (loading) return <Spinner variation="page" />
+          if (queryError) {
+            return (
+              <p e-util="negative">
+                Oops, there was an error, please try again.
+              </p>
+            )
+          }
+          const {
+            me: { firstName, lastName, postcode },
+          } = data
+          const initialValues = {
+            firstName,
+            lastName,
+            postcode,
+            radius: String(radius),
+          }
+          return (
+            <Formik
+              initialValues={initialValues}
+              onSubmit={this.handleSubmit}
+              validate={this.validate}
+              render={({ isSubmitting }: FormikProps<IFormValues>) => (
+                <Form noValidate>
+                  <h2>Edit my details</h2>
+                  <p>Tell us about yourself.</p>
+                  <Field
+                    autocomplete="given-name"
+                    name="firstName"
+                    render={({ field, form }: FieldProps<IFormValues>) => (
+                      <TextField
+                        {...field}
+                        error={getFieldError(form, 'firstName')}
+                        label="First name"
+                      />
+                    )}
+                  />
+                  <Field
+                    autocomplete="family-name"
+                    name="lastName"
+                    render={({ field, form }: FieldProps<IFormValues>) => (
+                      <TextField
+                        {...field}
+                        error={getFieldError(form, 'lastName')}
+                        label="Last name"
+                      />
+                    )}
+                  />
+                  <Field
+                    autocomplete="postal-code"
+                    name="postcode"
+                    render={({ field, form }: FieldProps<IFormValues>) => (
+                      <TextField
+                        {...field}
+                        error={getFieldError(form, 'postcode')}
+                        label="Postcode"
+                      />
+                    )}
+                  />
+                  <ButtonGroup>
+                    <Button disabled={isSubmitting}>Save</Button>
+                    <Link to="/profile">Cancel</Link>
+                  </ButtonGroup>
+                </Form>
               )}
             />
-            <Field
-              autocomplete="family-name"
-              name="lastName"
-              render={({ field, form }: FieldProps<IFormValues>) => (
-                <TextField
-                  {...field}
-                  error={getFieldError(form, 'lastName')}
-                  label="Last name"
-                />
-              )}
-            />
-            <Field
-              autocomplete="postal-code"
-              name="postcode"
-              render={({ field, form }: FieldProps<IFormValues>) => (
-                <TextField
-                  {...field}
-                  error={getFieldError(form, 'postcode')}
-                  label="Postcode"
-                />
-              )}
-            />
-            <ButtonGroup>
-              <Button disabled={isSubmitting}>Save</Button>
-              <Link to="/profile">Cancel</Link>
-            </ButtonGroup>
-          </Form>
-        )}
-      />
+          )
+        }}
+      </Query>
     )
   }
 
@@ -153,17 +165,11 @@ class EditUser extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: IStore) => ({
-  firstName: userFirstNameSelector(state) as string,
-  lastName: userLastNameSelector(state) as string,
-  postcode: userPostcodeSelector(state) as string,
-})
-
 const mapDispatchToProps = {
   setUser: userSet,
 }
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps,
 )(EditUser)
