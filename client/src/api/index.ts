@@ -1,4 +1,4 @@
-import { IUserPatchBody, IUserPostBody, IUserResponse } from 'shared/types'
+import { IUserPostBody, IUserResponse } from 'shared/types'
 import compactor from '../compactor'
 import { getCredentials } from '../localStorage'
 import ICredentials from '../types/ICredentials'
@@ -6,7 +6,6 @@ import {
   deleteConfig,
   getConfig,
   origin,
-  patchConfig,
   postConfig,
   postFileConfig,
   putFileConfig,
@@ -37,15 +36,6 @@ export const getSignOut = (): Promise<Response> =>
       return response
     })
     .then(response => response.json())
-
-export const patchMe = async (body: IUserPatchBody): Promise<Response> => {
-  const response = await fetch(
-    `${origin}/me`,
-    patchConfig(body, getCredentials()),
-  )
-  if (!response.ok) throw Error(String(response.status))
-  return response
-}
 
 const getFormatFromExtension = (extension: string) =>
   extension === 'png' ? 'png' : extension === 'webp' ? 'webp' : 'jpg'

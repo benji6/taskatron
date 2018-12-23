@@ -55,6 +55,7 @@ export default gql`
       userId: ID!
     ): Service
     deleteService(id: ID!): Service
+    updateMe(firstName: String, lastName: String, postcode: String): User
     updateService(
       carpetClean: Boolean
       deepClean: Boolean

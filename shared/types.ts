@@ -1,6 +1,6 @@
 import * as t from 'io-ts'
 
-const postCodeRegex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})/
+const postcodeRegex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})/
 
 const isDecimal = (a: any): a is number =>
   typeof a === 'number' && String(a).length <= a.toFixed(2).length
@@ -15,7 +15,7 @@ export const isLatitude = (a: any): a is number =>
 export const isLongitude = (a: any): a is number =>
   typeof a === 'number' && a >= -180 && a <= 180
 export const isPostcode = (a: any): a is string =>
-  typeof a === 'string' && postCodeRegex.test(a)
+  typeof a === 'string' && postcodeRegex.test(a)
 
 const decimal = new t.Type<number, number>(
   'decimal',
@@ -84,12 +84,6 @@ export const ServiceFilters = t.partial({
 })
 
 export type IServiceFilters = t.TypeOf<typeof ServiceFilters>
-
-export interface IUserPatchBody {
-  firstName: string
-  lastName: string
-  postcode: string
-}
 
 export const UserPostBody = t.exact(
   t.type({

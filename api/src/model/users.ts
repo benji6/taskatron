@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { IUserModelParams, IUserPatchBody, IUserResponse } from 'shared/types'
+import { IUserModelParams, IUserResponse } from 'shared/types'
 import { IUser } from '../types'
 import { withUsersCollection } from './withCollection'
 
@@ -52,10 +52,7 @@ export const setUser = async ({
   })
 
 // TODO: updating location
-export const updateUser = async (
-  id: string,
-  updateObj: IUserPatchBody,
-): Promise<void> =>
+export const updateUser = async (id: string, updateObj: any): Promise<void> =>
   withUsersCollection(async collection => {
     await collection.updateOne({ _id: new ObjectId(id) }, { $set: updateObj })
   })

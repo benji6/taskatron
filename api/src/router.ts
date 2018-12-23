@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { IUserResponse } from 'shared/types'
-import { get as getMe, patch as patchMe } from './controllers/me'
+import { get as getMe } from './controllers/me'
 import {
   post as postSendToken,
   postErrorMiddleware as postSendTokenErrorMiddleware,
@@ -30,7 +30,6 @@ const sendTokenMiddleware = passwordless.requestToken(
 
 router.get('/health', (_, response) => response.status(200).end())
 router.get('/me', restricted(), getMe)
-router.patch('/me', restricted(), patchMe)
 router.post(
   '/send-token',
   sendTokenMiddleware,

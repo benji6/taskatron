@@ -30,12 +30,6 @@ export const getConfig = (credentials?: ICredentials) => ({
   headers: createHeaders(credentials),
 })
 
-export const patchConfig = (body: any, credentials?: ICredentials) => ({
-  body: JSON.stringify(body),
-  headers: createHeaders(credentials, true),
-  method: 'PATCH',
-})
-
 export const postConfig = (body: any, credentials?: ICredentials) => ({
   body: JSON.stringify(body),
   headers: createHeaders(credentials, true),

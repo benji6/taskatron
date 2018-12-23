@@ -4,6 +4,7 @@ export default gql`
   {
     me {
       firstName
+      id
       lastName
       postcode
     }

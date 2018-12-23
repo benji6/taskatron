@@ -13,7 +13,7 @@ import {
   searchServices,
   updateService,
 } from '../model/services'
-import { getUser } from '../model/users'
+import { getUser, updateUser } from '../model/users'
 import pino from '../pino'
 import { IService, IUser } from '../types'
 
@@ -75,6 +75,19 @@ export default {
         pino.error(`deleteImage(${serviceId}) error:`, e),
       )
       return service
+    },
+    updateMe: async (
+      _: unknown,
+      args: any,
+      { userId }: IContext,
+    ): Promise<IService> => {
+      const user = await getUser(userId)
+      if (!user) throw new UserInputError('Not found')
+      if (user.id !== userId) {
+        throw new AuthenticationError('Authed user does not match record user')
+      }
+      await updateUser(userId, args)
+      return { ...user, ...args }
     },
     updateService: async (
       _: unknown,
