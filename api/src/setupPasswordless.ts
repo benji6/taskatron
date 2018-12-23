@@ -2,7 +2,6 @@ import * as config from 'config'
 import * as Mailgun from 'mailgun-js'
 import { getUser } from './model/users'
 import passwordless from './passwordless'
-import MongoStore from './passwordless/MongoStore'
 import pino from './pino'
 
 const mailgunDomain = 'sandboxe27535c7d6394776b917ab1bf7c49eed.mailgun.org'
@@ -11,8 +10,6 @@ const mailgun = Mailgun({
   apiKey: config.get('mailgunApiKey'),
   domain: mailgunDomain,
 })
-
-passwordless.init(new MongoStore())
 
 passwordless.addDelivery(
   (

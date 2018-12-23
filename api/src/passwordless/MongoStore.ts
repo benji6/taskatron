@@ -68,19 +68,6 @@ export default class MongoStore {
     })
   }
 
-  public clear(callback: (e?: Error) => void) {
-    this.getCollection((collection: Collection) => {
-      collection.remove({}, { w: 1 }, (err?: Error) => {
-        if (err) callback(err)
-        else callback()
-      })
-    })
-  }
-
-  public length(callback: any) {
-    this.getCollection((collection: Collection) => collection.count(callback))
-  }
-
   private getCollection(callback: (a: Collection) => void) {
     withPasswordlessTokensCollection(async collection => {
       await collection.createIndex({ uid: 1 }, { unique: true })

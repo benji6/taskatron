@@ -1,8 +1,7 @@
 import * as base58 from 'bs58'
 import * as crypto from 'crypto'
 import { NextFunction, Request, Response } from 'express'
-
-type TokenStore = any
+import MongoStore from './MongoStore'
 
 interface IRequest extends Request {
   passwordless?: { uidToAuth?: string }
@@ -33,6 +32,8 @@ interface IDelivery {
   sendToken: SendToken
 }
 
+const tokenStore = new MongoStore()
+
 const generateToken = (): string => base58.encode(crypto.randomBytes(16))
 
 const send401 = (res: Response, authenticate?: string) => {
@@ -43,19 +44,9 @@ const send401 = (res: Response, authenticate?: string) => {
 
 class Passwordless {
   private defaultDelivery?: IDelivery = undefined
-  private tokenStore?: TokenStore = undefined
-
-  public init(tokenStore: TokenStore) {
-    this.tokenStore = tokenStore
-  }
 
   public acceptToken() {
     return (req: IRequest, res: Response, next: NextFunction) => {
-      if (!this.tokenStore) {
-        throw new Error(
-          'Passwordless is missing a TokenStore. Are you sure you called passwordless.init()?',
-        )
-      }
       const authorizationHeader = req.header('authorization')
 
       if (!authorizationHeader) return next()
@@ -64,7 +55,7 @@ class Passwordless {
 
       if (!token || !uid) return next()
 
-      this.tokenStore.authenticate(
+      tokenStore.authenticate(
         token,
         uid.toString(),
         (error: Error, valid: boolean) => {
@@ -84,7 +75,7 @@ class Passwordless {
   public logout() {
     return (req: IRequest, res: Response, next: NextFunction) => {
       if (req.user) {
-        this.tokenStore.invalidateUser(req.user, () => {
+        tokenStore.invalidateUser(req.user, () => {
           delete req.user
           next()
         })
@@ -99,12 +90,6 @@ class Passwordless {
       const sendError = (statusCode: number, authenticate?: string) => {
         if (statusCode === 401) send401(res, authenticate)
         else res.status(statusCode).send()
-      }
-
-      if (!this.tokenStore) {
-        throw new Error(
-          'Passwordless is missing a TokenStore. Are you sure you called passwordless.init()?',
-        )
       }
 
       if (!req.body) {
@@ -153,7 +138,7 @@ class Passwordless {
 
             const ttl = deliveryMethod.options.ttl || 60 * 60 * 1000
 
-            this.tokenStore.storeOrUpdate(
+            tokenStore.storeOrUpdate(
               token,
               uid.toString(),
               ttl,
