@@ -53,7 +53,16 @@ class EditUser extends React.PureComponent<IProps> {
     ) : submittedSuccessfully ? (
       <Redirect to="/profile" />
     ) : (
-      <Mutation mutation={mutation}>
+      <Mutation
+        mutation={mutation}
+        update={(cache, { data: { meUpdate } }) => {
+          const cached: any = cache.readQuery({ query })
+          cache.writeQuery({
+            data: { me: { ...cached.me, ...meUpdate } },
+            query,
+          })
+        }}
+      >
         {updateMe => {
           return (
             <Query query={query}>
