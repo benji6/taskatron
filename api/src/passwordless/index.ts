@@ -41,15 +41,6 @@ const send401 = (res: Response, authenticate?: string) => {
   res.end('Unauthorized')
 }
 
-export const restricted = () => (
-  req: IRequest,
-  res: Response,
-  next: NextFunction,
-) => {
-  if (req.user) return next()
-  send401(res, 'Provide a token')
-}
-
 class Passwordless {
   private defaultDelivery?: IDelivery = undefined
   private tokenStore?: TokenStore = undefined

@@ -12,8 +12,9 @@ import {
 } from './controllers/serviceImages'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
+import { restricted } from './middleware'
 import { getUserByEmail } from './model/users'
-import passwordless, { restricted } from './passwordless/index'
+import passwordless from './passwordless/index'
 
 const router = express.Router()
 
