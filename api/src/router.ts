@@ -1,10 +1,6 @@
 import * as express from 'express'
-import { IUserResponse } from 'shared/types'
 import { get as getMe } from './controllers/me'
-import {
-  post as postSendToken,
-  postErrorMiddleware as postSendTokenErrorMiddleware,
-} from './controllers/sendToken'
+import { post as postSendToken } from './controllers/sendToken'
 import {
   del as deleteServiceImage,
   post as postServiceImage,
@@ -12,29 +8,21 @@ import {
 } from './controllers/serviceImages'
 import { get as getSignOut } from './controllers/signOut'
 import { post as postUser } from './controllers/user'
-import { restricted } from './middleware'
-import { getUserByEmail } from './model/users'
+import {
+  postErrorMiddleware,
+  restricted,
+  sendTokenMiddleware,
+} from './middleware'
 import passwordless from './passwordless/index'
 
 const router = express.Router()
-
-const sendTokenMiddleware = passwordless.requestToken(
-  (email: string, delivery: any, callback: any) => {
-    getUserByEmail(email)
-      .then((userResponse?: IUserResponse) => {
-        if (userResponse) return callback(null, userResponse._id)
-        callback(Error(`Email address not recognised: ${email}`))
-      })
-      .catch((err: Error) => callback(err))
-  },
-)
 
 router.get('/health', (_, response) => response.status(200).end())
 router.get('/me', restricted(), getMe)
 router.post(
   '/send-token',
   sendTokenMiddleware,
-  postSendTokenErrorMiddleware,
+  postErrorMiddleware,
   postSendToken,
 )
 router.delete('/services/:id/image', restricted(), deleteServiceImage)
