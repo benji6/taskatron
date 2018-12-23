@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost'
 
 export default gql`
   mutation DeleteService($id: ID!) {
-    deleteService(id: $id) {
+    serviceDelete(id: $id) {
       id
     }
   }

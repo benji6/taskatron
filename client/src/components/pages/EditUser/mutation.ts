@@ -6,7 +6,7 @@ export default gql`
     $lastName: String!
     $postcode: String!
   ) {
-    updateMe(firstName: $firstName, lastName: $lastName, postcode: $postcode) {
+    meUpdate(firstName: $firstName, lastName: $lastName, postcode: $postcode) {
       firstName
       lastName
       postcode

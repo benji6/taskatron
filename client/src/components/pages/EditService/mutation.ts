@@ -15,7 +15,7 @@ export default gql`
     $ovenClean: Boolean
     $radius: Int
   ) {
-    updateService(
+    serviceUpdate(
       carpetClean: $carpetClean
       deepClean: $deepClean
       description: $description

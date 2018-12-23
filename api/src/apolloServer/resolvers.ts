@@ -28,7 +28,20 @@ interface IServices {
 
 export default {
   Mutation: {
-    addService: async (
+    meUpdate: async (
+      _: unknown,
+      args: any,
+      { userId }: IContext,
+    ): Promise<IService> => {
+      const user = await getUser(userId)
+      if (!user) throw new UserInputError('Not found')
+      if (user.id !== userId) {
+        throw new AuthenticationError('Authed user does not match record user')
+      }
+      await updateUser(userId, args)
+      return { ...user, ...args }
+    },
+    serviceAdd: async (
       _: unknown,
       args: any,
       { userId }: IContext,
@@ -59,7 +72,7 @@ export default {
         location,
       })
     },
-    deleteService: async (
+    serviceDelete: async (
       _: unknown,
       args: any,
       { userId }: IContext,
@@ -76,20 +89,7 @@ export default {
       )
       return service
     },
-    updateMe: async (
-      _: unknown,
-      args: any,
-      { userId }: IContext,
-    ): Promise<IService> => {
-      const user = await getUser(userId)
-      if (!user) throw new UserInputError('Not found')
-      if (user.id !== userId) {
-        throw new AuthenticationError('Authed user does not match record user')
-      }
-      await updateUser(userId, args)
-      return { ...user, ...args }
-    },
-    updateService: async (
+    serviceUpdate: async (
       _: unknown,
       args: any,
       { userId }: IContext,

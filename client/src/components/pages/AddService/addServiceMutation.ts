@@ -14,7 +14,7 @@ export default gql`
     $radius: Int!
     $userId: ID!
   ) {
-    addService(
+    serviceAdd(
       carpetClean: $carpetClean
       deepClean: $deepClean
       description: $description

@@ -41,7 +41,8 @@ export default gql`
   }
 
   type Mutation {
-    addService(
+    meUpdate(firstName: String, lastName: String, postcode: String): User
+    serviceAdd(
       carpetClean: Boolean
       deepClean: Boolean
       description: String!
@@ -54,9 +55,8 @@ export default gql`
       radius: Int!
       userId: ID!
     ): Service
-    deleteService(id: ID!): Service
-    updateMe(firstName: String, lastName: String, postcode: String): User
-    updateService(
+    serviceDelete(id: ID!): Service
+    serviceUpdate(
       carpetClean: Boolean
       deepClean: Boolean
       description: String
