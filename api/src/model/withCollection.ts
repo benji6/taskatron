@@ -1,4 +1,4 @@
-import config = require('config')
+import * as config from 'config'
 import { Collection, MongoClient } from 'mongodb'
 import * as collectionNames from './collectionNames'
 

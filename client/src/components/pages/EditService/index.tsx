@@ -69,7 +69,7 @@ class EditService extends React.PureComponent {
         variables={{ userId: getUserId() }}
       >
         {({ loading, error, data }) => {
-          if (loading) return <Spinner variation="page" />
+          if (loading) return <Spinner variant="page" />
           if (error) return <GenericErrorMessage />
           if (submittedSuccessfully) return <Redirect to="/profile" />
 

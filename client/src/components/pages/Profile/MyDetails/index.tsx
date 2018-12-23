@@ -1,13 +1,12 @@
-import { ButtonGroup, Card, Spinner } from 'eri'
+import { Button, ButtonGroup, Card, Spinner } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import { Link } from 'react-router-dom'
 import query from './query'
 
 const MyDetails = () => (
   <Query query={query}>
     {({ data, error, loading }) => {
-      if (loading) return <Spinner variation="page" />
+      if (loading) return <Spinner variant="page" />
       if (error) {
         return (
           <p e-util="negative">
@@ -38,9 +37,7 @@ const MyDetails = () => (
             </li>
           </ul>
           <ButtonGroup>
-            <Link className="e-button e-button--primary" to="/profile/user">
-              Edit
-            </Link>
+            <Button to="/profile/user">Edit</Button>
           </ButtonGroup>
         </Card>
       )

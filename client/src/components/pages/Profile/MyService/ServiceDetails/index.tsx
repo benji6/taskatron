@@ -1,7 +1,6 @@
 import { Button, ButtonGroup, Icon } from 'eri'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
-import { Link } from 'react-router-dom'
 import { getUserId } from '../../../../../localStorage'
 import { renderCurrency } from '../../../../../utils'
 import query from '../query'
@@ -82,12 +81,7 @@ class ServiceDetails extends React.PureComponent<IProps> {
           </li>
         </ul>
         <ButtonGroup>
-          <Link
-            className="e-button e-button--primary"
-            to="profile/service/edit"
-          >
-            Edit details
-          </Link>
+          <Button to="profile/service/edit">Edit details</Button>
           <Button
             onClick={this.openDeleteDialog}
             sentiment="negative"

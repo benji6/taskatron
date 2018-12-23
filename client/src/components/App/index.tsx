@@ -29,7 +29,7 @@ class App extends React.PureComponent {
     return (
       <Query query={queryMyId}>
         {({ data, error, loading }) => {
-          if (loading) return <Spinner variation="page" />
+          if (loading) return <Spinner variant="page" />
           const isSignedIn = Boolean(!error && data.me.id)
 
           return (

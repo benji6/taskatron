@@ -67,7 +67,7 @@ class EditUser extends React.PureComponent<IProps> {
           return (
             <Query query={query}>
               {({ data, error: queryError, loading }) => {
-                if (loading) return <Spinner variation="page" />
+                if (loading) return <Spinner variant="page" />
                 if (queryError) return <GenericErrorMessage />
                 const {
                   me: { firstName, lastName, postcode },

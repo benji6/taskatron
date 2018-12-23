@@ -88,7 +88,7 @@ export default class EditServiceImage extends React.PureComponent<IProps> {
                       <h2>Edit image</h2>
                       <h3>Current image</h3>
                       {loading ? (
-                        <Spinner variation="page" />
+                        <Spinner variant="page" />
                       ) : error ? (
                         <p e-util="center negative">
                           Oops, there was an error loading your image.

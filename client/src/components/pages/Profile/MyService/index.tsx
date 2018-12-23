@@ -13,7 +13,7 @@ const MyService = () => {
   return (
     <Query fetchPolicy="network-only" query={query} variables={{ userId }}>
       {({ loading, error, data }) => {
-        if (loading) return <Spinner variation="page" />
+        if (loading) return <Spinner variant="page" />
         if (error) {
           return (
             <p e-util="negative">

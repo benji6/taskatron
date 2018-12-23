@@ -97,7 +97,7 @@ class Search extends React.PureComponent<IProps> {
             }
           >
             {({ loading, error, data }) => {
-              if (loading) return <Spinner variation="page" />
+              if (loading) return <Spinner variant="page" />
 
               if (error) {
                 return (

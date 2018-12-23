@@ -62,7 +62,7 @@ class Login extends React.Component {
         </>
       )
     }
-    return <Spinner variation="page" />
+    return <Spinner variant="page" />
   }
 }
 

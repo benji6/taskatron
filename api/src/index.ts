@@ -7,7 +7,6 @@ import apolloServer from './apolloServer'
 import passwordless from './passwordless/index'
 import pino from './pino'
 import router from './router'
-import './setupPasswordless'
 
 const { NODE_ENV } = process.env
 
