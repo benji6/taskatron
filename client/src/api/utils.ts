@@ -1,8 +1,6 @@
 import { getCredentials } from '../localStorage'
 import ICredentials from '../types/ICredentials'
 
-export const origin = process.env.API_URL
-
 const createHeaders = (
   credentials?: ICredentials,
   withContentType?: boolean,
