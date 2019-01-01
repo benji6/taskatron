@@ -12,7 +12,7 @@ const Header = ({ onMenuOpen }: IProps) => (
   <EriHeader>
     <h1>
       <Link className="header__heading-link" to="/">
-        Taskatron
+        Cleanly
       </Link>
     </h1>
     <Query query={queryMyId}>

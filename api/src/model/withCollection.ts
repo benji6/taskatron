@@ -4,7 +4,7 @@ import * as collectionNames from './collectionNames'
 
 const { PASSWORDLESS_TOKENS, SERVICES, USERS } = collectionNames
 
-const dbName = 'taskatron'
+const dbName = 'cleanly'
 
 const withCollection = (
   collectionName: collectionNames.TCollectionNames,
