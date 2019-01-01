@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import { getUserId } from '../../../../../localStorage'
 import { renderCurrency } from '../../../../../utils'
+import ButtonLink from '../../../../ButtonLink'
 import query from '../query'
 import DeleteDialog from './DeleteDialog'
 import mutation from './mutation'
@@ -81,7 +82,7 @@ class ServiceDetails extends React.PureComponent<IProps> {
           </li>
         </ul>
         <ButtonGroup>
-          <Button to="profile/service/edit">Edit details</Button>
+          <ButtonLink to="profile/service/edit">Edit details</ButtonLink>
           <Button
             onClick={this.openDeleteDialog}
             sentiment="negative"

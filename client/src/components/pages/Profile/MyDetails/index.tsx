@@ -1,6 +1,7 @@
-import { Button, ButtonGroup, Card, Spinner } from 'eri'
+import { ButtonGroup, Card, Spinner } from 'eri'
 import * as React from 'react'
 import { Query } from 'react-apollo'
+import ButtonLink from '../../../ButtonLink'
 import query from './query'
 
 const MyDetails = () => (
@@ -37,7 +38,7 @@ const MyDetails = () => (
             </li>
           </ul>
           <ButtonGroup>
-            <Button to="/profile/user">Edit</Button>
+            <ButtonLink to="/profile/user">Edit</ButtonLink>
           </ButtonGroup>
         </Card>
       )

@@ -1,10 +1,11 @@
-import { Button, ButtonGroup, Pagination, Spinner } from 'eri'
+import { ButtonGroup, CardGroup, Pagination, Spinner } from 'eri'
 import { History, Location } from 'history' // tslint:disable-line no-implicit-dependencies
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 import { IServiceFilters } from 'shared/types'
 import { createSearchString } from '../../../../utils'
+import ButtonLink from '../../../ButtonLink'
 import { resultsPerPage } from './constants'
 import Filters from './Filters'
 import query from './query'
@@ -76,14 +77,14 @@ class Search extends React.PureComponent<IProps> {
         <h2>Find a cleaner</h2>
         <Filters setFilters={this.setFilters} urlSearchFilters={this.filters} />
         <ButtonGroup>
-          <Button
+          <ButtonLink
             to={{
               pathname: '/',
               search,
             }}
           >
             Search
-          </Button>
+          </ButtonLink>
         </ButtonGroup>
         {typeof this.page === 'string' && (
           <Query
@@ -125,9 +126,11 @@ class Search extends React.PureComponent<IProps> {
                       {total > 1 && 's'} found
                     </p>
                   )}
-                  {nodes.map((service: any) => (
-                    <Result key={service.id}>{service}</Result>
-                  ))}
+                  <CardGroup>
+                    {nodes.map((service: any) => (
+                      <Result key={service.id}>{service}</Result>
+                    ))}
+                  </CardGroup>
                   <Pagination
                     onChange={this.handlePaginationChange}
                     page={Number(this.page)}

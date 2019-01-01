@@ -4,6 +4,7 @@ import { Mutation } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import { deleteServiceImage } from '../../../../../api'
 import { serviceImageUrl } from '../../../../../utils'
+import ButtonLink from '../../../../ButtonLink'
 import query from '../query'
 import DeleteDialog from './DeleteDialog'
 import mutation from './mutation'
@@ -36,7 +37,9 @@ export default class ServiceImage extends React.PureComponent<IProps> {
           <>
             <img alt="your service image" src={serviceImageUrl(imagePath)} />
             <ButtonGroup>
-              <Button to={`/service/${id}/image/edit`}>Edit image</Button>
+              <ButtonLink to={`/service/${id}/image/edit`}>
+                Edit image
+              </ButtonLink>
               <Button
                 onClick={this.openDeleteDialog}
                 sentiment="negative"
