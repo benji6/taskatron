@@ -1,4 +1,8 @@
-# Cleanly
+# Taskatron
+
+Unfinished and abandoned app for finding local tradespeople
+
+Left here for posterity
 
 ## External services
 

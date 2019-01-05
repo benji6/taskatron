@@ -17,16 +17,16 @@ export default async ({ token, uid }: { token: string; uid: string }) => {
 
   const text = `Hello ${user.firstName},
 
-Here's your Cleanly sign in link: ${config.get(
+Here's your Taskatron sign in link: ${config.get(
     'clientUrl',
   )}/login?token=${token}&uid=${uid}
 
 Have fun,
-Cleanly`
+Taskatron`
 
   const data = {
-    from: `Cleanly <mailgun@${mailgunDomain}>`,
-    subject: 'Sign in to Cleanly',
+    from: `Taskatron <mailgun@${mailgunDomain}>`,
+    subject: 'Sign in to Taskatron',
     text,
     to: user.email,
   }

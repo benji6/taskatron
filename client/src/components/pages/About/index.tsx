@@ -5,8 +5,8 @@ export default function About() {
     <>
       <h2>About</h2>
       <p>
-        Cleanly aims to make finding and offering cleaning services as simple as
-        possible.
+        Taskatron aims to make finding and offering cleaning services as simple
+        as possible.
       </p>
       <p>It is currently under construction!</p>
     </>
